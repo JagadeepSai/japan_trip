@@ -6341,3 +6341,12 @@ body[data-view="journey"] .hero-wordmark .hero-en { font-size: 0.44rem; }
 body[data-view="journey"] { padding-bottom: 0; } /* dock clearance not needed — nothing scrolls under it */
 main > .section-journey[data-view] { padding-bottom: 0; }
 body[data-view="journey"] .tl-scroller--journey { margin-bottom: 0; }
+
+/* Mobile journey nav: flat, aligned capsules (organic bubbles wobbled at
+   this size); the sync pill retires — the app is Live by default now */
+.sync-pill { display: none; }
+@media (max-width: 700px) {
+  .jnav-track { padding-top: 2px; }
+  .jnav-bubble { top: 0; bottom: 0; border-radius: 12px; }
+  .jnav-day { padding: 0.34rem 0.05rem; }
+}
