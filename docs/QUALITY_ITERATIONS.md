@@ -1066,3 +1066,10 @@ Food row ──► Try toggle · Map
 Packing Open ──► Shop / Days
 Tips CTA ──► Board | Map | Shop | Days(drawer) | Packing
 ```
+
+## Iteration 49 — Minimal orientation chip + last-position restore (2026-07-26)
+**Ask:** the "↓ VERTICAL" toggle floated misaligned above the nav — make it minimal, aesthetic, aligned; remember where the user was (tab + journey day) and land them back there on reload. Push.
+**Done:**
+- `.jnav-orient` → icon-only 30px round chip (26px mobile), in normal flex flow at the right end of `.journey-nav`, vertically centered on the day-pill row (Δ2px desktop / Δ5px mobile); label dropped (title/aria kept), hover rotates 90° as an affordance. Removed the absolute-position + track-margin hack.
+- Journey position persistence: the strip's scroll listener debounce-saves (250ms) the viewport origin as **absolute trip-minutes** (`jp-journey-pos` = px/PX_H·60 + tlStartMin) — orientation-independent; `renderJourney()` restores it after every render (scrollLeft or scrollTop per orientation). Tab restore already existed (`jp-view` via initViews) — re-verified.
+**Verified (passTT/passTTm, hermetic):** chip icon-only+round+aligned in-flow; scroll to D6 → reload → journey tab + scroll 6300px restored exactly; toggling to vertical lands at the same trip-minute (top 6300); plan-tab reload restores plan; no page errors. `?v=20260841a`.

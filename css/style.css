@@ -6382,33 +6382,24 @@ body[data-view="journey"] .tl-scroller--journey { margin-bottom: 0; }
 .tl-sun--v { transform: translate(0, -50%); }
 
 /* orientation toggle riding the right end of the day nav */
-.journey-nav { position: relative; }
+.journey-nav { display: flex; align-items: flex-end; gap: 0.55rem; }
+.journey-nav .jnav-track { flex: 1; min-width: 0; }
 .jnav-orient {
-  position: absolute;
-  right: 0;
-  top: 8px;
-  z-index: 5;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.32rem;
-  padding: 0.3rem 0.7rem;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 6px;
+  display: grid;
+  place-items: center;
   border: 1px solid var(--line);
-  border-radius: var(--r-pill);
+  border-radius: 50%;
   background: var(--paper-2);
   color: var(--ink-muted);
-  font: inherit;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
-.jnav-orient:hover { color: var(--vermillion); border-color: currentColor; }
-.journey-nav .jnav-track { margin-right: 108px; }
+.jnav-orient:hover { color: var(--vermillion); border-color: currentColor; transform: rotate(90deg); }
 body.night .jnav-orient { background: #141a24; }
 @media (max-width: 700px) {
-  .jnav-orient span { display: none; }
-  .jnav-orient { padding: 0.3rem 0.5rem; top: 4px; }
-  .journey-nav .jnav-track { margin-right: 40px; }
+  .jnav-orient { width: 26px; height: 26px; margin-bottom: 4px; }
 }

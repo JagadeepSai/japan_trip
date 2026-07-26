@@ -3444,10 +3444,6 @@ function renderJourneyNav() {
   });
   const vertical = journeyIsVertical();
   nav.innerHTML = `
-    <button type="button" class="jnav-orient" data-orient title="Rotate the timeline">
-      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"aria-hidden="true">${vertical ? '<path d="M4 12h14M14 8l4 4-4 4"/>' : '<path d="M12 4v14M8 14l4 4 4-4"/>'}</svg>
-      <span>${vertical ? "Horizontal" : "Vertical"}</span>
-    </button>
     <div class="jnav-track">
       ${segs
         .map((s) => {
@@ -3464,7 +3460,10 @@ function renderJourneyNav() {
           })
           .join("")}
       </div>
-    </div>`;
+    </div>
+    <button type="button" class="jnav-orient" data-orient title="${vertical ? "Horizontal timeline" : "Vertical timeline"}" aria-label="Rotate the timeline">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${vertical ? '<path d="M4 12h14M14 8l4 4-4 4"/>' : '<path d="M12 5v14M8 15l4 4 4-4"/>'}</svg>
+    </button>`;
   updateJourneyNav();
 }
 
@@ -3502,6 +3501,13 @@ function renderJourney() {
   if (tlHost) renderTimelineBoard(tlHost, journeyIsVertical());
   renderJourneyNav();
   sizeJourneyHero();
+  // land the user back where they left the trip (orientation-independent)
+  const savedMin = Number(localStorage.getItem("jp-journey-pos"));
+  if (tlHost && savedMin > 0) {
+    const px = Math.max(0, ((savedMin - (state.tlStartMin || 0)) / 60) * TL_PX_H);
+    if (journeyIsVertical()) tlHost.scrollTop = px;
+    else tlHost.scrollLeft = px;
+  }
 }
 
 function initJourney() {
@@ -3516,7 +3522,18 @@ function initJourney() {
     const btn = e.target.closest("[data-jnav]");
     if (btn) journeyGoToDay(Number(btn.dataset.jnav));
   });
-  tl?.addEventListener("scroll", () => requestAnimationFrame(updateJourneyNav), { passive: true });
+  tl?.addEventListener(
+    "scroll",
+    () => {
+      requestAnimationFrame(updateJourneyNav);
+      clearTimeout(state.jposTimer);
+      state.jposTimer = setTimeout(() => {
+        const px = journeyIsVertical() ? tl.scrollTop : tl.scrollLeft;
+        localStorage.setItem("jp-journey-pos", String(Math.round((px / TL_PX_H) * 60 + (state.tlStartMin || 0))));
+      }, 250);
+    },
+    { passive: true }
+  );
   tl?.addEventListener("click", (e) => {
     const open = e.target.closest("[data-min-open]");
     if (open) {
