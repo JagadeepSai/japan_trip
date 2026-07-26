@@ -6350,3 +6350,65 @@ body[data-view="journey"] .tl-scroller--journey { margin-bottom: 0; }
   .jnav-bubble { top: 0; bottom: 0; border-radius: 12px; }
   .jnav-day { padding: 0.34rem 0.05rem; }
 }
+
+/* ============================================================
+   Pass AN — vertical journey timeline
+   ============================================================ */
+
+.tl-vertical { overflow-y: auto; overflow-x: auto; }
+.tl-strip--v { position: relative; }
+.tl-sky--v {
+  width: 100%;
+  background-image: linear-gradient(180deg,
+    rgba(38, 52, 92, 0.14) 0%, rgba(38, 52, 92, 0.1) 17%,
+    rgba(226, 150, 96, 0.1) 27%,
+    rgba(255, 252, 242, 0.05) 37%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 252, 242, 0.04) 63%,
+    rgba(235, 166, 88, 0.1) 73%,
+    rgba(196, 92, 74, 0.08) 79%,
+    rgba(38, 52, 92, 0.11) 87%, rgba(38, 52, 92, 0.14) 100%);
+  background-repeat: repeat-y;
+}
+.tlv-tick { position: absolute; width: 8px; height: 1px; background: rgba(120, 110, 100, 0.35); }
+.tlv-tick.is-major { width: 14px; height: 2px; background: rgba(120, 110, 100, 0.55); }
+.tlv-hour { position: absolute; font-size: 0.56rem; font-weight: 600; letter-spacing: 0.06em; color: var(--ink-muted); opacity: 0.75; }
+.tl-city-ribbon--v { position: absolute; left: 0; width: 3px; height: auto; border-radius: 2px; }
+.tlv-day-head { position: absolute; left: 0; right: 0; pointer-events: none; }
+.tlv-day-head .tl-day-head-inner { position: sticky; top: 8px; left: auto; pointer-events: auto; }
+.tl-block--v { align-items: flex-start; padding-top: 0.42rem; }
+.tl-block--v .tl-thumb { width: 36px; height: 36px; }
+.tl-span--v { top: 0; bottom: auto; left: 0; width: 4px; height: auto; border-radius: 0 0 3px 0; }
+.tl-sun--v { transform: translate(0, -50%); }
+
+/* orientation toggle riding the right end of the day nav */
+.journey-nav { position: relative; }
+.jnav-orient {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper-2);
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.jnav-orient:hover { color: var(--vermillion); border-color: currentColor; }
+.journey-nav .jnav-track { margin-right: 108px; }
+body.night .jnav-orient { background: #141a24; }
+@media (max-width: 700px) {
+  .jnav-orient span { display: none; }
+  .jnav-orient { padding: 0.3rem 0.5rem; top: 4px; }
+  .journey-nav .jnav-track { margin-right: 40px; }
+}

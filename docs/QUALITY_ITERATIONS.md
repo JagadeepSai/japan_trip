@@ -871,6 +871,18 @@ The 23-agent adversarial workflow (65+ passes) finished judging; every confirmed
   the dual-mode stores (zero direct storage writes outside api.js); packing/tastes/night/view
   prefs are per-device by design.
 
+## Iteration 48 — vertical journey timeline (2026-07-26)
+
+- Orientation toggle (chip at the day-nav's right, persisted jp-journey-orient): the journey
+  strip transposes — time flows DOWN, block heights = durations (lanes repacked for the 62px
+  vertical minimum, not the 176px label width), hour ruler + weather lane on the left edge
+  (temp maps to x, rain bars horizontal), sun markers at their hour, vertical sky cycle
+  (dawn→dusk down each day), city ribbons down the left, day chips sticky-top through their
+  band. Day nav stays horizontal + fixed above; nav clicks scroll vertically to 06:00; active
+  pill tracks scrollTop; origin trim carries over (flight at 162px from top).
+- Verified desktop + mobile: geometry exact, toggle round-trips, zero page scroll both modes,
+  278-point weather curve + 23 sun markers render vertically; plan strip untouched.
+
 ## Iteration 47 — the strip origin IS 3h before the flight (2026-07-26)
 
 - Left-scrolling into D1's dead morning was redundant → the strip's coordinate origin is now

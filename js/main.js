@@ -1879,6 +1879,7 @@ async function decorateTimelineWeather(board) {
   const strip = board.querySelector(".tl-strip");
   if (!strip || board.dataset.wxToken !== token) return;
 
+  const isV = board.classList.contains("tl-vertical");
   // sunrise / sunset (always available — pure astronomy)
   const suns = TRIP.days
     .map((d, di) => {
@@ -1888,15 +1889,49 @@ async function decorateTimelineWeather(board) {
       const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
       const y = TL_HEAD_H + TL_WX_H;
       const x0 = ((state.tlStartMin || 0) / 60) * TL_PX_H;
-      const mark = (m, cls, glyph) =>
-        m == null ? "" : `<span class="tl-sun ${cls}" style="left:${di * TL_DAY_W + (m / 60) * TL_PX_H - x0}px; top:${y}px">${glyph} ${fmt(m)}</span>`;
+      const mark = (m, cls, glyph) => {
+        if (m == null) return "";
+        if (isV) {
+          const top = ((di * 1440 + m) / 60) * TL_PX_H - x0;
+          return top < 0 ? "" : `<span class="tl-sun tl-sun--v ${cls}" style="top:${top}px; left:3px">${glyph} ${fmt(m)}</span>`;
+        }
+        return `<span class="tl-sun ${cls}" style="left:${di * TL_DAY_W + (m / 60) * TL_PX_H - x0}px; top:${y}px">${glyph} ${fmt(m)}</span>`;
+      };
       return mark(rise, "is-rise", "▲") + mark(set, "is-set", "▼");
     })
     .join("");
 
   const entries = Object.values(wx);
   let band = "";
-  if (entries.length) {
+  if (entries.length && isV) {
+    const all = entries.flatMap((e) => e.hours.map((h) => h.t)).filter((t) => t != null);
+    const tMin = Math.min(...all);
+    const tMax = Math.max(...all);
+    const pad = 4;
+    const xBase = 46 + pad; // ruler width
+    const xW = 34 - pad * 2;
+    const x0v = ((state.tlStartMin || 0) / 60) * TL_PX_H;
+    const pts = [];
+    const bars = [];
+    entries
+      .sort((a, b) => a.di - b.di)
+      .forEach((e) => {
+        e.hours.forEach((h, hi) => {
+          const y = (e.di * 1440 + (hi + 0.5) * 60) / 60 * TL_PX_H - x0v;
+          if (y < 0) return;
+          if (h.t != null) pts.push(`${Math.round((xBase + ((h.t - tMin) / (tMax - tMin || 1)) * xW) * 10) / 10},${Math.round(y)}`);
+          if (h.p > 0.05) {
+            const bw = Math.min(1, h.p / 4) * xW;
+            bars.push(`<rect x="${xBase}" y="${Math.round(y - TL_PX_H / 2 + 4)}" width="${bw}" height="${TL_PX_H - 8}" rx="2" class="tl-wx-rain"/>`);
+          }
+        });
+      });
+    const stripH = parseFloat(board.querySelector(".tl-strip").style.height);
+    band = `<svg class="tl-wx" width="92" height="${stripH}" aria-hidden="true">
+      ${bars.join("")}
+      <polyline class="tl-wx-temp" points="${pts.join(" ")}"/>
+    </svg>`;
+  } else if (entries.length) {
     const all = entries.flatMap((e) => e.hours.map((h) => h.t)).filter((t) => t != null);
     const tMin = Math.min(...all);
     const tMax = Math.max(...all);
@@ -1937,7 +1972,99 @@ async function decorateTimelineWeather(board) {
   });
 }
 
-function renderTimelineBoard(board) {
+/* Vertical journey: time flows downward, days stack; the hour ruler and the
+   weather lane live on the left edge, day chips ride sticky through their band */
+function renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP }) {
+  // repack lanes for the vertical minimum (block height), not label width
+  const minV = Math.ceil(((62 + 8) / PX_H) * 60);
+  const laneEnds = {};
+  blocks.sort((a, b) => a.di - b.di || a.start - b.start || a.dur - b.dur);
+  blocks.forEach((b) => {
+    const lanes = (laneEnds[b.di] ||= []);
+    let li = lanes.findIndex((end) => end <= b.start);
+    if (li === -1) {
+      li = lanes.length;
+      lanes.push(0);
+    }
+    lanes[li] = b.start + Math.max(b.dur, minV);
+    b.lane = li;
+  });
+  const maxLanes = Math.max(1, ...Object.values(laneEnds).map((l) => l.length));
+  const RULER_W = 46;
+  const WX_W = 34;
+  const CX0 = RULER_W + WX_W + 12;
+  const narrow = (board.clientWidth || 400) < 520;
+  const LANE_W = narrow ? 150 : 196;
+  const DAY_H = 24 * PX_H;
+  const O0 = (startMin / 60) * PX_H;
+  const totalH = TRIP.days.length * DAY_H - O0 + 16;
+  const contentW = CX0 + maxLanes * (LANE_W + LANE_GAP) + 12;
+  const fmtHM = (min) => `${String(Math.floor(min / 60) % 24).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
+
+  const bands = TRIP.days.map((d, di) => {
+    const city = cityById(d.cityId);
+    const tint = JOURNEY_CITY_TINT[d.cityId] || "rgba(30,58,95,0.05)";
+    const top = di * DAY_H - O0;
+    const ticks = [];
+    for (let h = 0; h < 24; h++) {
+      const y = top + h * PX_H;
+      if (y < -2) continue;
+      ticks.push(`<span class="tlv-tick ${h % 12 === 0 ? "is-major" : ""}" style="top:${y}px; left:${RULER_W - 10}px"></span>`);
+      if (h % 2 === 0) ticks.push(`<span class="tlv-hour" style="top:${y + 2}px; left:4px">${String(h).padStart(2, "0")}</span>`);
+    }
+    return `
+    <div class="tl-city-ribbon tl-city-ribbon--v" style="top:${top}px; height:${DAY_H + 1}px; background:${tint.replace(/[\d.]+\)$/, "0.9)")}"></div>
+    <div class="tlv-day-head" style="top:${Math.max(0, top)}px; height:${DAY_H - Math.max(0, -top)}px">
+      <span class="tl-day-head-inner" style="margin-left:${CX0}px"><strong>D${di + 1}</strong> · ${escapeHtml([new Date(d.date + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }), city?.name].filter(Boolean).join(" · "))}</span>
+    </div>
+    ${ticks.join("")}`;
+  });
+
+  const byGroup = {};
+  blocks.forEach((b) => {
+    if (b.g) (byGroup[`${b.g.id}:${b.di}`] ||= { g: b.g, items: [] }).items.push(b);
+  });
+  const bubbles = Object.values(byGroup).map(({ g, items }) => {
+    const y0 = Math.min(...items.map((b) => b.di * DAY_H + (b.start / 60) * PX_H)) - O0 - 8;
+    const y1 = Math.max(...items.map((b) => b.di * DAY_H + ((b.start + b.dur) / 60) * PX_H)) - O0 + 8;
+    const l0 = Math.min(...items.map((b) => b.lane));
+    const l1 = Math.max(...items.map((b) => b.lane));
+    const info = groupInfo(g);
+    const tag = info.start ? `${info.start} ⇢ ${info.end || info.start}` : "";
+    return `<div class="tl-group" style="left:${CX0 + l0 * (LANE_W + LANE_GAP) - 8}px; top:${y0}px; width:${(l1 - l0 + 1) * (LANE_W + LANE_GAP) - LANE_GAP + 16}px; height:${y1 - y0}px">
+      <button type="button" class="tl-group-tag" data-group-edit="${g.id}">結び ${escapeHtml(g.label)}${tag ? ` · ${escapeHtml(tag)}` : ""}</button>
+    </div>`;
+  });
+
+  const blockHtml = blocks.map((b) => {
+    const top = b.di * DAY_H + (b.start / 60) * PX_H - O0;
+    const durH = Math.max(10, (b.dur / 60) * PX_H - 4);
+    const height = Math.max(62, durH);
+    const passive = b.w.active === false;
+    const img = wishImage(b.w);
+    const range = b.timed ? `${fmtHM(b.start)}–${fmtHM(b.start + b.dur)}` : `~${formatDurationMin(b.dur)}`;
+    return `<button type="button" class="tl-block tl-block--v ${passive ? "is-passive" : ""} ${isHidden(b.w) ? "is-hidden" : ""} ${b.timed ? "is-timed" : ""} ${b.w.type === "transit" ? "is-transit" : ""}"
+      data-min-open="${b.w.id}" data-type="${escapeHtml(b.w.type || "place")}"
+      style="left:${CX0 + b.lane * (LANE_W + LANE_GAP)}px; top:${top}px; width:${LANE_W}px; height:${height}px" title="${escapeHtml(b.w.label)}">
+      ${img ? `<img class="tl-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : `<span class="tl-dot"></span>`}
+      <span class="tl-copy">
+        <strong>${escapeHtml(b.w.label)}</strong>
+        <small>${escapeHtml(range)}</small>
+      </span>
+      <span class="tl-span tl-span--v" style="height:${Math.min(durH, height - 2)}px"></span>
+    </button>`;
+  });
+
+  board.innerHTML = `<div class="tl-strip tl-strip--v" style="height:${totalH}px; min-width:${contentW}px">
+    <div class="tl-sky tl-sky--v" style="height:${totalH}px; background-size:100% ${DAY_H}px; background-position:0 ${-O0}px"></div>
+    ${bands.join("")}
+    ${bubbles.join("")}
+    ${blockHtml.join("")}
+  </div>`;
+}
+
+function renderTimelineBoard(board, vertical = false) {
+  board.classList.toggle("tl-vertical", vertical);
   const PX_H = TL_PX_H;
   const DAY_W = TL_DAY_W;
   const HEAD_H = TL_HEAD_H;
@@ -1993,6 +2120,12 @@ function renderTimelineBoard(board) {
   state.tlStartMin = startMin;
   const X0 = (startMin / 60) * PX_H;
   const totalW = TRIP.days.length * DAY_W - X0;
+
+  if (vertical) {
+    renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP });
+    decorateTimelineWeather(board);
+    return;
+  }
   const fmtHM = (min) => `${String(Math.floor(min / 60) % 24).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
 
   const dayBands = TRIP.days.map((d, di) => {
@@ -3269,8 +3402,11 @@ const CITY_NAV_TINT = {
 
 function journeyGoToDay(di) {
   // land at 06:00, not midnight — mornings are where the day starts reading
-  const x0 = ((state.tlStartMin || 0) / 60) * TL_PX_H;
-  document.getElementById("journey-timeline")?.scrollTo({ left: Math.max(0, di * TL_DAY_W + 6 * TL_PX_H - 24 - x0), behavior: "smooth" });
+  const tl = document.getElementById("journey-timeline");
+  if (!tl) return;
+  const off = ((di * 1440 + 360 - (state.tlStartMin || 0)) / 60) * TL_PX_H - 24;
+  if (journeyIsVertical()) tl.scrollTo({ top: Math.max(0, off), behavior: "smooth" });
+  else tl.scrollTo({ left: Math.max(0, off), behavior: "smooth" });
 }
 
 function journeyFocusDay(dayId) {
@@ -3306,7 +3442,12 @@ function renderJourneyNav() {
     const idxs = dayCities.map((l, i) => (l.includes(c) ? i : -1)).filter((i) => i >= 0);
     return { c, a: Math.min(...idxs), b: Math.max(...idxs) };
   });
+  const vertical = journeyIsVertical();
   nav.innerHTML = `
+    <button type="button" class="jnav-orient" data-orient title="Rotate the timeline">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"aria-hidden="true">${vertical ? '<path d="M4 12h14M14 8l4 4-4 4"/>' : '<path d="M12 4v14M8 14l4 4 4-4"/>'}</svg>
+      <span>${vertical ? "Horizontal" : "Vertical"}</span>
+    </button>
     <div class="jnav-track">
       ${segs
         .map((s) => {
@@ -3332,7 +3473,9 @@ function updateJourneyNav() {
   const nav = document.getElementById("journey-nav");
   if (!tl || !nav) return;
   const x0 = ((state.tlStartMin || 0) / 60) * TL_PX_H;
-  const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor((tl.scrollLeft + x0 + tl.clientWidth * 0.35) / TL_DAY_W)));
+  const vertical = journeyIsVertical();
+  const pos = vertical ? tl.scrollTop + tl.clientHeight * 0.35 : tl.scrollLeft + tl.clientWidth * 0.35;
+  const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor((pos + x0) / TL_DAY_W)));
   nav.querySelectorAll(".jnav-day").forEach((el) => el.classList.toggle("active", Number(el.dataset.jnav) === di));
 }
 
@@ -3346,13 +3489,17 @@ function sizeJourneyHero() {
   tl.style.height = `${Math.max(280, window.innerHeight - top - 14)}px`;
 }
 
+function journeyIsVertical() {
+  return localStorage.getItem("jp-journey-orient") === "v";
+}
+
 function renderJourney() {
   if (!isViewActive("journey")) {
     state.viewDirty.journey = true;
     return;
   }
   const tlHost = document.getElementById("journey-timeline");
-  if (tlHost) renderTimelineBoard(tlHost);
+  if (tlHost) renderTimelineBoard(tlHost, journeyIsVertical());
   renderJourneyNav();
   sizeJourneyHero();
 }
@@ -3360,6 +3507,12 @@ function renderJourney() {
 function initJourney() {
   const tl = document.getElementById("journey-timeline");
   document.getElementById("journey-nav")?.addEventListener("click", (e) => {
+    const flip = e.target.closest("[data-orient]");
+    if (flip) {
+      localStorage.setItem("jp-journey-orient", journeyIsVertical() ? "h" : "v");
+      renderJourney();
+      return;
+    }
     const btn = e.target.closest("[data-jnav]");
     if (btn) journeyGoToDay(Number(btn.dataset.jnav));
   });
