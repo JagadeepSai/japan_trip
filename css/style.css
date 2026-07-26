@@ -6250,3 +6250,7 @@ body.night #chat-threads { background-color: #10151d; }
   pointer-events: none;
 }
 .chat-head { border-bottom: none; }
+
+/* Slightly slimmer banner */
+.hero-header { min-height: 168px; padding-top: 0.95rem; padding-bottom: 1rem; }
+.hero-view-title { font-size: clamp(1.55rem, 3.2vw, 2.15rem); }
