@@ -1993,8 +1993,10 @@ function renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP }) {
       w = sbs;
       off = w + LANE_GAP;
     } else {
-      w = Math.max(150, Math.min(340, Math.floor(avail / (1 + 0.45 * (n - 1)))));
-      off = Math.max(44, Math.floor((avail - w) / (n - 1)));
+      // cascade with at most a thumb-column (44px) of overlap, so the
+      // underlying card's title and time stay readable
+      w = Math.max(150, Math.min(340, Math.floor((avail + (n - 1) * 44) / n)));
+      off = w - 44;
     }
     const extent = w + off * (n - 1);
     return { w, off, x0: CX0 + Math.max(0, Math.floor((avail - extent) / 2)) };
@@ -2079,7 +2081,7 @@ function renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP }) {
     const img = wishImage(b.w);
     const geo = dayGeo[b.di];
     const range = b.timed ? `${fmtHM(b.start)}–${fmtHM(b.start + b.dur)}` : `~${formatDurationMin(b.dur)}`;
-    return `<button type="button" class="tl-block tl-block--v ${passive ? "is-passive" : ""} ${isHidden(b.w) ? "is-hidden" : ""} ${b.timed ? "is-timed" : ""} ${b.w.type === "transit" ? "is-transit" : ""} ${height >= 120 ? "is-tall" : ""} ${geo.w < 190 ? "is-slim" : ""}"
+    return `<button type="button" class="tl-block tl-block--v ${passive ? "is-passive" : ""} ${isHidden(b.w) ? "is-hidden" : ""} ${b.timed ? "is-timed" : ""} ${b.w.type === "transit" ? "is-transit" : ""} ${height >= 120 && geo.w >= 260 ? "is-tall" : ""} ${geo.w < 190 ? "is-slim" : ""}"
       data-min-open="${b.w.id}" data-type="${escapeHtml(b.w.type || "place")}"
       style="left:${geo.x0 + b.lane * geo.off}px; top:${top}px; width:${geo.w}px; height:${height}px; z-index:${Math.min(3, 1 + b.lane)}" title="${escapeHtml(b.w.label)}">
       ${img ? `<img class="tl-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : `<span class="tl-dot"></span>`}

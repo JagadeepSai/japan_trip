@@ -1086,3 +1086,8 @@ Tips CTA ──► Board | Map | Shop | Days(drawer) | Packing
 - Chip: glass (92% paper + blur) at z4; night theme: legible rail inks, amber temps, softened rain.
 - Dock clearance via strip margin-bottom (96px + safe-area); verified last card clears dock at max scroll.
 **Verified:** 8/8 functional checks (centering, underlay, furniture, weather cues, chip, scroll-restore, dock, mobile) + 3-judge adversarial panel (scores 3→7, 4→8.5, 3→6.5 pre-fix; their 3 blockers — off-center column, z-order sun line, cramped multi-lane days — all fixed and re-verified; "horizontal regression" claim disproven via git diff + pixel-identical chrome). Horizontal mode untouched (278-pt curve intact). `?v=20260843a`.
+
+## Iteration 51 — Cascade legibility + thumb balance (2026-07-26)
+**Ask:** "The cards start look a bit off in vertical" (screenshot: cascade card covering the underlying card's time; 88px poster thumb dominating a ~213px card).
+**Done:** cascade lanes now overlap by at most 44px (one thumb-column: `w = (avail + (n−1)·44)/n`, `off = w−44`) so every overlapped card's title/time stay readable; poster thumbs (`is-tall`) now require ≥260px-wide cards — narrower tall cards keep the 40px slim square. Desktop side-by-side unaffected.
+**Verified:** Arashiyama/Tenryu-ji pair at 360px: overlap exactly 44px, both readable; Sagano thumb 40px; full 8-check vertical suite green. `?v=20260844a`.
