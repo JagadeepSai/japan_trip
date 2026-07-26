@@ -871,6 +871,56 @@ The 23-agent adversarial workflow (65+ passes) finished judging; every confirmed
   the dual-mode stores (zero direct storage writes outside api.js); packing/tastes/night/view
   prefs are per-device by design.
 
+## Iteration 47 — the strip origin IS 3h before the flight (2026-07-26)
+
+- Left-scrolling into D1's dead morning was redundant → the strip's coordinate origin is now
+  startMin = firstD1Event − 3h (09:35 for the 12:35 flight): scrollLeft 0 IS the trip start,
+  nothing left of it exists. Ten geometry sites updated (bands/heads/ribbons/ticks, blocks,
+  bubbles, sky background-phase, wx/sun markers, tlSpotFromX, drag-drop math, nav goto/active)
+  — verified: flight at exactly 162px (3h×54), Senso-ji cross-day at 1211px, retime drag still
+  writes correct times, no errors.
+
+## Iteration 46 — journey banner → headband, true zero-scroll (2026-07-26)
+
+- Journey-only banner compression: 169px postcard → 79px headband (kicker + title + wordmark
+  in one band, lede hidden) via body[data-view=journey] overrides.
+- Chased the residual document overhang to THREE stacked sources: body dock-clearance padding,
+  the section's 3.5rem bottom padding, and the strip's own 1.6rem margin-bottom — all zeroed
+  on journey. docHeight now equals viewport exactly at 1440×900, 1440×760 and 390×844.
+
+## Iteration 45 — 6am landings · actives audit · mobile chat sheet (2026-07-26)
+
+- Journey nav day-click now lands at 06:00 (not midnight's empty band).
+- Actives audit: 12 of 15 passive day-events were inbox-promoted anchors still carrying their
+  "maybe" default (Skytree, Kiyomizu, Nijo, Ginkaku-ji, Kurama hike, Kappabashi, Don Quijote…)
+  — activated in DB + seeds regenerated (tools/regen-seeds.py now a reusable script). Kept as
+  intentional maybes: Monkey Park, Kobe beef, Yoyogi buskers.
+- Mobile chat was unusable → full-height sheet at ≤560px (own ×, above the dock), 16px inputs
+  (kills iOS focus-zoom — the core bug), scrollable settings (log stays visible), safe-area
+  padding on the composer.
+
+## Iteration 44 — the REAL itinerary: Oct 14–25, flights, timed schedule (2026-07-26)
+
+- **Flights booked & loaded:** CX BLR 01:15 → Tokyo 16:05 (Oct 14) and SQ KIX 16:50 (Oct 25)
+  → BLR 10:35+1, both as timed transit events. Trip dates shifted to Oct 14–25 (weekdays
+  corrected: Oct 14 = Wednesday).
+- **Structural edits:** Okutama removed (tail-season risk) → Mt. Takao trek promoted to d3 with
+  full timed bundle; festival day = Nijo → Ginkaku-ji/Philosopher's Path → Kurama–Kibune hike →
+  night Fire Festival (Jidai Matsuri daytime skipped → inbox, passive); d7 beefed with Kiyomizu
+  golden hour + Higashiyama lantern lanes; kimono = BUY vintage at the new Tōji flea market
+  event (21st = the Arashiyama day) instead of renting; markets at city ends (Oedo Sun 18 =
+  3rd Sunday ✓ verify note, Nishiki d10, Kuromon d11); club night lands on Saturday.
+- **~60 events now carry start times** matching the plan; photos fetched for 10 previously
+  imageless day-events (Tōji, Nishiki, Pontocho ×2, Gion, Kifune, Amerikamura, Arima, Sagano,
+  Ginza) — map-only search results rejected.
+- **Shopping researched & expanded** (LIVE JAPAN / Time Out lists): Don Quijote (KitKats,
+  Megrhythm, LuLuLun, pain patches), Kappabashi (knife, chopsticks), Oedo antiques, new Itoya/
+  Loft stationery event, 4 new buy-list rows (9 total).
+- **Pipeline:** changeset applied to the live DB first, then data.js seeds AND the schema.sql
+  SEED regenerated FROM the DB (single source of truth, real UUIDs, JSON re-validated);
+  plan.md rewritten with the timed day cards. Mobile journey nav fixed (labels collided at
+  390px → day-number pills + unlabeled tint bubbles). NOT pushed to GitHub per instruction.
+
 ## Iteration 43 — torii geometry · dates resilience · preview slimmed (2026-07-26)
 
 - Nuki beam was floating mid-header (a red stripe behind the controls) — now anchored to the

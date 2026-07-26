@@ -23,7 +23,7 @@ create policy "Allow public update settings" on public.settings for update using
 create policy "Allow public delete settings" on public.settings for delete using (true);
 
 insert into public.settings (key, value)
-select 'trip-dates', '{"start":"2026-10-15","end":"2026-10-26"}'::jsonb
+select 'trip-dates', '{"start":"2026-10-14","end":"2026-10-25"}'::jsonb
 where not exists (select 1 from public.settings where key = 'trip-dates');
 
 create table if not exists public.user_settings (

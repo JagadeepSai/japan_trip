@@ -1887,8 +1887,9 @@ async function decorateTimelineWeather(board) {
       const { rise, set } = sunTimes(d.date, city.lat, city.lng);
       const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
       const y = TL_HEAD_H + TL_WX_H;
+      const x0 = ((state.tlStartMin || 0) / 60) * TL_PX_H;
       const mark = (m, cls, glyph) =>
-        m == null ? "" : `<span class="tl-sun ${cls}" style="left:${di * TL_DAY_W + (m / 60) * TL_PX_H}px; top:${y}px">${glyph} ${fmt(m)}</span>`;
+        m == null ? "" : `<span class="tl-sun ${cls}" style="left:${di * TL_DAY_W + (m / 60) * TL_PX_H - x0}px; top:${y}px">${glyph} ${fmt(m)}</span>`;
       return mark(rise, "is-rise", "▲") + mark(set, "is-set", "▼");
     })
     .join("");
@@ -1909,7 +1910,8 @@ async function decorateTimelineWeather(board) {
       .sort((a, b) => a.di - b.di)
       .forEach((e) => {
         e.hours.forEach((h, hi) => {
-          const x = e.di * TL_DAY_W + (hi + 0.5) * TL_PX_H;
+          const x = e.di * TL_DAY_W + (hi + 0.5) * TL_PX_H - ((state.tlStartMin || 0) / 60) * TL_PX_H;
+          if (x < 0) return;
           if (h.t != null) pts.push(`${Math.round(x)},${Math.round(yFor(h.t) * 10) / 10}`);
           if (h.p > 0.05) {
             const bh = Math.min(1, h.p / 4) * yH;
@@ -1984,7 +1986,13 @@ function renderTimelineBoard(board) {
   });
   const maxLanes = Math.max(1, ...Object.values(laneEnds).map((l) => l.length));
   const stripH = HEAD_H + WX_H + RULER_H + maxLanes * (LANE_H + LANE_GAP) + 18;
-  const totalW = TRIP.days.length * DAY_W;
+  // The strip ORIGIN is 3h before day 1's first event — everything left of it
+  // is dead space, so it isn't rendered (or scrollable) at all
+  const firstD1 = blocks.filter((b) => b.di === 0).reduce((m, b) => Math.min(m, b.start), Infinity);
+  const startMin = Number.isFinite(firstD1) ? Math.min(1380, Math.max(0, firstD1 - 180)) : 0;
+  state.tlStartMin = startMin;
+  const X0 = (startMin / 60) * PX_H;
+  const totalW = TRIP.days.length * DAY_W - X0;
   const fmtHM = (min) => `${String(Math.floor(min / 60) % 24).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
 
   const dayBands = TRIP.days.map((d, di) => {
@@ -1992,13 +2000,14 @@ function renderTimelineBoard(board) {
     const tint = JOURNEY_CITY_TINT[d.cityId] || "rgba(30,58,95,0.05)";
     const ticks = [];
     for (let h = 0; h < 24; h++) {
-      const x = di * DAY_W + h * PX_H;
+      const x = di * DAY_W + h * PX_H - X0;
+      if (x < -2) continue;
       ticks.push(`<span class="tl-tick ${h % 12 === 0 ? "is-major" : ""}" style="left:${x}px; top:${HEAD_H + WX_H}px"></span>`);
       if (h % 2 === 0) ticks.push(`<span class="tl-hour" style="left:${x + 3}px; top:${HEAD_H + WX_H + 2}px">${String(h).padStart(2, "0")}</span>`);
     }
     return `
-    <div class="tl-city-ribbon" style="left:${di * DAY_W}px; width:${DAY_W + 1}px; background:${tint.replace(/[\d.]+\)$/, "0.9)")}"></div>
-    <div class="tl-day-head" style="left:${di * DAY_W}px; width:${DAY_W}px; height:${HEAD_H}px">
+    <div class="tl-city-ribbon" style="left:${di * DAY_W - X0}px; width:${DAY_W + 1}px; background:${tint.replace(/[\d.]+\)$/, "0.9)")}"></div>
+    <div class="tl-day-head" style="left:${di * DAY_W - X0}px; width:${DAY_W}px; height:${HEAD_H}px">
       <span class="tl-day-head-inner"><strong>D${di + 1}</strong> · ${escapeHtml([new Date(d.date + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }), city?.name].filter(Boolean).join(" · "))}</span>
     </div>
     ${ticks.join("")}`;
@@ -2010,8 +2019,8 @@ function renderTimelineBoard(board) {
     if (b.g) (byGroup[`${b.g.id}:${b.di}`] ||= { g: b.g, items: [] }).items.push(b);
   });
   const bubbles = Object.values(byGroup).map(({ g, items }) => {
-    const x0 = Math.min(...items.map((b) => b.di * DAY_W + (b.start / 60) * PX_H));
-    const x1 = Math.max(...items.map((b) => b.di * DAY_W + ((b.start + b.dur) / 60) * PX_H));
+    const x0 = Math.min(...items.map((b) => b.di * DAY_W + (b.start / 60) * PX_H)) - X0;
+    const x1 = Math.max(...items.map((b) => b.di * DAY_W + ((b.start + b.dur) / 60) * PX_H)) - X0;
     const l0 = Math.min(...items.map((b) => b.lane));
     const l1 = Math.max(...items.map((b) => b.lane));
     const top = HEAD_H + WX_H + RULER_H + l0 * (LANE_H + LANE_GAP) - 7;
@@ -2024,7 +2033,7 @@ function renderTimelineBoard(board) {
   });
 
   const blockHtml = blocks.map((b) => {
-    const left = b.di * DAY_W + (b.start / 60) * PX_H;
+    const left = b.di * DAY_W + (b.start / 60) * PX_H - X0;
     const durW = Math.max(10, (b.dur / 60) * PX_H - 4);
     const width = Math.max(MIN_LABEL_W, durW);
     const top = HEAD_H + WX_H + RULER_H + b.lane * (LANE_H + LANE_GAP);
@@ -2044,16 +2053,11 @@ function renderTimelineBoard(board) {
   });
 
   board.innerHTML = `<div class="tl-strip" style="width:${totalW}px; height:${stripH}px">
-    <div class="tl-sky" style="width:${totalW}px; background-size:${DAY_W}px 100%"></div>
+    <div class="tl-sky" style="width:${totalW}px; background-size:${DAY_W}px 100%; background-position:${-X0}px 0"></div>
     ${dayBands.join("")}
     ${bubbles.join("")}
     ${blockHtml.join("")}
   </div>`;
-  // wake up at breakfast, not midnight
-  if (!board.dataset.tlScrolled) {
-    board.scrollLeft = 8 * PX_H - 30;
-    board.dataset.tlScrolled = "1";
-  }
   decorateTimelineWeather(board);
 }
 
@@ -2093,7 +2097,7 @@ function renderAgenda(board) {
 // Where on the trip does a viewport x land? (snapped to 15 minutes)
 function tlSpotFromX(clientX, scroller, wish) {
   const rect = scroller.getBoundingClientRect();
-  const totalMin = ((clientX - rect.left + scroller.scrollLeft) / TL_PX_H) * 60;
+  const totalMin = ((clientX - rect.left + scroller.scrollLeft) / TL_PX_H) * 60 + (state.tlStartMin || 0);
   const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor(totalMin / 1440)));
   const dur = wish ? wishDurationMin(wish) : 60;
   const startMin = Math.max(0, Math.min(Math.round((totalMin - di * 1440) / 15) * 15, 1440 - dur));
@@ -2176,7 +2180,7 @@ function initTimelineDrag(board) {
     state.tlDragUntil = performance.now() + 350;
     const w = state.wishes.find((x) => x.id === d.id);
     if (!w) return;
-    const totalMin = (parseFloat(d.block.style.left) / TL_PX_H) * 60;
+    const totalMin = (parseFloat(d.block.style.left) / TL_PX_H) * 60 + (state.tlStartMin || 0);
     const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor(totalMin / 1440)));
     const dur = wishDurationMin(w);
     const start = Math.max(0, Math.min(Math.round((totalMin - di * 1440) / 15) * 15, 1440 - dur));
@@ -3264,7 +3268,9 @@ const CITY_NAV_TINT = {
 };
 
 function journeyGoToDay(di) {
-  document.getElementById("journey-timeline")?.scrollTo({ left: Math.max(0, di * TL_DAY_W - 24), behavior: "smooth" });
+  // land at 06:00, not midnight — mornings are where the day starts reading
+  const x0 = ((state.tlStartMin || 0) / 60) * TL_PX_H;
+  document.getElementById("journey-timeline")?.scrollTo({ left: Math.max(0, di * TL_DAY_W + 6 * TL_PX_H - 24 - x0), behavior: "smooth" });
 }
 
 function journeyFocusDay(dayId) {
@@ -3325,7 +3331,8 @@ function updateJourneyNav() {
   const tl = document.getElementById("journey-timeline");
   const nav = document.getElementById("journey-nav");
   if (!tl || !nav) return;
-  const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor((tl.scrollLeft + tl.clientWidth * 0.35) / TL_DAY_W)));
+  const x0 = ((state.tlStartMin || 0) / 60) * TL_PX_H;
+  const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor((tl.scrollLeft + x0 + tl.clientWidth * 0.35) / TL_DAY_W)));
   nav.querySelectorAll(".jnav-day").forEach((el) => el.classList.toggle("active", Number(el.dataset.jnav) === di));
 }
 

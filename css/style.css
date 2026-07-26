@@ -6291,3 +6291,53 @@ body.night .hidden-boat.on {
   filter: drop-shadow(0 0 7px rgba(255, 46, 77, 0.7));
   animation: neon-breathe 2.8s ease-in-out infinite alternate;
 }
+
+/* Mobile journey nav: pills show day numbers only; bubble tints carry the
+   city identity (labels collided at 390px) */
+@media (max-width: 700px) {
+  .journey-nav { padding: 0 0.6rem; }
+  .jnav-day { padding: 0.3rem 0.05rem 0.35rem; }
+  .jnav-day span { display: none; }
+  .jnav-day strong { font-size: 0.66rem; }
+  .jnav-bubble span { display: none; }
+  .jnav-track { padding-top: 6px; }
+}
+
+/* ============================================================
+   Pass AM — mobile chat becomes a full sheet (was unusable)
+   ============================================================ */
+@media (max-width: 560px) {
+  .chat-panel {
+    left: 0;
+    right: 0;
+    top: 10px;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    border-radius: 14px 14px 0 0;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    z-index: 120; /* above the dock — the sheet has its own × */
+  }
+  .chat-panel::before { left: -6px; right: -6px; top: -8px; height: 9px; }
+  .chat-head::after { left: -5px; right: -5px; }
+  .chat-fab { z-index: 119; }
+  .chat-settings { max-height: 45vh; overflow-y: auto; }
+  .chat-msg { max-width: 94%; font-size: 0.84rem; }
+  /* 16px stops iOS zooming the page on focus — the core "unusable" bug */
+  #chat-input, .chat-settings input, .chat-settings select { font-size: 16px; }
+  #chat-threads { font-size: 0.78rem; }
+  .chat-composer { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+}
+
+/* Journey wears a slim headband, not the full postcard — everything must fit
+   the viewport with zero page scroll */
+body[data-view="journey"] .hero-header { min-height: 78px; padding-top: 0.55rem; padding-bottom: 0.6rem; }
+body[data-view="journey"] .hero-view-title { font-size: 1.3rem; }
+body[data-view="journey"] .hero-lede { display: none; }
+body[data-view="journey"] .hero-kicker { margin-bottom: 0; font-size: 0.56rem; padding: 0.22rem 0.7rem; }
+body[data-view="journey"] .hero-wordmark .hero-ja { font-size: 0.9rem; }
+body[data-view="journey"] .hero-wordmark .hero-en { font-size: 0.44rem; }
+body[data-view="journey"] { padding-bottom: 0; } /* dock clearance not needed — nothing scrolls under it */
+main > .section-journey[data-view] { padding-bottom: 0; }
+body[data-view="journey"] .tl-scroller--journey { margin-bottom: 0; }
