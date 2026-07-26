@@ -6355,31 +6355,157 @@ body[data-view="journey"] .tl-scroller--journey { margin-bottom: 0; }
    Pass AN — vertical journey timeline
    ============================================================ */
 
-.tl-vertical { overflow-y: auto; overflow-x: auto; }
-.tl-strip--v { position: relative; }
+.tl-vertical { position: relative; overflow-y: auto; overflow-x: auto; scroll-padding-bottom: 110px; }
+.tl-strip--v { position: relative; margin-inline: auto; margin-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+/* full-bleed atmosphere: sky + city bands run edge to edge under the column */
+.tlv-under { position: absolute; left: 0; top: 0; min-width: 100%; pointer-events: none; }
 .tl-sky--v {
   width: 100%;
   background-image: linear-gradient(180deg,
-    rgba(38, 52, 92, 0.14) 0%, rgba(38, 52, 92, 0.1) 17%,
-    rgba(226, 150, 96, 0.1) 27%,
-    rgba(255, 252, 242, 0.05) 37%,
+    rgba(38, 52, 92, 0.32) 0%, rgba(38, 52, 92, 0.24) 17%,
+    rgba(226, 150, 96, 0.22) 27%,
+    rgba(255, 252, 242, 0.1) 37%,
     rgba(255, 255, 255, 0) 50%,
-    rgba(255, 252, 242, 0.04) 63%,
-    rgba(235, 166, 88, 0.1) 73%,
-    rgba(196, 92, 74, 0.08) 79%,
-    rgba(38, 52, 92, 0.11) 87%, rgba(38, 52, 92, 0.14) 100%);
+    rgba(255, 252, 242, 0.08) 63%,
+    rgba(235, 166, 88, 0.2) 73%,
+    rgba(196, 92, 74, 0.16) 79%,
+    rgba(38, 52, 92, 0.26) 87%, rgba(38, 52, 92, 0.32) 100%);
   background-repeat: repeat-y;
 }
-.tlv-tick { position: absolute; width: 8px; height: 1px; background: rgba(120, 110, 100, 0.35); }
-.tlv-tick.is-major { width: 14px; height: 2px; background: rgba(120, 110, 100, 0.55); }
-.tlv-hour { position: absolute; font-size: 0.56rem; font-weight: 600; letter-spacing: 0.06em; color: var(--ink-muted); opacity: 0.75; }
-.tl-city-ribbon--v { position: absolute; left: 0; width: 3px; height: auto; border-radius: 2px; }
-.tlv-day-head { position: absolute; left: 0; right: 0; pointer-events: none; }
-.tlv-day-head .tl-day-head-inner { position: sticky; top: 8px; left: auto; pointer-events: auto; }
-.tl-block--v { align-items: flex-start; padding-top: 0.42rem; }
-.tl-block--v .tl-thumb { width: 36px; height: 36px; }
-.tl-span--v { top: 0; bottom: auto; left: 0; width: 4px; height: auto; border-radius: 0 0 3px 0; }
-.tl-sun--v { transform: translate(0, -50%); }
+body:not(.night) .tl-sky--v { mix-blend-mode: multiply; }
+.tlv-day-band { position: absolute; left: 0; right: 0; }
+.tlv-day-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(38, 52, 92, 0.25);
+  box-shadow: 0 0 24px 8px rgba(38, 52, 92, 0.1);
+}
+body.night .tlv-day-rule { background: rgba(147, 167, 221, 0.35); box-shadow: 0 0 24px 8px rgba(147, 167, 221, 0.12); }
+
+/* the instrument rail: one grounded column carrying hours, temps, sun times */
+.tl-strip--v::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--railw, 64px);
+  background: linear-gradient(90deg, rgba(120, 110, 100, 0.07), rgba(120, 110, 100, 0.02));
+  border-right: 1px solid rgba(120, 110, 100, 0.16);
+  pointer-events: none;
+}
+.tlv-tick { position: absolute; left: calc(var(--railw, 64px) - 12px); width: 8px; height: 1px; background: rgba(120, 110, 100, 0.35); }
+.tlv-tick.is-major { width: 10px; height: 2px; background: rgba(120, 110, 100, 0.55); }
+.tlv-hour {
+  position: absolute;
+  left: 0;
+  width: calc(var(--railw, 64px) - 18px);
+  text-align: right;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  opacity: 0.9;
+}
+.tlv-hour.is-major { font-weight: 700; font-size: 0.62rem; }
+body.night .tlv-hour { color: #a9b4d0; }
+body.night .tlv-tick { background: rgba(169, 180, 208, 0.4); }
+body.night .tlv-tick.is-major { background: rgba(169, 180, 208, 0.6); }
+.tlv-grid { position: absolute; left: 0; right: 0; height: 1px; background: rgba(120, 110, 100, 0.1); pointer-events: none; }
+.tlv-grid.is-major { background: rgba(120, 110, 100, 0.22); }
+.tlv-wx-t {
+  position: absolute;
+  left: 0;
+  width: calc(var(--railw, 64px) - 18px);
+  text-align: right;
+  transform: translateY(-50%);
+  font-size: 0.56rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(196, 92, 74, 0.8);
+}
+body.night .tlv-wx-t { color: #e8a066; opacity: 0.85; }
+.tlv-rain-row { position: absolute; left: 0; right: 0; background: linear-gradient(90deg, rgba(74, 112, 168, 0.08), rgba(74, 112, 168, 0.02)); pointer-events: none; }
+body.night .tlv-rain-row { background: linear-gradient(90deg, rgba(147, 167, 221, 0.06), rgba(147, 167, 221, 0.01)); }
+.tlv-gap { position: absolute; width: 0; border-left: 2px dashed rgba(120, 110, 100, 0.28); }
+.tlv-gap span {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  font-size: 0.6rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+body.night .tlv-gap span { background: #141a24; }
+
+/* the city thread binds the column's left edge */
+.tl-city-ribbon--v { position: absolute; width: 3px; height: auto; border-radius: 2px; }
+
+.tlv-day-head { position: absolute; left: 0; right: 0; pointer-events: none; z-index: 4; }
+.tlv-day-head .tl-day-head-inner {
+  position: sticky;
+  top: 8px;
+  left: auto;
+  pointer-events: auto;
+  background: color-mix(in srgb, var(--paper-2) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+body.night .tlv-day-head .tl-day-head-inner { background: color-mix(in srgb, #141a24 92%, transparent); }
+
+/* card anatomy: portrait thumb, unclamped title, ghost duration track;
+   hover moves off the time axis (translateY would read as retiming) */
+.tl-block--v { justify-content: flex-start; align-items: stretch; padding: 0.42rem 0.55rem 0.45rem; border-left-width: 1px; border-left-color: var(--line); box-shadow: 0 1px 4px rgba(60, 50, 40, 0.15); }
+.tl-block--v::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  bottom: 3px;
+  width: 4px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--type-place) 22%, transparent);
+}
+.tl-block--v[data-type="experience"]::before { background: color-mix(in srgb, var(--type-experience) 22%, transparent); }
+.tl-block--v[data-type="food"]::before { background: color-mix(in srgb, var(--type-food) 22%, transparent); }
+.tl-block--v[data-type="shop"]::before { background: color-mix(in srgb, var(--type-shop) 22%, transparent); }
+.tl-block--v[data-type="transit"]::before { background: color-mix(in srgb, var(--type-transit) 22%, transparent); }
+.tl-block--v .tl-thumb { width: 44px; height: auto; align-self: stretch; min-height: 40px; max-height: 120px; object-fit: cover; }
+.tl-block--v .tl-copy { align-self: flex-start; min-width: 0; padding-left: 4px; }
+.tl-block--v strong { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.tl-block--v.is-tall .tl-thumb { width: clamp(44px, 38%, 88px); max-height: none; }
+.tl-block--v.is-slim .tl-thumb { align-self: flex-start; width: 40px; height: 40px; min-height: 40px; max-height: 40px; }
+.tl-span--v { left: 3px; top: 3px; bottom: auto; width: 4px; border-radius: 2px; }
+.tl-block--v.is-timed strong::before { content: none; }
+.tl-block--v.is-timed small::before { content: "◷ "; color: var(--vermillion); font-size: 0.9em; }
+.tl-block--v:hover { transform: translateX(2px); }
+.tl-block--v.is-passive { opacity: 1; background: color-mix(in srgb, var(--paper-2) 72%, transparent); }
+.tl-block--v.is-passive .tl-thumb { filter: grayscale(0.55) opacity(0.8); }
+.tl-block--v.is-passive strong { color: var(--ink-muted); }
+
+.tl-sun--v { left: 4px; transform: translate(0, -100%); font-size: 0.58rem; }
+.tl-sun--v.is-below { transform: translate(0, 15px); }
+.tl-sun-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, currentColor, transparent 55%);
+  opacity: 0.4;
+  pointer-events: none;
+}
+.tl-sun-line.is-rise { color: #c2703d; }
+.tl-sun-line.is-set { color: #51618f; }
+body.night .tl-sun-line.is-rise { color: #e8a066; }
+body.night .tl-sun-line.is-set { color: #93a7dd; }
 
 /* orientation toggle riding the right end of the day nav */
 .journey-nav { display: flex; align-items: flex-end; gap: 0.55rem; }

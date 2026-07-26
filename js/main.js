@@ -1893,7 +1893,10 @@ async function decorateTimelineWeather(board) {
         if (m == null) return "";
         if (isV) {
           const top = ((di * 1440 + m) / 60) * TL_PX_H - x0;
-          return top < 0 ? "" : `<span class="tl-sun tl-sun--v ${cls}" style="top:${top}px; left:3px">${glyph} ${fmt(m)}</span>`;
+          if (top < 0) return "";
+          // only a sun just AFTER an even hour collides with that hour's label
+          const nearLabel = m % 120 <= 18;
+          return `<span class="tl-sun-line ${cls}" style="top:${top}px"></span><span class="tl-sun tl-sun--v ${cls}${nearLabel ? " is-below" : ""}" style="top:${top}px; left:4px">${glyph} ${fmt(m)}</span>`;
         }
         return `<span class="tl-sun ${cls}" style="left:${di * TL_DAY_W + (m / 60) * TL_PX_H - x0}px; top:${y}px">${glyph} ${fmt(m)}</span>`;
       };
@@ -1904,33 +1907,18 @@ async function decorateTimelineWeather(board) {
   const entries = Object.values(wx);
   let band = "";
   if (entries.length && isV) {
-    const all = entries.flatMap((e) => e.hours.map((h) => h.t)).filter((t) => t != null);
-    const tMin = Math.min(...all);
-    const tMax = Math.max(...all);
-    const pad = 4;
-    const xBase = 46 + pad; // ruler width
-    const xW = 34 - pad * 2;
     const x0v = ((state.tlStartMin || 0) / 60) * TL_PX_H;
-    const pts = [];
-    const bars = [];
-    entries
-      .sort((a, b) => a.di - b.di)
-      .forEach((e) => {
-        e.hours.forEach((h, hi) => {
-          const y = (e.di * 1440 + (hi + 0.5) * 60) / 60 * TL_PX_H - x0v;
-          if (y < 0) return;
-          if (h.t != null) pts.push(`${Math.round((xBase + ((h.t - tMin) / (tMax - tMin || 1)) * xW) * 10) / 10},${Math.round(y)}`);
-          if (h.p > 0.05) {
-            const bw = Math.min(1, h.p / 4) * xW;
-            bars.push(`<rect x="${xBase}" y="${Math.round(y - TL_PX_H / 2 + 4)}" width="${bw}" height="${TL_PX_H - 8}" rx="2" class="tl-wx-rain"/>`);
-          }
-        });
+    const wide = (board.clientWidth || 0) >= 520;
+    const parts = [];
+    entries.forEach((e) => {
+      e.hours.forEach((h, hi) => {
+        const y = (((e.di * 1440 + (hi + 0.5) * 60) / 60) * TL_PX_H) - x0v;
+        if (y < 0) return;
+        if (h.p > 0.05) parts.push(`<div class="tlv-rain-row" style="top:${y - TL_PX_H / 2}px; height:${TL_PX_H}px"></div>`);
+        if (wide && h.t != null && (hi === 9 || hi === 15 || hi === 21)) parts.push(`<span class="tlv-wx-t" style="top:${y}px">${Math.round(h.t)}°</span>`);
       });
-    const stripH = parseFloat(board.querySelector(".tl-strip").style.height);
-    band = `<svg class="tl-wx" width="92" height="${stripH}" aria-hidden="true">
-      ${bars.join("")}
-      <polyline class="tl-wx-temp" points="${pts.join(" ")}"/>
-    </svg>`;
+    });
+    band = parts.join("");
   } else if (entries.length) {
     const all = entries.flatMap((e) => e.hours.map((h) => h.t)).filter((t) => t != null);
     const tMin = Math.min(...all);
@@ -1972,8 +1960,9 @@ async function decorateTimelineWeather(board) {
   });
 }
 
-/* Vertical journey: time flows downward, days stack; the hour ruler and the
-   weather lane live on the left edge, day chips ride sticky through their band */
+/* Vertical journey: time flows downward, days stack; a full-bleed sky +
+   city-band underlay runs behind a centered card column whose left edge
+   carries a single instrument rail (hours, temps, sun times) */
 function renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP }) {
   // repack lanes for the vertical minimum (block height), not label width
   const minV = Math.ceil(((62 + 8) / PX_H) * 60);
@@ -1989,35 +1978,80 @@ function renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP }) {
     lanes[li] = b.start + Math.max(b.dur, minV);
     b.lane = li;
   });
-  const maxLanes = Math.max(1, ...Object.values(laneEnds).map((l) => l.length));
-  const RULER_W = 46;
-  const WX_W = 34;
-  const CX0 = RULER_W + WX_W + 12;
-  const narrow = (board.clientWidth || 400) < 520;
-  const LANE_W = narrow ? 150 : 196;
+  const boardW = board.clientWidth || 400;
+  const narrow = boardW < 520;
+  const RAIL_W = narrow ? 44 : 64;
+  const CX0 = RAIL_W + 12;
+  const avail = Math.min(boardW, 760) - CX0 - 24;
+  // every day is centered in the same content box; lanes sit side by side
+  // when that leaves cards readable, else they cascade calendar-style
+  const dayGeo = TRIP.days.map((_, di) => {
+    const n = (laneEnds[di] || []).length || 1;
+    const sbs = Math.min(340, Math.floor((avail - (n - 1) * LANE_GAP) / n));
+    let w, off;
+    if (n === 1 || sbs >= 200) {
+      w = sbs;
+      off = w + LANE_GAP;
+    } else {
+      w = Math.max(150, Math.min(340, Math.floor(avail / (1 + 0.45 * (n - 1)))));
+      off = Math.max(44, Math.floor((avail - w) / (n - 1)));
+    }
+    const extent = w + off * (n - 1);
+    return { w, off, x0: CX0 + Math.max(0, Math.floor((avail - extent) / 2)) };
+  });
   const DAY_H = 24 * PX_H;
   const O0 = (startMin / 60) * PX_H;
   const totalH = TRIP.days.length * DAY_H - O0 + 16;
-  const contentW = CX0 + maxLanes * (LANE_W + LANE_GAP) + 12;
+  const stripW = CX0 + avail + 16;
   const fmtHM = (min) => `${String(Math.floor(min / 60) % 24).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
 
+  const underBands = [];
   const bands = TRIP.days.map((d, di) => {
     const city = cityById(d.cityId);
     const tint = JOURNEY_CITY_TINT[d.cityId] || "rgba(30,58,95,0.05)";
+    const solid = tint.replace(/[\d.]+\)$/, "0.9)");
     const top = di * DAY_H - O0;
+    underBands.push(
+      `<div class="tlv-day-band" style="top:${top}px; height:${DAY_H + 1}px; background:${tint}"></div>` +
+        (top >= 0 ? `<div class="tlv-day-rule" style="top:${top}px"></div>` : "")
+    );
     const ticks = [];
     for (let h = 0; h < 24; h++) {
       const y = top + h * PX_H;
       if (y < -2) continue;
-      ticks.push(`<span class="tlv-tick ${h % 12 === 0 ? "is-major" : ""}" style="top:${y}px; left:${RULER_W - 10}px"></span>`);
-      if (h % 2 === 0) ticks.push(`<span class="tlv-hour" style="top:${y + 2}px; left:4px">${String(h).padStart(2, "0")}</span>`);
+      ticks.push(`<span class="tlv-tick ${h % 12 === 0 ? "is-major" : ""}" style="top:${y}px"></span>`);
+      if (h % 2 === 0) {
+        if (h > 0) ticks.push(`<div class="tlv-grid ${h % 12 === 0 ? "is-major" : ""}" style="top:${y}px"></div>`);
+        ticks.push(`<span class="tlv-hour ${h % 12 === 0 ? "is-major" : ""}" style="top:${y + 2}px">${String(h).padStart(2, "0")}</span>`);
+      }
     }
     return `
-    <div class="tl-city-ribbon tl-city-ribbon--v" style="top:${top}px; height:${DAY_H + 1}px; background:${tint.replace(/[\d.]+\)$/, "0.9)")}"></div>
+    <div class="tl-city-ribbon tl-city-ribbon--v" style="top:${top}px; height:${DAY_H + 1}px; left:${dayGeo[di].x0 - 9}px; background:${solid}"></div>
     <div class="tlv-day-head" style="top:${Math.max(0, top)}px; height:${DAY_H - Math.max(0, -top)}px">
-      <span class="tl-day-head-inner" style="margin-left:${CX0}px"><strong>D${di + 1}</strong> · ${escapeHtml([new Date(d.date + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }), city?.name].filter(Boolean).join(" · "))}</span>
+      <span class="tl-day-head-inner" style="margin-left:${dayGeo[di].x0}px"><strong>D${di + 1}</strong> · ${escapeHtml([new Date(d.date + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }), city?.name].filter(Boolean).join(" · "))}</span>
     </div>
     ${ticks.join("")}`;
+  });
+
+  // free-time connectors: a dashed thread + duration pill in gaps the eye
+  // would otherwise read as "page ended"
+  const gaps = [];
+  TRIP.days.forEach((_, di) => {
+    const db = blocks.filter((b) => b.di === di).sort((a, b) => a.start - b.start);
+    let timeEnd = null;
+    let visEnd = null;
+    db.forEach((b) => {
+      if (visEnd != null && b.start - visEnd >= 75) {
+        const y0 = ((di * 1440 + visEnd) / 60) * PX_H - O0;
+        const gapH = ((b.start - visEnd) / 60) * PX_H;
+        if (y0 >= 0)
+          gaps.push(
+            `<div class="tlv-gap" style="top:${y0 + 8}px; height:${gapH - 16}px; left:${dayGeo[di].x0 + 18}px"><span>${formatDurationMin(b.start - timeEnd)}</span></div>`
+          );
+      }
+      timeEnd = Math.max(timeEnd ?? 0, b.start + b.dur);
+      visEnd = Math.max(visEnd ?? 0, b.start + Math.max(b.dur, minV));
+    });
   });
 
   const byGroup = {};
@@ -2025,13 +2059,14 @@ function renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP }) {
     if (b.g) (byGroup[`${b.g.id}:${b.di}`] ||= { g: b.g, items: [] }).items.push(b);
   });
   const bubbles = Object.values(byGroup).map(({ g, items }) => {
+    const geo = dayGeo[items[0].di];
     const y0 = Math.min(...items.map((b) => b.di * DAY_H + (b.start / 60) * PX_H)) - O0 - 8;
     const y1 = Math.max(...items.map((b) => b.di * DAY_H + ((b.start + b.dur) / 60) * PX_H)) - O0 + 8;
     const l0 = Math.min(...items.map((b) => b.lane));
     const l1 = Math.max(...items.map((b) => b.lane));
     const info = groupInfo(g);
     const tag = info.start ? `${info.start} ⇢ ${info.end || info.start}` : "";
-    return `<div class="tl-group" style="left:${CX0 + l0 * (LANE_W + LANE_GAP) - 8}px; top:${y0}px; width:${(l1 - l0 + 1) * (LANE_W + LANE_GAP) - LANE_GAP + 16}px; height:${y1 - y0}px">
+    return `<div class="tl-group" style="left:${geo.x0 + l0 * geo.off - 8}px; top:${y0}px; width:${(l1 - l0) * geo.off + geo.w + 16}px; height:${y1 - y0}px">
       <button type="button" class="tl-group-tag" data-group-edit="${g.id}">結び ${escapeHtml(g.label)}${tag ? ` · ${escapeHtml(tag)}` : ""}</button>
     </div>`;
   });
@@ -2042,22 +2077,27 @@ function renderTimelineVertical(board, { blocks, startMin, PX_H, LANE_GAP }) {
     const height = Math.max(62, durH);
     const passive = b.w.active === false;
     const img = wishImage(b.w);
+    const geo = dayGeo[b.di];
     const range = b.timed ? `${fmtHM(b.start)}–${fmtHM(b.start + b.dur)}` : `~${formatDurationMin(b.dur)}`;
-    return `<button type="button" class="tl-block tl-block--v ${passive ? "is-passive" : ""} ${isHidden(b.w) ? "is-hidden" : ""} ${b.timed ? "is-timed" : ""} ${b.w.type === "transit" ? "is-transit" : ""}"
+    return `<button type="button" class="tl-block tl-block--v ${passive ? "is-passive" : ""} ${isHidden(b.w) ? "is-hidden" : ""} ${b.timed ? "is-timed" : ""} ${b.w.type === "transit" ? "is-transit" : ""} ${height >= 120 ? "is-tall" : ""} ${geo.w < 190 ? "is-slim" : ""}"
       data-min-open="${b.w.id}" data-type="${escapeHtml(b.w.type || "place")}"
-      style="left:${CX0 + b.lane * (LANE_W + LANE_GAP)}px; top:${top}px; width:${LANE_W}px; height:${height}px" title="${escapeHtml(b.w.label)}">
+      style="left:${geo.x0 + b.lane * geo.off}px; top:${top}px; width:${geo.w}px; height:${height}px; z-index:${Math.min(3, 1 + b.lane)}" title="${escapeHtml(b.w.label)}">
       ${img ? `<img class="tl-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : `<span class="tl-dot"></span>`}
       <span class="tl-copy">
         <strong>${escapeHtml(b.w.label)}</strong>
         <small>${escapeHtml(range)}</small>
       </span>
-      <span class="tl-span tl-span--v" style="height:${Math.min(durH, height - 2)}px"></span>
+      <span class="tl-span tl-span--v" style="height:${Math.min(durH, height - 6)}px"></span>
     </button>`;
   });
 
-  board.innerHTML = `<div class="tl-strip tl-strip--v" style="height:${totalH}px; min-width:${contentW}px">
+  board.innerHTML = `<div class="tlv-under" style="height:${totalH}px; width:${stripW}px">
     <div class="tl-sky tl-sky--v" style="height:${totalH}px; background-size:100% ${DAY_H}px; background-position:0 ${-O0}px"></div>
+    ${underBands.join("")}
+  </div>
+  <div class="tl-strip tl-strip--v" style="height:${totalH}px; width:${stripW}px; --railw:${RAIL_W}px">
     ${bands.join("")}
+    ${gaps.join("")}
     ${bubbles.join("")}
     ${blockHtml.join("")}
   </div>`;
