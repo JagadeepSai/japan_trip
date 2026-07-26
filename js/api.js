@@ -325,3 +325,132 @@ const ShopStore = (() => {
 
   return { list, create, update, remove, subscribe };
 })();
+
+/**
+ * Shared trip settings (e.g. trip start/end dates) — same dual-mode pattern.
+ * DB table: settings(key text primary key, value jsonb)
+ */
+const SettingsStore = (() => {
+  const LOCAL_KEY = "jp-settings-v1";
+  let client = null;
+
+  function ensureClient() {
+    if (client || !isSupabaseConfigured()) return client;
+    if (typeof supabase === "undefined" || !supabase.createClient) return null;
+    client = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+    return client;
+  }
+
+  function localAll() {
+    try {
+      return JSON.parse(localStorage.getItem(LOCAL_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  async function get(key) {
+    const sb = ensureClient();
+    if (sb) {
+      try {
+        const { data, error } = await sb.from("settings").select("value").eq("key", key).maybeSingle();
+        if (error) throw error;
+        if (data) return data.value;
+      } catch (err) {
+        // table missing / offline — the local mirror keeps settings usable
+        console.warn("[settings] cloud read failed, using local mirror:", err?.message || err);
+      }
+    }
+    return localAll()[key] ?? null;
+  }
+
+  async function set(key, value) {
+    // always write the local mirror first, so a failed cloud write (e.g. the
+    // settings table not created yet) still persists on this device
+    const all = localAll();
+    all[key] = value;
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(all));
+    const sb = ensureClient();
+    if (sb) {
+      const { error } = await sb.from("settings").upsert({ key, value });
+      if (error) throw error;
+    }
+  }
+
+  function subscribe(onChange) {
+    const sb = ensureClient();
+    if (!sb) return () => {};
+    const channel = sb
+      .channel("settings-live")
+      .on("postgres_changes", { event: "*", schema: "public", table: "settings" }, () => onChange())
+      .subscribe();
+    return () => sb.removeChannel(channel);
+  }
+
+  return { get, set, subscribe };
+})();
+
+/**
+ * Google sign-in via Supabase Auth (supabase mode only) + per-user private
+ * settings (RLS: auth.uid() = user_id). Used to sync the chat connection.
+ */
+const AuthStore = (() => {
+  let client = null;
+
+  function ensureClient() {
+    if (client || !isSupabaseConfigured()) return client;
+    if (typeof supabase === "undefined" || !supabase.createClient) return null;
+    client = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+    return client;
+  }
+
+  const available = () => !!ensureClient();
+
+  async function getUser() {
+    const sb = ensureClient();
+    if (!sb) return null;
+    const { data } = await sb.auth.getUser();
+    return data?.user || null;
+  }
+
+  async function signInGoogle() {
+    const sb = ensureClient();
+    if (!sb) return;
+    await sb.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: location.origin + location.pathname },
+    });
+  }
+
+  async function signOut() {
+    await ensureClient()?.auth.signOut();
+  }
+
+  async function loadUserSettings() {
+    const sb = ensureClient();
+    const user = await getUser();
+    if (!sb || !user) return null;
+    const { data, error } = await sb.from("user_settings").select("value").eq("user_id", user.id).maybeSingle();
+    if (error) throw error;
+    return data?.value || null;
+  }
+
+  async function saveUserSettings(patch) {
+    const sb = ensureClient();
+    const user = await getUser();
+    if (!sb || !user) return;
+    const current = (await loadUserSettings()) || {};
+    const { error } = await sb.from("user_settings").upsert({ user_id: user.id, value: { ...current, ...patch } });
+    if (error) throw error;
+  }
+
+  // fires on OAuth return / sign-out so the UI can follow the session
+  function onChange(cb) {
+    const sb = ensureClient();
+    if (!sb) return () => {};
+    const { data } = sb.auth.onAuthStateChange((_event, session) => cb(session?.user || null));
+    return () => data?.subscription?.unsubscribe();
+  }
+
+  return { available, getUser, signInGoogle, signOut, loadUserSettings, saveUserSettings, onChange };
+})();

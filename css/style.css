@@ -4423,3 +4423,1830 @@ body.night .wc-time { border-color: rgba(155, 184, 224, 0.3); }
 .wc-min-name { flex: 1 1 100%; overflow-wrap: anywhere; }
 .wc-min .wc-city { margin-left: calc(8px + 0.5rem); } /* aligns under the name, past the dot */
 .wc-min-dot { margin-top: 6px; }
+
+/* ============================================================
+   Pass T — event images · inbox filters
+   ============================================================ */
+.wc-img {
+  display: block;
+  width: calc(100% + 3px + 0.85rem + 0.95rem);
+  height: 96px;
+  object-fit: cover;
+  margin: -0.8rem -0.85rem 0.6rem calc(-0.95rem - 3px);
+  border-radius: 9px 9px 0 0;
+  border-bottom: 1px solid var(--line);
+}
+.wish-card.is-passive .wc-img { opacity: 0.75; filter: saturate(0.8); }
+.pin-hovercard .hc-img {
+  display: block;
+  width: calc(100% + 26px);
+  height: 92px;
+  object-fit: cover;
+  margin: -10px -14px 8px -12px;
+  border-radius: 11px 11px 0 0;
+}
+.wish-preview-img {
+  display: block;
+  width: calc(100% + 2rem);
+  height: 118px;
+  object-fit: cover;
+  margin: -0.9rem -1rem 0.65rem;
+  border-radius: 11px 11px 0 0;
+}
+.wish-image-input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.85rem;
+  margin: 0.15rem 0 0.45rem;
+  outline: none;
+}
+.wish-image-input:focus { border-color: var(--indigo-soft); box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08); }
+
+/* Inbox filter bar */
+.inbox-filters {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0 0.95rem 0.75rem;
+}
+#inbox-tray[hidden] ~ .inbox-filters,
+.inbox-tray-head[aria-expanded="false"] ~ .inbox-filters { display: none; }
+.inbox-filters input[type="search"] {
+  width: min(340px, 100%);
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper-2);
+  color: var(--ink);
+  font-size: 0.8rem;
+  outline: none;
+}
+.inbox-filters input[type="search"]:focus { border-color: var(--indigo-soft); box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08); }
+.inbox-filter-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+/* ============================================================
+   Pass U — calendar grid view · 旅路 journey river
+   ============================================================ */
+
+/* Calendar view */
+.kanban--cal {
+  display: block;
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+  scroll-snap-type: none;
+}
+.board-lane-wrap.is-cal .lane-nav { display: none; }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.cal-weekday {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 0.2rem 0.4rem 0.4rem;
+}
+.cal-cell {
+  min-height: 110px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.4rem;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+body.night .cal-cell { background: rgba(28, 34, 43, 0.5); }
+.cal-cell.is-off { background: transparent; border-style: dashed; opacity: 0.45; min-height: 60px; }
+.cal-cell.drag-over { background: rgba(196, 92, 74, 0.1); box-shadow: inset 0 0 0 1.5px var(--vermillion); }
+.cal-cell-head { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.4rem; flex-wrap: wrap; }
+.cal-date { font-family: var(--font-latin); font-weight: 600; font-size: 1rem; color: var(--indigo); }
+body.night .cal-date { color: #cdd9ec; }
+.cal-cell.is-off .cal-date { font-size: 0.8rem; color: var(--ink-muted); }
+.cal-day { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; color: var(--vermillion); }
+.cal-city { font-size: 0.6rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.cal-cards { display: flex; flex-direction: column; gap: 0.3rem; padding: 0; min-height: 40px; }
+.cal-cards .wish-card--min { border-radius: 8px 8px 12px 12px; border-bottom-width: 2px; }
+.cal-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1.5px solid rgba(30, 58, 95, 0.3);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--indigo);
+  cursor: pointer;
+  text-align: left;
+}
+body.night .cal-group { color: #cdd9ec; border-color: rgba(155, 184, 224, 0.3); background: rgba(28, 34, 43, 0.4); }
+.cal-group svg { color: var(--vermillion); flex: 0 0 auto; }
+.cal-group em { font-style: normal; margin-left: auto; font-size: 0.62rem; background: var(--indigo); color: #f7f2ea; border-radius: 999px; padding: 0 5px; }
+@media (max-width: 900px) {
+  .cal-grid { grid-template-columns: repeat(2, 1fr); }
+  .cal-weekday { display: none; }
+  .cal-cell.is-off { display: none; }
+}
+
+/* 旅路 Journey */
+.section-journey { position: relative; max-width: 1180px; }
+.journey-inner { transition: opacity 0.3s ease; }
+.section-journey.is-collapsed { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+.section-journey.is-collapsed .journey-inner { display: none; }
+.journey-collapse {
+  position: absolute;
+  left: -6px;
+  top: 6.5rem;
+  bottom: 6rem;
+  width: 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 0.8rem;
+  color: var(--ink-muted);
+  transition: color 0.2s ease, border-color 0.2s ease;
+  z-index: 5;
+}
+.journey-collapse:hover { color: var(--vermillion); border-color: var(--indigo-soft); }
+.jc-label {
+  writing-mode: vertical-rl;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.jc-chev { transition: transform 0.3s var(--ease); }
+.section-journey.is-collapsed .journey-collapse { position: static; width: auto; flex-direction: row; padding: 0.55rem 1rem; bottom: auto; top: auto; }
+.section-journey.is-collapsed .jc-label { writing-mode: horizontal-tb; }
+.section-journey.is-collapsed .jc-chev { transform: rotate(180deg); }
+
+.journey-body { position: relative; border-radius: var(--r-lg); }
+.journey-river { position: absolute; inset: 0; }
+.jflow { animation: jflow 7s linear infinite; }
+.jflow-b { animation-duration: 11s; animation-direction: reverse; }
+@keyframes jflow {
+  to { stroke-dashoffset: -200; }
+}
+
+.jday {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 3;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 1.3rem;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  max-width: 92%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jday-kicker { display: block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--vermillion); }
+.jday strong { font-family: var(--font-latin); font-size: 0.98rem; color: var(--indigo); }
+body.night .jday strong { color: #cdd9ec; }
+
+.jcard {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  height: 80px;
+  padding: 0.45rem 0.6rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 12px 12px 18px 18px;
+  border-bottom: 3px solid rgba(30, 58, 95, 0.55);
+  box-shadow: var(--shadow-pin);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  z-index: 2;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.jcard:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.jcard img { width: 62px; height: 62px; object-fit: cover; border-radius: 8px; flex: 0 0 auto; }
+.jcard-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--type-place); flex: 0 0 auto; margin-left: 0.3rem; }
+.jcard[data-type="experience"] .jcard-dot { background: var(--type-experience); }
+.jcard[data-type="food"] .jcard-dot { background: var(--type-food); }
+.jcard[data-type="shop"] .jcard-dot { background: var(--type-shop); }
+.jcard-copy { min-width: 0; display: grid; gap: 1px; }
+.jcard-copy strong { font-family: var(--font-latin); font-size: 0.85rem; line-height: 1.25; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.jcard-copy small { font-size: 0.66rem; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jcard.is-maybe { opacity: 0.62; border-style: dashed; }
+.jcard.is-hidden { background: #170b10; border-color: rgba(255, 46, 77, 0.5); }
+.jcard.is-hidden strong { color: #ff9fae; }
+
+.jtransit {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  text-align: center;
+  background: var(--paper);
+  border: 1.5px dashed var(--type-transit);
+  border-radius: 12px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font: inherit;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 1px;
+  max-width: 86%;
+}
+.jtransit:hover { border-style: solid; }
+.jtransit-mode { font-family: var(--font-latin); font-weight: 600; font-size: 0.82rem; color: var(--type-transit); }
+.jtransit-time { font-size: 0.74rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.jtransit-date { font-size: 0.62rem; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.jleg {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  background: color-mix(in srgb, var(--paper) 80%, transparent);
+  padding: 0 4px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1;
+  pointer-events: none;
+}
+body.night .jcard { background: var(--paper-2); }
+body.night .journey-river path[stroke="#c1443a"] { opacity: 1; }
+@media (max-width: 700px) {
+  .journey-collapse { display: none; }
+  .jday strong { font-size: 0.85rem; }
+}
+
+/* ============================================================
+   Pass V — tabbed views · map modal · footer · inset card images
+   ============================================================ */
+
+/* One section on screen at a time; the dock switches views */
+main > .section[data-view]:not(.is-active-view) { display: none; }
+main > .section[data-view] { border-top: none; padding-top: 4rem; }
+
+/* Board-card image: inset frame under the tag row (the full-bleed banner
+   overhung the card border and clipped the corners) */
+.wc-img {
+  width: 100%;
+  height: 108px;
+  object-fit: cover;
+  margin: 0.15rem 0 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+/* ---- Map modal ---- */
+.map-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70; /* under the dock (80) so Plan/Shop/… stay clickable over the backdrop */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(10px, 2.5vw, 30px);
+  padding-bottom: calc(var(--dock-h) + 0.75rem);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.26s ease, visibility 0s linear 0.26s;
+}
+.map-overlay.open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.26s ease;
+}
+.map-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 24, 40, 0.42);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+body.night .map-modal-backdrop { background: rgba(4, 7, 14, 0.6); }
+.map-overlay .section-map {
+  position: relative;
+  z-index: 1;
+  width: min(1280px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  margin: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 2.3rem 2.2rem 1.9rem;
+}
+.map-overlay .section-intro { margin-bottom: 1.3rem; }
+.map-overlay .trip-map { height: calc(100vh - 330px); min-height: 380px; }
+.map-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  z-index: 5;
+}
+body.map-open { overflow: hidden; }
+
+/* ---- Footer: countdown, then the reference links ---- */
+.site-footer {
+  display: grid;
+  gap: 1.15rem;
+  justify-items: center;
+  padding-top: 3rem;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem 0.6rem;
+  max-width: 580px;
+}
+.footer-pill {
+  padding: 0.52rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+.footer-pill:hover {
+  color: var(--vermillion);
+  border-color: currentColor;
+  transform: translateY(-1px);
+}
+
+/* River flow animation only runs while the river is on screen */
+.journey-body:not(.is-flowing) .jflow { animation-play-state: paused; }
+
+@media (max-width: 700px) {
+  .map-overlay { padding: 0; align-items: stretch; }
+  .map-overlay .section-map {
+    width: 100%;
+    max-height: none;
+    border: none;
+    border-radius: 0;
+    padding: 1.6rem 1rem calc(var(--dock-h) + 1.2rem);
+  }
+  .map-overlay .trip-map { height: 58vh; min-height: 320px; }
+}
+
+/* ============================================================
+   Pass W — compact per-tab hero · tab palettes · map modal fit ·
+   FAQ guide view · hovercard image · dock alignment
+   ============================================================ */
+
+/* ---- Hero: a banner, not a full-screen scroll section ---- */
+.hero { min-height: clamp(300px, 40vh, 440px); }
+.hero-simple .hero-content { padding: 3.4rem 1.5rem 2.5rem; }
+.hero-kicker { margin: 0 0 0.7rem; font-size: 0.72rem; }
+.hero-ja { font-size: clamp(2.3rem, 5.5vw, 3.5rem); }
+.hero-en { margin-top: 0.5rem; font-size: clamp(0.8rem, 1.6vw, 0.95rem); }
+.hero-lede { margin: 0.85rem auto 0; font-size: 0.92rem; }
+.hero-fuji { height: min(18vh, 140px); bottom: 0; }
+
+/* Each tab hangs its own postcard behind the title */
+body[data-view="journey"] .hero-photo {
+  background-image: url("https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=1600&q=80&auto=format&fit=crop");
+  background-position: center 55%;
+}
+body[data-view="shop"] .hero-photo {
+  background-image: url("https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1600&q=80&auto=format&fit=crop");
+  background-position: center 40%;
+}
+body[data-view="taste"] .hero-photo {
+  background-image: url("https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=1600&q=80&auto=format&fit=crop");
+  background-position: center 60%;
+}
+body[data-view="faq"] .hero-photo {
+  background-image: url("https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=1600&q=80&auto=format&fit=crop");
+  background-position: center 62%;
+}
+
+/* ---- Per-tab ambient palette (subtle radial accents; night keeps its ink) ---- */
+body[data-view="journey"] {
+  background:
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(74, 112, 142, 0.13), transparent 55%),
+    radial-gradient(ellipse 60% 35% at 90% 5%, rgba(196, 92, 74, 0.06), transparent 50%),
+    var(--paper);
+}
+body[data-view="shop"] {
+  background:
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(171, 78, 116, 0.1), transparent 55%),
+    radial-gradient(ellipse 60% 35% at 90% 5%, rgba(224, 182, 79, 0.1), transparent 50%),
+    var(--paper);
+}
+body[data-view="taste"] {
+  background:
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(110, 140, 80, 0.13), transparent 55%),
+    radial-gradient(ellipse 60% 35% at 90% 5%, rgba(196, 92, 74, 0.07), transparent 50%),
+    var(--paper);
+}
+body[data-view="faq"] {
+  background:
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(122, 110, 165, 0.11), transparent 55%),
+    radial-gradient(ellipse 60% 35% at 90% 5%, rgba(30, 58, 95, 0.08), transparent 50%),
+    var(--paper);
+}
+body.night[data-view="journey"] {
+  background: radial-gradient(ellipse 50% 35% at 80% 0%, rgba(74, 112, 142, 0.17), transparent 50%), #0d1319;
+}
+body.night[data-view="shop"] {
+  background: radial-gradient(ellipse 50% 35% at 80% 0%, rgba(171, 78, 116, 0.15), transparent 50%), #12101a;
+}
+body.night[data-view="taste"] {
+  background: radial-gradient(ellipse 50% 35% at 80% 0%, rgba(110, 140, 80, 0.15), transparent 50%), #0f1410;
+}
+body.night[data-view="faq"] {
+  background: radial-gradient(ellipse 50% 35% at 80% 0%, rgba(122, 110, 165, 0.16), transparent 50%), #100f18;
+}
+
+/* ---- Map modal: fixed chrome, the map takes every spare pixel ---- */
+.map-overlay .section-map {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  padding: 1.4rem 1.6rem 1.3rem;
+}
+.map-modal-head { display: flex; align-items: center; gap: 0.7rem; margin: 0 0 1rem; }
+.map-modal-head h2 { margin: 0; font-size: clamp(1.35rem, 2.4vw, 1.7rem); }
+.map-head-ja { color: var(--vermillion); font-size: 0.78em; margin-left: 0.15rem; }
+.map-modal-head .map-close { position: static; margin-left: auto; }
+.map-overlay .map-layout { flex: 1 1 auto; min-height: 0; }
+.map-overlay .map-frame { min-height: 0; height: 100%; }
+.map-overlay .trip-map { height: 100%; min-height: 340px; }
+.map-overlay .map-index { max-height: 100%; }
+
+/* ---- Pin hovercard image: inset frame like the cards ---- */
+.pin-hovercard .hc-img {
+  width: 100%;
+  height: 86px;
+  object-fit: cover;
+  margin: 0 0 7px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+/* ---- Dock: the map button sits level with its neighbours ---- */
+.dock { align-items: center; }
+.dock-fab { transform: none; padding: 0 0.35rem; }
+.dock-fab-ring { width: 2.9rem; height: 2.9rem; }
+
+/* ---- 案内 FAQ guide view ---- */
+.faq-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+  max-width: 900px;
+  margin-bottom: 1.7rem;
+}
+.faq-fact {
+  display: grid;
+  gap: 2px;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+}
+.faq-fact strong { font-family: var(--font-latin); font-size: 1.55rem; font-weight: 600; color: var(--indigo); line-height: 1.15; }
+body.night .faq-fact strong { color: #cdd9ec; }
+.faq-fact span[lang="ja"] { color: var(--vermillion); font-size: 0.7rem; letter-spacing: 0.2em; }
+.faq-fact small { color: var(--ink-muted); font-size: 0.74rem; }
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 0.9rem;
+}
+.faq-card {
+  display: flex;
+  gap: 1.05rem;
+  align-items: stretch;
+  text-align: left;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--paper-2);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.faq-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--indigo-soft); }
+.faq-card-ja {
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.22em;
+  color: var(--vermillion);
+  opacity: 0.85;
+  border-right: 1px solid var(--line);
+  padding-right: 0.85rem;
+  flex: 0 0 auto;
+}
+.faq-card-body { display: grid; gap: 0.35rem; align-content: start; min-width: 0; }
+.faq-card-body strong { font-family: var(--font-latin); font-size: 1rem; font-weight: 600; color: var(--ink); }
+.faq-card-body small {
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.faq-card-foot { margin-top: 0.2rem; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--vermillion); }
+
+@media (max-width: 700px) {
+  .faq-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero { min-height: clamp(260px, 34vh, 360px); }
+  .map-overlay .section-map { overflow-y: auto; overflow-x: hidden; }
+  .map-overlay .trip-map { height: 56vh; min-height: 300px; }
+}
+
+/* Pass W addendum — hero kicker must read over any postcard; the inked Fuji
+   ridge belongs to the plan view's artwork only */
+.hero-kicker {
+  display: inline-block;
+  padding: 0.42rem 1rem;
+  border-radius: var(--r-pill);
+  background: rgba(250, 247, 242, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+body.night .hero-kicker {
+  background: rgba(10, 14, 24, 0.55);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+body:not([data-view="plan"]) .hero-fuji { display: none; }
+
+@media (max-width: 700px) {
+  .map-overlay .trip-map { height: calc(100dvh - 210px); min-height: 300px; }
+}
+
+/* ============================================================
+   Pass X — verification-round fixes (night lede, pile titles,
+   sync pill, city pins, footer band, map close)
+   ============================================================ */
+
+/* Night hero: the lede kept day ink and vanished on the dark photo */
+body.night .hero-lede {
+  color: #cdd9ec;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Group pile titles: the hover-hidden tools no longer reserve ~88px —
+   they take width only while the pile is hovered/focused */
+.icon-btn.is-sm.group-move,
+.icon-btn.is-sm.group-edit {
+  width: 0;
+  min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-width: 0;
+  overflow: hidden;
+  transition: opacity 0.15s ease, width 0.15s ease;
+}
+.group-block:hover .icon-btn.is-sm.group-move,
+.group-block:hover .icon-btn.is-sm.group-edit,
+.group-block:focus-within .icon-btn.is-sm.group-move,
+.group-block:focus-within .icon-btn.is-sm.group-edit {
+  width: 24px;
+}
+.group-toggle { min-width: 0; }
+.group-name { flex: 1 1 auto; min-width: 0; }
+
+/* The sync badge scrolls away with the hero on phones instead of riding
+   over the board toolbar */
+@media (max-width: 700px) {
+  .sync-pill { position: absolute; }
+}
+
+/* City letters step back at national zoom so cluster counts stay legible */
+.trip-map.zoomed-out .city-marker { opacity: 0.6; }
+.trip-map.zoomed-out .city-marker .pin-dot { transform: scale(0.85); }
+
+/* Map modal close: bigger target, clearer against the washi */
+.map-close {
+  width: 40px;
+  height: 40px;
+  font-size: 1.45rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper-2);
+}
+
+/* Tighten the page tail — the countdown was floating in a cavern */
+main > .section[data-view] { padding-bottom: 3.5rem; }
+.site-footer { padding: 1.8rem 1.5rem calc(var(--dock-h) + 1.4rem); }
+
+/* ============================================================
+   Pass Y — 関所 password gate · integrated banner (no start scroll)
+   ============================================================ */
+
+/* ---- Gate: opaque until the password opens it ---- */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(196, 92, 74, 0.1), transparent 55%),
+    radial-gradient(ellipse 60% 35% at 90% 5%, rgba(30, 58, 95, 0.09), transparent 50%),
+    var(--paper);
+}
+html.authed .gate { display: none; }
+html:not(.authed) body { overflow: hidden; }
+.gate-card {
+  width: min(360px, 100%);
+  text-align: center;
+  padding: 2.2rem 1.9rem 1.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--paper-2);
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+}
+.gate-ja {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.5em;
+  margin-right: -0.5em;
+  color: var(--vermillion);
+}
+.gate-card h1 { margin: 0; font-family: var(--font-display); font-size: 2rem; color: var(--indigo-deep); }
+body.night .gate-card h1 { color: #e8eef8; }
+.gate-hint { margin: 0; font-size: 0.85rem; color: var(--ink-muted); }
+#gate-form { display: flex; gap: 0.5rem; width: 100%; margin-top: 0.4rem; }
+#gate-pass {
+  flex: 1;
+  min-width: 0;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  outline: none;
+}
+#gate-pass:focus { border-color: var(--indigo-soft); box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08); }
+.gate-err { margin: 0; font-size: 0.8rem; color: var(--vermillion); }
+.gate-shake { animation: gate-shake 0.35s ease; }
+@keyframes gate-shake {
+  20% { transform: translateX(-6px); }
+  45% { transform: translateX(5px); }
+  70% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+/* ---- Banner integrated into the page — no scroll section at the start ---- */
+.hero,
+.hero-simple {
+  min-height: 0;
+  max-width: calc(var(--max) - 3rem);
+  margin: 0.9rem auto 0;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  align-items: center;
+}
+.hero-fuji { display: none; }
+.hero-simple .hero-content { padding: 1.55rem 1.25rem 1.5rem; }
+.hero-kicker { margin: 0 0 0.55rem; font-size: 0.6rem; padding: 0.28rem 0.75rem; }
+.hero-ja { font-size: clamp(1.65rem, 3.2vw, 2.3rem); }
+.hero-en { margin-top: 0.3rem; font-size: 0.68rem; letter-spacing: 0.3em; }
+.hero-lede { margin: 0.5rem auto 0; font-size: 0.78rem; }
+.hero-veil {
+  background: linear-gradient(180deg, rgba(250, 247, 242, 0.16), rgba(250, 247, 242, 0.34));
+}
+body.night .hero-veil {
+  background: linear-gradient(180deg, rgba(7, 13, 24, 0.45), rgba(10, 16, 28, 0.6));
+}
+main > .section[data-view] { padding-top: 2.4rem; }
+
+@media (max-width: 700px) {
+  .hero,
+  .hero-simple { margin: 0.6rem 0.75rem 0; max-width: none; }
+  .hero-simple .hero-content { padding: 1.2rem 1rem; }
+}
+
+/* Banner + section heading read as one header — tab switches land on both */
+main > .section[data-view] { padding-top: 1.5rem; }
+main > .section[data-view] .section-intro { margin-bottom: 2rem; }
+
+/* ============================================================
+   Pass Z — shared trip dates · journey date rail · 3D anime river
+   ============================================================ */
+
+/* ---- Trip date range (Plan toolbar) ---- */
+.trip-dates {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+}
+.trip-dates input[type="date"] {
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.28rem 0.1rem;
+  outline: none;
+  width: 8.2em;
+}
+.trip-dates input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.55; }
+body.night .trip-dates input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+/* ---- Journey date rail ---- */
+.journey-rail {
+  position: fixed;
+  left: clamp(6px, 1.8vw, 30px);
+  top: 50%;
+  transform: translateY(-50%);
+  height: min(72vh, 620px);
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  z-index: 40;
+  padding: 0.4rem 0;
+}
+body[data-view="journey"] .journey-rail { display: flex; }
+.journey-rail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--line) 12%, var(--line) 88%, transparent);
+}
+.jrail-day {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 2px 8px;
+  border: none;
+  background: var(--paper);
+  border-radius: 10px;
+  color: var(--ink-muted);
+  font: inherit;
+  cursor: pointer;
+  opacity: 0.62;
+  transition: opacity 0.18s ease, transform 0.18s ease, color 0.18s ease;
+}
+.jrail-day .jrail-num { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; line-height: 1.2; }
+.jrail-day .jrail-date { font-size: 0.55rem; line-height: 1.2; white-space: nowrap; }
+.jrail-day:hover { opacity: 1; color: var(--indigo); }
+.jrail-day.active { opacity: 1; color: var(--vermillion); transform: scale(1.18); }
+.jrail-day.active .jrail-num { text-shadow: 0 0 12px rgba(196, 92, 74, 0.35); }
+body.night .jrail-day { background: #12161c; }
+@media (max-width: 940px) { .journey-rail { display: none !important; } }
+
+/* ---- 3D anime river materials ---- */
+.jbank { stroke: rgba(134, 168, 108, 0.4); }
+body.night .jbank { stroke: rgba(52, 84, 92, 0.45); }
+.jwall { filter: brightness(0.58) saturate(1.15); }
+.jrim { stroke: rgba(255, 255, 255, 0.4); }
+body.night .jrim { stroke: rgba(190, 220, 255, 0.28); }
+.jpin-shadow { fill: rgba(24, 34, 56, 0.28); }
+body.night .jpin-shadow { fill: rgba(0, 0, 0, 0.5); }
+.jspark { stroke: rgba(255, 255, 255, 0.9); animation-duration: 5.5s !important; }
+body.night .jspark { stroke: rgba(210, 235, 255, 0.95); }
+
+/* Depth for everything standing on the valley */
+.jday {
+  box-shadow: 0 10px 24px rgba(30, 48, 80, 0.18), 0 2px 5px rgba(30, 48, 80, 0.12);
+}
+.jcard {
+  box-shadow: 0 12px 26px rgba(30, 48, 80, 0.16), 0 3px 7px rgba(30, 48, 80, 0.1);
+}
+.jcard:hover {
+  transform: translateY(-3px) perspective(600px) rotateX(3deg);
+  box-shadow: 0 18px 34px rgba(30, 48, 80, 0.24), 0 4px 9px rgba(30, 48, 80, 0.12);
+}
+.jtransit { box-shadow: 0 9px 20px rgba(30, 48, 80, 0.15); }
+body.night .jday,
+body.night .jcard,
+body.night .jtransit { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5); }
+
+/* ---- Valley scenery materials (day + night) ---- */
+.jground-shadow { fill: rgba(24, 34, 56, 0.14); stroke: none; }
+body.night .jground-shadow { fill: rgba(0, 0, 0, 0.4); }
+.jbush circle { fill: #86ab68; stroke: #5d7f47; stroke-width: 1; }
+.jbush .jbush-light { fill: #a9c78a; stroke: none; }
+body.night .jbush circle { fill: #2c493b; stroke: #1f382c; }
+body.night .jbush .jbush-light { fill: #3f6150; }
+.jgrass path { stroke: #74a05b; }
+body.night .jgrass path { stroke: #35563f; }
+.jrock ellipse { fill: #c0b8aa; stroke: #948b7d; stroke-width: 0.8; }
+body.night .jrock ellipse { fill: #454c5e; stroke: #333949; }
+.jlamp-post { stroke: #6d5741; stroke-width: 2.2; stroke-linecap: round; }
+.jlamp-box { fill: #f0cf74; stroke: #6d5741; stroke-width: 1.2; }
+.jlamp-cap { fill: #6d5741; }
+.jlamp-halo { fill: rgba(255, 196, 100, 0); transition: fill 0.5s ease; }
+body.night .jlamp-halo { fill: rgba(255, 196, 100, 0.4); }
+body.night .jlamp-box { fill: #ffd98a; filter: drop-shadow(0 0 7px rgba(255, 200, 110, 0.85)); }
+.jtorii path { stroke: #c1443a; fill: none; stroke-linecap: round; }
+body.night .jtorii path { stroke: #e0584a; filter: drop-shadow(0 0 5px rgba(224, 88, 74, 0.4)); }
+.jbridge-deck { fill: none; stroke: #a86a4a; stroke-linecap: round; }
+.jbridge-rail { fill: none; stroke: #7c4433; stroke-linecap: round; }
+body.night .jbridge-deck { stroke: #8a5a40; }
+body.night .jbridge-rail { stroke: #5f3628; }
+.jpond-glint { fill: rgba(255, 255, 255, 0.28); }
+body.night .jpond-glint { fill: rgba(190, 220, 255, 0.2); }
+.jboat-hull { fill: #7c4433; stroke: #5f3628; stroke-width: 1; }
+.jboat-rice { fill: #faf4e6; stroke: #d9cdb4; stroke-width: 0.8; }
+.jboat-fish { fill: #e88a6a; stroke: #c96b4d; stroke-width: 0.6; }
+/* bob the boat's parts, not the positioned group — a CSS transform on .jboat
+   itself would override the SVG placement transform */
+.jboat > * { animation: jboat-bob 3.4s ease-in-out infinite alternate; }
+@keyframes jboat-bob {
+  from { transform: translateY(0); }
+  to { transform: translateY(-2.5px); }
+}
+
+/* ---- Journey rail: bigger, easier to hit ---- */
+.journey-rail { height: min(78vh, 720px); }
+.jrail-day { padding: 4px 12px; border-radius: 12px; }
+.jrail-day .jrail-num { font-size: 0.8rem; }
+.jrail-day .jrail-date { font-size: 0.68rem; }
+.jrail-day.active { transform: scale(1.22); box-shadow: 0 4px 14px rgba(196, 92, 74, 0.22); }
+
+/* ============================================================
+   Pass AA — banner IS the header · timeline mode · durations
+   ============================================================ */
+
+/* ---- Hero as the tab header: kicker + wordmark up top, view title below ---- */
+.hero-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: none;
+  width: 100%;
+  min-height: 205px;
+  padding: 1.15rem 1.6rem 1.2rem;
+  text-align: left;
+}
+.hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.hero-header .hero-kicker { margin: 0; }
+.hero-wordmark { margin: 0; text-align: right; }
+.hero-wordmark .hero-ja { font-size: 1.15rem; letter-spacing: 0.14em; text-shadow: 0 1px 8px rgba(20, 26, 42, 0.5); color: #fdf9f1; }
+.hero-wordmark .hero-en { margin-top: 0.1rem; font-size: 0.5rem; letter-spacing: 0.34em; color: rgba(253, 249, 241, 0.85); text-shadow: 0 1px 6px rgba(20, 26, 42, 0.5); }
+.hero-bottom { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.hero-view-title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+  line-height: 1.1;
+  color: #fdf9f1;
+  text-shadow: 0 2px 16px rgba(20, 26, 42, 0.65), 0 1px 3px rgba(20, 26, 42, 0.5);
+}
+.hero-header .hero-lede {
+  margin: 0;
+  font-size: 0.74rem;
+  color: rgba(253, 249, 241, 0.88);
+  text-shadow: 0 1px 8px rgba(20, 26, 42, 0.6);
+}
+/* darker foot so the white title always reads over any postcard */
+.hero-veil {
+  background: linear-gradient(180deg, rgba(20, 26, 42, 0.14), rgba(250, 247, 242, 0) 38%, rgba(20, 26, 42, 0.52) 100%);
+}
+body.night .hero-veil {
+  background: linear-gradient(180deg, rgba(7, 13, 24, 0.4), rgba(7, 13, 24, 0.18) 38%, rgba(4, 8, 16, 0.66) 100%);
+}
+/* the banner carries the title now — sections drop their own heading */
+main > .section[data-view] .section-intro .eyebrow,
+main > .section[data-view] .section-intro h2 { display: none; }
+main > .section[data-view] .section-intro { margin-bottom: 1.1rem; }
+main > .section[data-view] { padding-top: 1.1rem; }
+
+/* ---- Timeline board mode ---- */
+.kanban--tl {
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  box-shadow: var(--shadow-sm);
+}
+.tl-strip { position: relative; }
+.tl-day { position: absolute; top: 0; bottom: 0; } /* boundaries come from the sky cycle, not a line */
+.tl-day-head {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--line);
+  pointer-events: none;
+}
+.tl-day-head strong { font-family: var(--font-latin); font-size: 0.95rem; color: var(--indigo); }
+body.night .tl-day-head strong { color: #cdd9ec; }
+.tl-day-head span { font-size: 0.68rem; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tl-tick { position: absolute; width: 1px; height: 8px; background: rgba(120, 110, 100, 0.35); }
+.tl-tick.is-major { height: 14px; width: 2px; background: rgba(120, 110, 100, 0.55); }
+.tl-hour { position: absolute; font-size: 0.56rem; font-weight: 600; letter-spacing: 0.06em; color: var(--ink-muted); opacity: 0.75; }
+.tl-block {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--type-place);
+  border-radius: 10px;
+  background: var(--paper);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tl-block:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); z-index: 5; }
+.tl-block strong { font-size: 0.78rem; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tl-block small { font-size: 0.64rem; color: var(--ink-muted); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tl-block[data-type="experience"] { border-left-color: var(--type-experience); }
+.tl-block[data-type="food"] { border-left-color: var(--type-food); }
+.tl-block[data-type="shop"] { border-left-color: var(--type-shop); }
+.tl-block.is-transit { border-style: dashed; border-left-style: solid; border-left-color: var(--type-transit); background: transparent; }
+.tl-block.is-passive { opacity: 0.55; border-style: dashed; }
+.tl-block.is-timed strong::before { content: "◷ "; font-size: 0.7em; color: var(--vermillion); }
+.tl-block.is-hidden { background: #170b10; border-color: rgba(255, 46, 77, 0.5); }
+.tl-block.is-hidden strong { color: #ff9fae; }
+.tl-group {
+  position: absolute;
+  border: 1.5px solid rgba(30, 58, 95, 0.28);
+  background: rgba(30, 58, 95, 0.06);
+  border-radius: 26px 38px 30px 42px / 34px 26px 42px 30px;
+  pointer-events: none;
+}
+body.night .tl-group { border-color: rgba(139, 167, 205, 0.35); background: rgba(139, 167, 205, 0.08); }
+.tl-group-tag {
+  position: absolute;
+  top: -11px;
+  left: 14px;
+  pointer-events: auto;
+  border: 1px solid rgba(30, 58, 95, 0.3);
+  border-radius: var(--r-pill);
+  background: var(--paper-2);
+  color: var(--indigo);
+  font: inherit;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.6rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+body.night .tl-group-tag { color: #9bb8e0; }
+body.night .tl-block { background: var(--paper-2); }
+body.night .kanban--tl { background: #10151c; }
+
+#wish-duration { font-variant-numeric: tabular-nums; }
+
+/* Timeline refinements: day label rides along while you scroll its day;
+   narrow blocks wrap instead of truncating to one letter */
+/* no overflow:hidden here — it would become the sticky chip's scroll root
+   and pin it uselessly to the band instead of the viewport */
+.tl-day-head { padding: 0; white-space: nowrap; }
+.tl-day-head-inner {
+  position: sticky;
+  left: 12px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1px;
+  max-width: 320px;
+  padding: 0.35rem 0.9rem;
+  margin: 0.35rem 0 0 0.5rem;
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--line);
+}
+.tl-block.is-narrow { padding: 0.3rem 0.4rem; }
+.tl-block.is-narrow strong {
+  white-space: normal;
+  font-size: 0.66rem;
+  line-height: 1.15;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tl-block.is-narrow small { display: none; }
+.kanban--tl { min-height: 0; height: auto; }
+.kanban--tl .tl-strip { min-height: 0; }
+.hero-header .hero-kicker { background: rgba(250, 247, 242, 0.78); }
+
+/* ============================================================
+   Pass AB — readable timeline blocks · journey timeline · image fixes
+   ============================================================ */
+
+/* Preview popover image: inset frame, no more negative-margin banner */
+.wish-preview-img {
+  width: 100%;
+  height: 132px;
+  object-fit: cover;
+  margin: 0 0 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+/* Pin hovercard: fixed width so the % image has something to fill */
+.leaflet-tooltip.pin-hovercard { width: 250px; white-space: normal; }
+.pin-hovercard .hc-img { height: 108px; }
+
+/* Timeline scroller shared by Plan and Journey; kill the board's wave
+   pattern + right-edge mask inside the strip */
+.tl-scroller,
+.section-board .kanban--tl {
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  box-shadow: var(--shadow-sm);
+  -webkit-mask-image: none;
+  mask-image: none;
+  padding: 0;
+  min-height: 0;
+  height: auto;
+}
+body.night .tl-scroller,
+body.night .section-board .kanban--tl { background: #10151c; }
+.tl-scroller--journey {
+  margin-bottom: 1.6rem;
+  background:
+    linear-gradient(180deg, rgba(74, 112, 142, 0.1), rgba(134, 168, 108, 0.07) 85%),
+    #fbf8f2;
+}
+body.night .tl-scroller--journey {
+  background:
+    linear-gradient(180deg, rgba(74, 112, 142, 0.16), rgba(20, 30, 44, 0) 85%),
+    #0e141d;
+}
+
+/* Minimal day chip: one quiet line */
+.tl-day-head-inner {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.18rem 0.7rem;
+  margin: 0.3rem 0 0 0.45rem;
+  font-size: 0.66rem;
+  color: var(--ink-muted);
+  border: none;
+  background: color-mix(in srgb, var(--paper-2) 78%, transparent);
+}
+.tl-day-head-inner strong { font-family: var(--font-latin); font-size: 0.72rem; color: var(--vermillion); }
+
+/* Block anatomy: photo + full name + time always visible; the accent bar
+   underneath shows the TRUE time span */
+.tl-block { flex-direction: row; align-items: center; gap: 0.5rem; padding: 0.35rem 0.55rem 0.5rem; border-left-width: 1px; }
+.tl-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); flex: 0 0 auto; }
+.tl-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--type-place); flex: 0 0 auto; margin: 0 4px; }
+.tl-block[data-type="experience"] .tl-dot { background: var(--type-experience); }
+.tl-block[data-type="food"] .tl-dot { background: var(--type-food); }
+.tl-block[data-type="shop"] .tl-dot { background: var(--type-shop); }
+.tl-copy { display: grid; gap: 1px; min-width: 0; }
+.tl-copy strong {
+  font-size: 0.74rem;
+  white-space: normal;
+  line-height: 1.18;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tl-span {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  border-radius: 0 3px 3px 0;
+  background: var(--type-place);
+  opacity: 0.85;
+}
+.tl-block[data-type="experience"] .tl-span { background: var(--type-experience); }
+.tl-block[data-type="food"] .tl-span { background: var(--type-food); }
+.tl-block[data-type="shop"] .tl-span { background: var(--type-shop); }
+.tl-block[data-type="transit"] .tl-span { background: var(--type-transit); }
+
+/* ============================================================
+   Pass AC — journey = hero timeline · city date nav · drag · scrollbars
+   ============================================================ */
+
+/* Journey section goes end-to-end; the timeline is the hero */
+main > .section-journey[data-view] {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+.section-journey .section-intro { padding: 0 1.5rem; }
+.tl-hero {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+.tl-hero .tl-strip { min-height: 420px; }
+
+/* Date navigator: pills with fluid overlapping city bubbles behind them */
+.journey-nav { padding: 0 1.5rem; margin-bottom: 0.9rem; }
+.jnav-track { position: relative; padding-top: 20px; }
+.jnav-bubble {
+  position: absolute;
+  top: 14px;
+  bottom: -6px;
+  border-radius: 22px 30px 24px 34px / 28px 22px 34px 24px;
+  border: 1.5px solid rgba(30, 58, 95, 0.16);
+  pointer-events: none;
+}
+.jnav-bubble span {
+  position: absolute;
+  top: -16px;
+  left: 12px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+body.night .jnav-bubble { border-color: rgba(139, 167, 205, 0.22); }
+.jnav-days { position: relative; display: flex; }
+.jnav-day {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 0.35rem 0.2rem 0.45rem;
+  border: none;
+  background: none;
+  color: var(--ink-muted);
+  font: inherit;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.jnav-day strong { font-family: var(--font-latin); font-size: 0.78rem; line-height: 1.2; }
+.jnav-day span { font-size: 0.58rem; line-height: 1.2; white-space: nowrap; }
+.jnav-day:hover { color: var(--indigo); }
+.jnav-day.active { color: var(--vermillion); transform: scale(1.14); }
+body.night .jnav-day:hover { color: #cdd9ec; }
+
+/* Timeline blocks drag to retime (plan only wires it, cursor hints there) */
+.section-board .kanban--tl .tl-block { cursor: grab; touch-action: pan-x pan-y; }
+.tl-block.is-dragging {
+  cursor: grabbing;
+  z-index: 30;
+  opacity: 0.88;
+  box-shadow: var(--shadow-lg);
+  transition: none;
+}
+
+/* Scrollbars for the strips — the night default looked foreign */
+.tl-scroller,
+.section-board .kanban--tl { scrollbar-width: thin; scrollbar-color: rgba(28, 25, 23, 0.28) transparent; }
+.tl-scroller::-webkit-scrollbar,
+.section-board .kanban--tl::-webkit-scrollbar { height: 10px; background: transparent; }
+.tl-scroller::-webkit-scrollbar-thumb,
+.section-board .kanban--tl::-webkit-scrollbar-thumb { background: rgba(28, 25, 23, 0.22); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+body.night .tl-scroller,
+body.night .section-board .kanban--tl { scrollbar-color: rgba(190, 210, 235, 0.3) transparent; }
+body.night .tl-scroller::-webkit-scrollbar-thumb,
+body.night .section-board .kanban--tl::-webkit-scrollbar-thumb { background: rgba(190, 210, 235, 0.26); }
+
+/* ============================================================
+   Pass AD — GCal create ghost · agenda list · block card polish
+   ============================================================ */
+
+/* Timeline blocks pick up the board card language: washi paper, type accent
+   spine, serif titles */
+.tl-block {
+  border-left-width: 3px;
+  border-left-color: var(--type-place);
+  border-radius: 12px;
+  background: var(--paper-2);
+  box-shadow: var(--shadow-sm);
+}
+.tl-block[data-type="experience"] { border-left-color: var(--type-experience); }
+.tl-block[data-type="food"] { border-left-color: var(--type-food); }
+.tl-block[data-type="shop"] { border-left-color: var(--type-shop); }
+.tl-block.is-transit { border-left-color: var(--type-transit); background: var(--paper); }
+.tl-copy strong { font-family: var(--font-latin); font-weight: 600; font-size: 0.76rem; color: var(--ink); }
+.tl-copy small { letter-spacing: 0.02em; }
+.tl-thumb { width: 42px; height: 42px; border-radius: 9px; box-shadow: 0 1px 4px rgba(28, 25, 23, 0.14); }
+body.night .tl-block { background: #161d27; }
+body.night .tl-block.is-transit { background: #121821; }
+
+/* Google-Calendar-style creation ghost */
+.tl-ghost {
+  position: absolute;
+  top: 96px;
+  bottom: 10px;
+  border: 1.5px dashed var(--vermillion);
+  border-radius: 12px;
+  background: rgba(196, 92, 74, 0.09);
+  color: var(--vermillion);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 6px 8px;
+  pointer-events: none;
+  z-index: 25;
+}
+.kanban--tl .tl-strip { cursor: copy; }
+.kanban--tl .tl-strip .tl-block { cursor: grab; }
+
+/* Agenda list — a quiet, readable day-by-day index */
+.agenda { display: grid; }
+.agenda-day {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 1.1rem;
+  padding: 0.95rem 0.4rem;
+  border-bottom: 1px dashed rgba(120, 110, 100, 0.28);
+  align-items: start;
+}
+.agenda-day:last-child { border-bottom: none; }
+.agenda-date { display: grid; gap: 1px; padding-top: 0.2rem; }
+.agenda-date strong { font-family: var(--font-latin); font-size: 1.12rem; font-weight: 600; color: var(--indigo); line-height: 1.15; }
+body.night .agenda-date strong { color: #cdd9ec; }
+.agenda-date span { font-size: 0.7rem; color: var(--ink-muted); }
+.agenda-date em { font-style: normal; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--vermillion); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agenda-events { display: flex; flex-wrap: wrap; gap: 0.4rem 0.45rem; align-items: center; }
+.agenda-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.34rem 0.7rem 0.34rem 0.55rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--type-place);
+  border-radius: 9px;
+  background: var(--paper-2);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.agenda-chip:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.agenda-chip[data-type="experience"] { border-left-color: var(--type-experience); }
+.agenda-chip[data-type="food"] { border-left-color: var(--type-food); }
+.agenda-chip[data-type="shop"] { border-left-color: var(--type-shop); }
+.agenda-chip.is-transit { border-style: dashed; border-left-style: solid; border-left-color: var(--type-transit); background: transparent; }
+.agenda-chip.is-passive { opacity: 0.55; border-style: dashed; }
+.agenda-chip.is-hidden { background: #170b10; border-color: rgba(255, 46, 77, 0.5); color: #ff9fae; }
+.agenda-time { font-size: 0.66rem; font-weight: 700; color: var(--vermillion); font-variant-numeric: tabular-nums; }
+.agenda-knot {
+  border: 1px dashed rgba(30, 58, 95, 0.4);
+  border-radius: 999px;
+  background: rgba(30, 58, 95, 0.05);
+  color: var(--indigo);
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 0.28rem 0.7rem;
+  cursor: pointer;
+}
+body.night .agenda-chip { background: #161d27; }
+body.night .agenda-knot { color: #9bb8e0; border-color: rgba(139, 167, 205, 0.4); }
+.agenda-empty { font-size: 0.74rem; color: var(--ink-muted); font-style: italic; }
+@media (max-width: 700px) {
+  .agenda-day { grid-template-columns: 1fr; gap: 0.5rem; }
+}
+
+/* ============================================================
+   Pass AE — list without chrome · journey backdrop · no page scroll
+   ============================================================ */
+
+/* List view floats on the page — no board container behind it */
+.section-board .kanban--list {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0.3rem 1.25rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Journey strip: no box at all — the timeline floats on the page itself,
+   day bands and cards carry every bit of colour */
+.tl-scroller--journey,
+body.night .tl-scroller--journey {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Journey fits the viewport — the page itself never scrolls; tall lane
+   stacks scroll INSIDE the strip instead. The lock must sit on <html>:
+   body{overflow:hidden} doesn't stop the document scroller. */
+html:has(body[data-view="journey"]) { overflow: hidden; }
+body[data-view="journey"] { overflow: hidden; }
+.tl-hero { overflow-y: auto; }
+.tl-hero .tl-strip { min-height: 0; }
+
+
+/* City roofline: a slim colored ribbon along each day's top edge */
+.tl-city-ribbon {
+  position: absolute;
+  top: 0;
+  height: 3px;
+  border-radius: 2px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+body.night .tl-city-ribbon { opacity: 0.45; }
+
+
+/* ============================================================
+   Pass AF — seamless sky · sun markers · hourly weather ribbon
+   ============================================================ */
+
+/* One repeating gradient = zero seams between days (per-day divs left
+   subpixel joints that shimmered while scrolling) */
+.tl-sky {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg,
+    rgba(38, 52, 92, 0.14) 0%, rgba(38, 52, 92, 0.1) 17%,
+    rgba(226, 150, 96, 0.1) 27%,
+    rgba(255, 252, 242, 0.05) 37%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 252, 242, 0.04) 63%,
+    rgba(235, 166, 88, 0.1) 73%,
+    rgba(196, 92, 74, 0.08) 79%,
+    rgba(38, 52, 92, 0.11) 87%, rgba(38, 52, 92, 0.14) 100%);
+  background-repeat: repeat-x;
+}
+
+.tl-wx { position: absolute; top: 0; left: 0; pointer-events: none; }
+.tl-wx-temp {
+  fill: none;
+  stroke: var(--vermillion);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+.tl-wx-rain { fill: rgba(74, 112, 168, 0.3); }
+body.night .tl-wx-temp { stroke: #e0876f; opacity: 0.9; }
+body.night .tl-wx-rain { fill: rgba(120, 160, 220, 0.32); }
+
+.tl-sun {
+  position: absolute;
+  transform: translate(-50%, 13px); /* below the hour labels, still on the ruler */
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+.tl-sun.is-rise { color: #c2703d; }
+.tl-sun.is-set { color: #51618f; }
+body.night .tl-sun.is-rise { color: #e8a066; }
+body.night .tl-sun.is-set { color: #93a7dd; }
+
+.tl-day-wx {
+  margin-left: 0.45rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--line);
+  font-size: 0.62rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Pass AG — droplet glyph · full-bleed banner · tab rooms
+   ============================================================ */
+
+.wx-drop { width: 9px; height: 11px; fill: #5a83b8; vertical-align: -1px; margin: 0 1px 0 2px; }
+body.night .wx-drop { fill: #8fb3e6; }
+
+/* Banner spans edge to edge on every tab; its content keeps the page column */
+.hero,
+.hero-simple {
+  max-width: none;
+  margin: 0;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+.hero-header {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+@media (max-width: 700px) {
+  .hero,
+  .hero-simple { margin: 0; max-width: none; }
+}
+
+/* Each tab wears its own room — pattern + hue, all CSS, content stays quiet */
+body[data-view="plan"] {
+  background:
+    repeating-linear-gradient(90deg, rgba(30, 58, 95, 0.032) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(0deg, rgba(30, 58, 95, 0.032) 0 1px, transparent 1px 28px),
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(196, 92, 74, 0.09), transparent 55%),
+    var(--paper);
+}
+body[data-view="shop"] {
+  background:
+    repeating-linear-gradient(90deg, rgba(171, 78, 116, 0.045) 0 44px, rgba(171, 78, 116, 0) 44px 88px),
+    radial-gradient(ellipse 60% 35% at 90% 5%, rgba(224, 182, 79, 0.12), transparent 50%),
+    var(--paper);
+}
+body[data-view="taste"] {
+  background:
+    radial-gradient(circle, rgba(110, 140, 80, 0.15) 1.5px, transparent 2px) 0 0 / 26px 26px repeat,
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(110, 140, 80, 0.1), transparent 55%),
+    var(--paper);
+}
+body[data-view="journey"] {
+  background:
+    linear-gradient(180deg, rgba(74, 112, 142, 0.13), rgba(74, 112, 142, 0.03) 360px, rgba(255, 255, 255, 0) 65%),
+    var(--paper);
+}
+body[data-view="faq"] {
+  background:
+    radial-gradient(circle, transparent 9px, rgba(122, 110, 165, 0.085) 9.5px, transparent 11px) 0 0 / 30px 30px repeat,
+    radial-gradient(ellipse 70% 40% at 15% 0%, rgba(122, 110, 165, 0.1), transparent 55%),
+    var(--paper);
+}
+body.night[data-view="plan"] {
+  background:
+    repeating-linear-gradient(90deg, rgba(139, 167, 205, 0.05) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(0deg, rgba(139, 167, 205, 0.05) 0 1px, transparent 1px 28px),
+    #0e1218;
+}
+body.night[data-view="shop"] {
+  background:
+    repeating-linear-gradient(90deg, rgba(171, 98, 136, 0.07) 0 44px, rgba(171, 98, 136, 0) 44px 88px),
+    #12101a;
+}
+body.night[data-view="taste"] {
+  background:
+    radial-gradient(circle, rgba(130, 160, 100, 0.12) 1.5px, transparent 2px) 0 0 / 26px 26px repeat,
+    #0f1410;
+}
+body.night[data-view="journey"] {
+  background:
+    linear-gradient(180deg, rgba(74, 112, 142, 0.18), rgba(74, 112, 142, 0.04) 360px, rgba(0, 0, 0, 0) 65%),
+    #0d1319;
+}
+body.night[data-view="faq"] {
+  background:
+    radial-gradient(circle, transparent 9px, rgba(142, 130, 185, 0.09) 9.5px, transparent 11px) 0 0 / 30px 30px repeat,
+    #100f18;
+}
+
+/* ============================================================
+   Pass AH — 鳥居 Trip Chat
+   ============================================================ */
+
+.chat-fab {
+  position: fixed;
+  right: 18px;
+  bottom: calc(var(--dock-h) + 26px);
+  z-index: 76;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(150deg, #c9503f, #a23325);
+  color: #fff6ea;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(178, 58, 46, 0.4);
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s ease;
+}
+.chat-fab svg { width: 24px; height: 24px; }
+.chat-fab:hover { transform: translateY(-2px) scale(1.05); }
+.chat-fab.on { transform: scale(0.94); box-shadow: 0 4px 12px rgba(178, 58, 46, 0.4); }
+
+/* The panel stands like a torii: kasagi beam up top, vermillion pillars */
+.chat-panel {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--dock-h) + 88px);
+  z-index: 76;
+  width: min(400px, calc(100vw - 24px));
+  height: min(600px, calc(100vh - var(--dock-h) - 120px));
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-left: 5px solid #b23a2e;
+  border-right: 5px solid #b23a2e;
+  border-radius: 6px 6px 14px 14px;
+  box-shadow: var(--shadow-lg);
+}
+.chat-panel::before {
+  /* kasagi — the top beam, wider than the gate, gently lifted ends */
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: -14px;
+  right: -14px;
+  height: 12px;
+  background: linear-gradient(180deg, #c9503f, #a23325);
+  border-radius: 10px 10px 3px 3px;
+  box-shadow: 0 3px 8px rgba(120, 30, 20, 0.3);
+}
+
+.chat-head {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+}
+.chat-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #b23a2e;
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+}
+#chat-threads {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.55rem;
+  outline: none;
+}
+.chat-settings {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+}
+.chat-settings label { display: grid; gap: 2px; font-weight: 600; letter-spacing: 0.04em; }
+.chat-settings input,
+.chat-settings select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-2);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.42rem 0.55rem;
+  outline: none;
+}
+.chat-log {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.8rem 0.8rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.chat-empty { margin: auto; text-align: center; color: var(--ink-muted); font-size: 0.8rem; display: grid; gap: 0.4rem; padding: 1rem; }
+.chat-empty-ja { font-size: 1.8rem; }
+.chat-empty .soft { font-size: 0.7rem; opacity: 0.85; }
+.chat-msg {
+  max-width: 88%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.chat-msg.is-user {
+  align-self: flex-end;
+  background: rgba(30, 58, 95, 0.09);
+  border: 1px solid rgba(30, 58, 95, 0.14);
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.is-ai {
+  align-self: flex-start;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.is-error { border-color: rgba(196, 92, 74, 0.5); color: #a23325; }
+.chat-msg.is-busy span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 2px;
+  border-radius: 50%;
+  background: var(--ink-muted);
+  animation: chat-dot 1.2s ease-in-out infinite;
+}
+.chat-msg.is-busy span:nth-child(2) { animation-delay: 0.18s; }
+.chat-msg.is-busy span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes chat-dot { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+/* markdown inside replies — compact, never bloaty */
+.chat-msg h3, .chat-msg h4, .chat-msg h5, .chat-msg h6 { margin: 0.35rem 0 0.2rem; font-family: var(--font-latin); font-size: 0.84rem; color: var(--indigo); }
+body.night .chat-msg h3, body.night .chat-msg h4 { color: #cdd9ec; }
+.chat-msg p { margin: 0.25rem 0; }
+.chat-msg ul, .chat-msg ol { margin: 0.25rem 0; padding-left: 1.1rem; }
+.chat-msg li { margin: 0.12rem 0; }
+.chat-msg code { background: rgba(28, 25, 23, 0.07); border-radius: 4px; padding: 0.05em 0.35em; font-size: 0.92em; }
+.chat-msg pre { background: rgba(28, 25, 23, 0.06); border-radius: 8px; padding: 0.5rem 0.65rem; overflow-x: auto; margin: 0.3rem 0; }
+.chat-msg blockquote { margin: 0.3rem 0; padding-left: 0.6rem; border-left: 3px solid var(--line); color: var(--ink-muted); }
+.chat-msg a { color: var(--vermillion); }
+
+.chat-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.45rem 0.8rem 0; }
+.chat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: 100%;
+  padding: 0.22rem 0.35rem 0.22rem 0.6rem;
+  border: 1px solid rgba(196, 92, 74, 0.4);
+  border-radius: var(--r-pill);
+  background: rgba(196, 92, 74, 0.08);
+  color: var(--ink);
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-pill button {
+  border: none;
+  background: none;
+  color: var(--vermillion);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.15rem;
+}
+.chat-pill.is-sent { padding-right: 0.6rem; margin: 0 0.3rem 0.25rem 0; opacity: 0.85; }
+.chat-msg .chat-pill.is-sent { display: inline-flex; }
+
+.chat-composer { display: flex; gap: 0.45rem; align-items: flex-end; padding: 0.6rem 0.8rem 0.75rem; }
+#chat-input {
+  flex: 1;
+  min-width: 0;
+  resize: none;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  padding: 0.5rem 0.7rem;
+  outline: none;
+  max-height: 120px;
+}
+#chat-input:focus { border-color: var(--indigo-soft); }
+
+.wc-chat svg { width: 0.85rem; height: 0.85rem; }
+
+body.night .chat-panel { background: #141a24; }
+body.night .chat-msg.is-ai { background: #10151d; }
+body.night .chat-msg.is-user { background: rgba(139, 167, 205, 0.12); border-color: rgba(139, 167, 205, 0.2); }
+body.night .chat-msg code, body.night .chat-msg pre { background: rgba(255, 255, 255, 0.07); }
+
+@media (max-width: 560px) {
+  .chat-panel { right: 8px; left: 8px; width: auto; }
+}
+
+/* ============================================================
+   Pass AI — chat polish · [hidden] always wins · auth row
+   ============================================================ */
+
+/* display classes were silently overriding the hidden attribute
+   (chat panel/settings/pills never visually closed) */
+[hidden] { display: none !important; }
+
+.chat-head { padding: 0.6rem 0.75rem 0.55rem; }
+.chat-head .icon-btn { flex: 0 0 auto; }
+.chat-settings { gap: 0.6rem; padding: 0.85rem 0.95rem 0.95rem; }
+.chat-settings-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--vermillion); }
+.chat-hint { margin: -0.2rem 0 0; font-size: 0.66rem; font-weight: 400; color: var(--ink-muted); }
+.chat-hint a { color: var(--vermillion); }
+.chat-auth { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--ink-muted); border-top: 1px dashed var(--line); padding-top: 0.6rem; }
+.chat-auth .btn { white-space: nowrap; }
+
+/* ============================================================
+   Pass AJ — chat head polish · FAB inline with dock · mobile pass
+   ============================================================ */
+
+.chat-head {
+  gap: 0.4rem;
+  padding: 0.62rem 0.75rem 0.58rem;
+  background: linear-gradient(180deg, rgba(178, 58, 46, 0.05), transparent);
+}
+.chat-title { font-size: 0.88rem; letter-spacing: 0.24em; margin-right: 0.1rem; }
+#chat-threads {
+  appearance: none;
+  -webkit-appearance: none;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23948b7d' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")
+      right 0.6rem center no-repeat,
+    var(--paper);
+  padding: 0.34rem 1.5rem 0.34rem 0.7rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+#chat-threads:hover { border-color: var(--indigo-soft); }
+.chat-head .icon-btn.is-bare { width: 26px; height: 26px; border-radius: 8px; color: var(--ink-muted); }
+.chat-head .icon-btn.is-bare:hover { color: var(--vermillion); background: rgba(196, 92, 74, 0.08); }
+body.night .chat-head { background: linear-gradient(180deg, rgba(224, 88, 74, 0.08), transparent); }
+body.night #chat-threads { background-color: #10151d; }
+
+/* FAB rides in line with the dock */
+.chat-fab { bottom: 1.35rem; width: 56px; height: 56px; }
+.chat-panel { bottom: 92px; }
+@media (max-width: 760px) {
+  /* the dock spans most of the phone width — lift the FAB above it */
+  .chat-fab { bottom: calc(var(--dock-h) + 16px); width: 50px; height: 50px; right: 12px; }
+  .chat-panel { right: 8px; left: 8px; width: auto; bottom: calc(var(--dock-h) + 76px); height: min(560px, calc(100vh - var(--dock-h) - 110px)); }
+  .chat-head { flex-wrap: nowrap; }
+  .chat-title { display: none; } /* pillars + kasagi already say torii */
+}
+
+
+/* Pass AK — the nuki beam sits exactly at the header boundary */
+.chat-head { position: relative; }
+.chat-head::after {
+  content: "";
+  position: absolute;
+  left: -13px;
+  right: -13px;
+  bottom: -3px;
+  height: 5px;
+  background: #a23325;
+  border-radius: 3px;
+  pointer-events: none;
+}
+.chat-head { border-bottom: none; }

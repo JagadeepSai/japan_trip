@@ -26,11 +26,13 @@ This is what makes adds/edits **shared between friends, live**.
 1. Create an account + project at [supabase.com](https://supabase.com)
    (free tier: 500 MB — this trip uses a few hundred KB).
 2. **SQL Editor** → paste the whole of [`supabase/schema.sql`](supabase/schema.sql) → **Run**.
-   It creates two tables with public read/write policies:
-   - `wishes` — every event, incl. transits, groups (bundles), hidden events,
-     times and info notes (those all live in the `meta` jsonb — no extra tables).
-   - `shopping` — the shared buy-list.
-3. **Database → Replication** → enable **Realtime** for **both** `wishes` **and** `shopping`
+   One script does everything:
+   - creates `wishes` (events incl. transits, groups, hidden, times, info — all in the
+     `meta` jsonb) and `shopping` (the shared buy-list) with public read/write policies, **and**
+   - **inserts the initial database** (167 rows: the 12-day plan, bundles, transits, the full
+     menu, and the starter buy-list). The seed only inserts into empty tables, so re-running
+     the file is always safe.
+3. **Database → Replication** → enable **Realtime** for `wishes`, `shopping` **and** `settings` (trip dates sync through it)
    (this is what makes a friend's edit appear on your screen without a refresh).
 4. **Project Settings → API** → copy the **Project URL** and the **anon public** key
    into [`js/config.js`](js/config.js):
@@ -42,19 +44,16 @@ This is what makes adds/edits **shared between friends, live**.
    };
    ```
 
-5. **Open the site once.** The pill flips to **Live**, and because the cloud DB is
-   empty, the app **auto-seeds the initial database** (167 rows: the 12-day plan,
-   bundles, transits, the full menu, and the starter buy-list). This takes ~30–60 s
-   on that first load — watch the board fill in; every visitor after that gets it
-   instantly.
+5. **Open the site.** The pill flips to **Live** and the board loads straight from the
+   database — instantly, for everyone.
 
 **What syncs:** all events/sushi (board, map, groups, hidden, transit) + the
 shopping buy-list. **Per-device by design:** food "tried" marks, packing checks,
 night mode, view preferences.
 
-**Resetting the shared board:** Supabase → Table Editor → select rows in
-`wishes`/`shopping` → delete. (Delete *everything* and the next visitor re-seeds
-the initial database automatically.)
+**Resetting the shared board:** delete all rows in `wishes`/`shopping`
+(Table Editor) and re-run the seed section of `schema.sql` — or just reload the
+site once (a built-in fallback re-seeds an empty database automatically).
 
 ---
 
@@ -114,7 +113,34 @@ the upgrade path.)
 | Symptom | Fix |
 |---|---|
 | Pill says **Local** on the deployed site | `js/config.js` url/key empty or wrong — re-paste from Project Settings → API |
-| Edits don't appear on a friend's screen until refresh | Realtime not enabled for both tables (step 1.3) |
-| First deployed load shows an empty board | It's seeding (~30–60 s) — check the console for `[seed]` logs; refresh after |
+| Edits don't appear on a friend's screen until refresh | Realtime not enabled for the tables (step 1.3) |
+| Empty board on the deployed site | The seed section of `schema.sql` didn't run — re-run the whole file, or just reload once (the app re-seeds an empty DB itself) |
 | Insert errors in console mentioning a column | schema.sql not fully run — re-run the whole file (it's idempotent) |
 | Old UI after deploy | Cache token not bumped (step 4.2) |
+
+## 6 · Trip Chat (AI) — connecting a provider
+
+The 鳥居 chat (bottom-right) needs an LLM key. It is stored **only in your browser**
+(localStorage `jp-chat-config`) — never in the repo or database. Free options:
+
+| Provider | Get a key | Notes |
+|---|---|---|
+| **Groq** (recommended) | console.groq.com → API Keys | Free tier, very fast Llama 3.3 70B |
+| **Google Gemini** | aistudio.google.com → Get API key | Generous free tier (gemini-2.0-flash) |
+| **OpenRouter** | openrouter.ai → Keys | Use a `:free` model (default is set) |
+| OpenAI / Anthropic | platform accounts | Paid |
+| Custom / Ollama | — | Point at `http://localhost:11434/v1`, no key |
+
+Open the chat → ⚙ → pick provider → paste key → Save. The chat feeds the model a live
+markdown snapshot of the itinerary, and the 💬 on any event card attaches that event
+to your next message.
+
+### Google sign-in (optional, supabase mode)
+
+1. Supabase Dashboard → **Authentication → Providers → Google** → enable, paste a GCP
+   OAuth client id/secret (console.cloud.google.com → Credentials → OAuth client,
+   authorized redirect: `https://<project>.supabase.co/auth/v1/callback`).
+2. Add your site URL under **Authentication → URL Configuration**.
+3. Re-run `schema.sql` (it adds `user_settings`, private per user via RLS).
+4. In the chat ⚙ panel a "Sign in with Google" button appears; once signed in, your
+   chat provider key syncs to your own DB row across devices.

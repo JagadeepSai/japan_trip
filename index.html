@@ -5,14 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>日本の旅 — Japan Trip</title>
   <meta name="description" content="Collaborative Japan trip planner — wish board, map, and day itinerary." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%A9%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://upload.wikimedia.org" />
+  <link rel="dns-prefetch" href="https://a.basemaps.cartocdn.com" />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="css/style.css?v=20260730e" />
+  <link rel="stylesheet" href="css/style.css?v=20260830a" />
+  <script>
+    // Gate bootstrap: unlocks instantly for browsers that already know the
+    // password, before any styles or app code run
+    (function () {
+      try {
+        if (localStorage.getItem("jp-gate") === "78dc88de6dc36fcee21cfc735d034bccfa544ef785c965842817316ea5ebf6b8") {
+          document.documentElement.classList.add("authed");
+        }
+      } catch (e) { /* storage blocked — stay gated */ }
+    })();
+  </script>
 </head>
 <body>
+  <!-- 関所 password gate — nothing boots (and no DB is touched) until it opens -->
+  <div class="gate" id="gate" role="dialog" aria-label="Password required">
+    <div class="gate-card">
+      <span class="gate-ja" lang="ja" aria-hidden="true">関所</span>
+      <h1>日本の旅</h1>
+      <p class="gate-hint">Friends only — ask the crew for the password.</p>
+      <form id="gate-form">
+        <input id="gate-pass" type="password" placeholder="Password" autocomplete="current-password" aria-label="Password" required />
+        <button type="submit" class="btn btn-primary">Enter</button>
+      </form>
+      <p class="gate-err" id="gate-err" hidden>Not it — try again.</p>
+    </div>
+  </div>
   <canvas id="starfield" aria-hidden="true"></canvas>
   <div id="atmosphere" aria-hidden="true"></div>
 
@@ -75,33 +102,41 @@
       </svg>
     </div>
 
-    <div class="hero-content">
-      <h1>
-        <span class="hero-ja" id="hero-title-ja">日本の旅</span>
-        <span class="hero-en" id="hero-title-en">Japan Trip</span>
-      </h1>
-      <p class="hero-lede" id="hero-sub">一期一会 — every encounter, once in a lifetime.</p>
-      <div class="countdown" aria-live="polite">
-        <span><strong id="cd-days">—</strong> days</span>
-        <span class="dot" aria-hidden="true"></span>
-        <span id="cd-clock">—:—:—</span>
+    <div class="hero-content hero-header">
+      <div class="hero-top">
+        <p class="hero-kicker" id="hero-kicker">寿司舟 · Plan</p>
+        <h1 class="hero-wordmark">
+          <span class="hero-ja" id="hero-title-ja">日本の旅</span>
+          <span class="hero-en" id="hero-title-en">Japan Trip</span>
+        </h1>
+      </div>
+      <div class="hero-bottom">
+        <p class="hero-view-title" id="hero-view-title">Sushi Boat</p>
+        <p class="hero-lede" id="hero-sub">一期一会 — every encounter, once in a lifetime.</p>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="section section-board" id="board">
+    <section class="section section-board" id="board" data-view="plan">
       <div class="section-intro">
         <p class="eyebrow">Planning · 寿司舟</p>
-        <h2>Sushi Boat
+        <h2>Sushi Boat</h2>
+        <div class="board-tools">
           <button type="button" class="hidden-boat" id="hidden-toggle" aria-pressed="false" title="秘密 — reveal the hidden boats" aria-label="Reveal hidden events">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15.5c1.2 2.8 4.2 4.5 8 4.5s6.8-1.7 8-4.5Z"/><path d="M12 3.5V14"/><path d="M12 4.5c3.4 1 5.4 3.9 5.9 7.5H12"/></svg>
           </button>
-        </h2>
-        <div class="board-tools">
           <div class="view-toggle" id="board-view-toggle" role="group" aria-label="Card density">
             <button type="button" class="chip is-xs" data-view="full">Cards</button>
             <button type="button" class="chip is-xs" data-view="min">Compact</button>
+            <button type="button" class="chip is-xs" data-view="cal">Calendar</button>
+            <button type="button" class="chip is-xs" data-view="tl">Timeline</button>
+            <button type="button" class="chip is-xs" data-view="list">List</button>
+          </div>
+          <div class="trip-dates" id="trip-dates" title="Trip dates — shared with everyone">
+            <input type="date" id="trip-start" aria-label="Trip start date" />
+            <span aria-hidden="true">→</span>
+            <input type="date" id="trip-end" aria-label="Trip end date" />
           </div>
           <button type="button" class="btn btn-primary" id="open-wish-modal">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 14.5c0-2.2 3.4-3.5 7.5-3.5s7.5 1.3 7.5 3.5S16.1 18 12 18s-7.5-1.3-7.5-3.5Z"/><path d="M5.5 11.5C6.5 8.6 9 6.5 12 6.5s5.5 2.1 6.5 5"/></svg>
@@ -117,6 +152,18 @@
           <span class="inbox-tray-hint">unscheduled — drag onto a day below</span>
           <svg class="inbox-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         </button>
+        <div class="inbox-filters" id="inbox-filters">
+          <input id="inbox-search" type="search" placeholder="Search the inbox…" aria-label="Search inbox" />
+          <div class="inbox-filter-row" id="inbox-type-filters" aria-label="Filter by type">
+            <button type="button" class="chip is-xs is-active" data-itype="all">All</button>
+            <button type="button" class="chip is-xs" data-itype="place">Place</button>
+            <button type="button" class="chip is-xs" data-itype="experience">Experience</button>
+            <button type="button" class="chip is-xs" data-itype="food">Food</button>
+            <button type="button" class="chip is-xs" data-itype="shop">Shop</button>
+            <button type="button" class="chip is-xs" data-itype="transit">Transit</button>
+          </div>
+          <div class="inbox-filter-row" id="inbox-city-filters" aria-label="Filter by city"></div>
+        </div>
         <div class="kanban-cards inbox-cards" id="inbox-tray" data-drop=""></div>
       </div>
 
@@ -127,11 +174,75 @@
       </div>
     </section>
 
-    <section class="section section-map" id="map">
+    <section class="section section-journey" id="journey" data-view="journey">
+      <div class="journey-inner">
+        <div class="section-intro">
+          <p class="eyebrow">Overview · 川</p>
+          <h2>The Journey</h2>
+        </div>
+        <nav class="journey-nav" id="journey-nav" aria-label="Days by city"></nav>
+        <div class="tl-scroller tl-scroller--journey tl-hero" id="journey-timeline" aria-label="Trip timeline"></div>
+      </div>
+    </section>
+
+
+    <section class="section" id="shopping" data-view="shop">
+      <div class="section-intro section-intro-row">
+        <div>
+          <p class="eyebrow">Haul</p>
+          <h2>Shopping list</h2>
+          <p class="lede">Ideas flow in from shop sushi. Buys with places show on the map.</p>
+          <div class="section-pulse" id="shop-progress"></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="open-shop-modal">Add item</button>
+      </div>
+      <div class="shop-split">
+        <div class="shop-buy">
+          <div class="list-head">
+            <h3>To buy</h3>
+            <p>Committed purchases</p>
+          </div>
+          <ul class="shop-list" id="shop-list"></ul>
+        </div>
+        <aside class="ideas-panel" id="shop-ideas-panel">
+          <div class="list-head">
+            <h3>Wish list</h3>
+            <p>Things you might buy — move over when ready</p>
+          </div>
+          <ul class="ideas-list" id="shop-ideas"></ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="faq" data-view="faq">
       <div class="section-intro">
-        <p class="eyebrow">Geography · 地図</p>
-        <h2>Map</h2>
-        <div class="section-pulse" id="map-pulse"></div>
+        <p class="eyebrow">Guide · 案内</p>
+        <h2>Before you go</h2>
+        <p class="lede">Everything that isn’t an event — papers, money, weather, and what goes in the bag.</p>
+      </div>
+      <div class="faq-facts" id="faq-facts"></div>
+      <div class="faq-grid" id="faq-grid"></div>
+    </section>
+
+    <section class="section" id="tastes" data-view="taste">
+      <div class="section-intro">
+        <p class="eyebrow">Taste</p>
+        <h2>Food list</h2>
+        <p class="lede">Every dish you want to taste — tap one once you’ve tried it.</p>
+        <div class="section-pulse" id="tastes-progress"></div>
+      </div>
+      <div class="tastes-menu" id="tastes-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- Map modal — opened from the dock's map button or any "On map" link -->
+  <div class="map-overlay" id="map-overlay" aria-hidden="true">
+    <div class="map-modal-backdrop" data-map-close aria-hidden="true"></div>
+    <section class="section section-map is-modal-body" id="map">
+      <div class="map-modal-head">
+        <h2>Map <span class="map-head-ja" lang="ja">地図</span></h2>
+        <button type="button" class="picker-close map-close" id="map-close" aria-label="Close map">×</button>
       </div>
       <div class="map-layout" id="map-layout">
         <div class="map-frame">
@@ -164,46 +275,7 @@
         </aside>
       </div>
     </section>
-
-    <section class="section" id="shopping">
-      <div class="section-intro section-intro-row">
-        <div>
-          <p class="eyebrow">Haul</p>
-          <h2>Shopping list</h2>
-          <p class="lede">Ideas flow in from shop sushi. Buys with places show on the map.</p>
-          <div class="section-pulse" id="shop-progress"></div>
-        </div>
-        <button type="button" class="btn btn-primary" id="open-shop-modal">Add item</button>
-      </div>
-      <div class="shop-split">
-        <div class="shop-buy">
-          <div class="list-head">
-            <h3>To buy</h3>
-            <p>Committed purchases</p>
-          </div>
-          <ul class="shop-list" id="shop-list"></ul>
-        </div>
-        <aside class="ideas-panel" id="shop-ideas-panel">
-          <div class="list-head">
-            <h3>Wish list</h3>
-            <p>Things you might buy — move over when ready</p>
-          </div>
-          <ul class="ideas-list" id="shop-ideas"></ul>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section" id="tastes">
-      <div class="section-intro">
-        <p class="eyebrow">Taste</p>
-        <h2>Food list</h2>
-        <p class="lede">Every dish you want to taste — tap one once you’ve tried it.</p>
-        <div class="section-pulse" id="tastes-progress"></div>
-      </div>
-      <div class="tastes-menu" id="tastes-grid"></div>
-    </section>
-
-  </main>
+  </div>
 
   <!-- Group (結び) edit modal -->
   <div class="modal-overlay" id="group-modal" hidden>
@@ -264,29 +336,6 @@
     </div>
   </div>
 
-  <!-- Itinerary drawer (right) -->
-  <div class="drawer-overlay" id="itinerary-overlay" hidden>
-    <aside class="drawer-panel" id="itinerary-drawer" role="dialog" aria-modal="true" aria-labelledby="itinerary-title">
-      <div class="drawer-head">
-        <div>
-          <p class="drawer-eyebrow">Calendar</p>
-          <h2 id="itinerary-title">Itinerary</h2>
-        </div>
-        <button type="button" class="drawer-close" id="itinerary-close" aria-label="Close">×</button>
-      </div>
-      <div class="drawer-toolbar">
-        <div class="drawer-filters" id="itinerary-filters"></div>
-        <div class="drawer-nav">
-          <button type="button" class="drawer-nav-btn" id="itinerary-prev" aria-label="Previous day">‹</button>
-          <button type="button" class="drawer-nav-btn" id="itinerary-next" aria-label="Next day">›</button>
-        </div>
-      </div>
-      <div class="drawer-body">
-        <div class="timeline" id="timeline-list"></div>
-      </div>
-    </aside>
-  </div>
-
   <!-- Wish form modal -->
   <div class="modal-overlay" id="wish-modal" hidden>
     <div class="modal-sheet pin-card" role="dialog" aria-modal="true" aria-labelledby="wish-modal-title">
@@ -321,6 +370,9 @@
         </div>
         <div class="composer-row">
           <input id="wish-time" type="time" aria-label="Start time" title="Start time (shows on the card)" />
+          <input id="wish-duration" type="text" placeholder="How long? (~2h)" maxlength="12" aria-label="Approximate duration" title="Roughly how long to enjoy it — sizes the timeline block" />
+        </div>
+        <div class="group-field">
           <select id="wish-group" aria-label="Group"></select>
         </div>
         <div id="group-new-fields" hidden>
@@ -359,6 +411,7 @@
             <span>Links & notes</span>
             <span class="composer-details-hint">optional</span>
           </summary>
+          <input id="wish-image" type="url" class="wish-image-input" placeholder="Image URL (https://…) — shows on the card" />
           <textarea id="wish-info" rows="4" placeholder="Info — longer notes; paragraphs welcome. Shows behind the (i) on the card."></textarea>
           <div class="meta-head meta-head-inner">
             <div class="meta-actions">
@@ -406,6 +459,49 @@
   <!-- Wish preview popover -->
   <div class="wish-preview" id="wish-preview" hidden role="dialog" aria-label="Wish preview"></div>
 
+  <!-- 鳥居 Trip chat -->
+  <button type="button" class="chat-fab" id="chat-fab" aria-label="Trip chat" title="Trip chat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M3 6.2c3 .9 15 .9 18 0"/><path d="M5.2 6.6V19M18.8 6.6V19"/><path d="M4.5 10.8h15"/><path d="M12 6.9v3.9"/></svg>
+  </button>
+  <aside class="chat-panel" id="chat-panel" hidden aria-label="Trip chat">
+    <div class="chat-head">
+      <span class="chat-title" lang="ja">鳥居</span>
+      <select id="chat-threads" aria-label="Chat threads"></select>
+      <button type="button" class="icon-btn is-bare is-sm" id="chat-new" title="New thread" aria-label="New thread">＋</button>
+      <button type="button" class="icon-btn is-bare is-sm" id="chat-delete" title="Delete thread" aria-label="Delete thread"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 7h14M10 7V5h4v2m-7 0 1 13h8l1-13"/></svg></button>
+      <button type="button" class="icon-btn is-bare is-sm" id="chat-settings-btn" title="Connection" aria-label="Connection settings">⚙</button>
+      <button type="button" class="icon-btn is-bare is-sm" id="chat-close" aria-label="Close chat">×</button>
+    </div>
+    <div class="chat-settings" id="chat-settings" hidden>
+      <span class="chat-settings-title">Connection</span>
+      <label>Provider
+        <select id="chat-provider">
+          <option value="groq">Groq (free tier)</option>
+          <option value="gemini">Google Gemini (free tier)</option>
+          <option value="openrouter">OpenRouter (:free models)</option>
+          <option value="openai">OpenAI</option>
+          <option value="anthropic">Anthropic</option>
+          <option value="custom">Custom / Ollama</option>
+        </select>
+      </label>
+      <label>API key <input id="chat-key" type="password" placeholder="paste your key" autocomplete="off" /></label>
+      <p class="chat-hint" id="chat-key-hint"></p>
+      <label>Model
+        <select id="chat-model-select"></select>
+        <input id="chat-model" type="text" placeholder="model id" hidden />
+      </label>
+      <label id="chat-base-row" hidden>Base URL <input id="chat-base" type="text" placeholder="http://localhost:11434/v1" /></label>
+      <button type="button" class="btn btn-primary btn-compact" id="chat-settings-save">Save connection</button>
+      <div class="chat-auth" id="chat-auth" hidden></div>
+    </div>
+    <div class="chat-log" id="chat-log"></div>
+    <div class="chat-pills" id="chat-pills" hidden></div>
+    <form class="chat-composer" id="chat-form">
+      <textarea id="chat-input" rows="1" placeholder="Ask about the trip…" aria-label="Message"></textarea>
+      <button type="submit" class="btn btn-primary btn-compact" id="chat-send">Send</button>
+    </form>
+  </aside>
+
   <div class="picker-overlay" id="picker-overlay" hidden>
     <div class="picker-sheet" role="dialog" aria-modal="true" aria-labelledby="picker-title">
       <div class="picker-head">
@@ -430,50 +526,40 @@
     </div>
   </div>
 
-  <footer class="site-footer">
-    <nav class="footer-links" aria-label="Reference">
-      <button type="button" class="text-link is-caps" data-doc="visa">Visa</button>
-      <span class="footer-sep" aria-hidden="true">·</span>
-      <button type="button" class="text-link is-caps" data-doc="bookings">Book now</button>
-      <span class="footer-sep" aria-hidden="true">·</span>
-      <button type="button" class="text-link is-caps" data-doc="money">Money & transit</button>
-      <span class="footer-sep" aria-hidden="true">·</span>
-      <button type="button" class="text-link is-caps" data-doc="october">October notes</button>
-      <span class="footer-sep" aria-hidden="true">·</span>
-      <button type="button" class="text-link is-caps" id="open-packing">Packing</button>
-      <span class="footer-sep" aria-hidden="true">·</span>
-      <button type="button" class="text-link is-caps" id="open-tips">Trip tips</button>
-    </nav>
-  </footer>
 
   <nav class="dock" aria-label="Bottom navigation">
-    <a class="dock-item" href="#board" data-nav="board">
-      <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13.5c1.5 4 5 6 9 6s7.5-2 9-6Z"/><ellipse cx="8.6" cy="11" rx="3" ry="1.9"/><path d="M5.8 9.4c1.7-1.1 4-1.1 5.6 0"/><ellipse cx="15.8" cy="11" rx="3" ry="1.9"/><path d="M13 9.4c1.7-1.1 4-1.1 5.6 0"/></svg></span>
-      <span>Sushi</span>
+    <a class="dock-item" href="#journey" data-nav="journey">
+      <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7c3-2.2 6-2.2 9 0s6 2.2 9 0"/><path d="M3 12.5c3-2.2 6-2.2 9 0s6 2.2 9 0"/><path d="M3 18c3-2.2 6-2.2 9 0s6 2.2 9 0"/></svg></span>
+      <span>Journey</span>
     </a>
-    <a class="dock-item" href="#shopping" data-nav="shopping">
+    <a class="dock-item" href="#shopping" data-nav="shop">
       <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 8h11.4l-1.1 11a1.9 1.9 0 0 1-1.9 1.7H9.3A1.9 1.9 0 0 1 7.4 19L6.3 8Z"/><path d="M9 8V6.9a3 3 0 0 1 6 0V8"/></svg></span>
       <span>Shop</span>
     </a>
     <a class="dock-item dock-fab" href="#map" data-nav="map" aria-label="Map">
       <span class="dock-fab-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4.5 3.5 6.5v13L9 17.5l6 2 5.5-2v-13L15 6.5 9 4.5Z"/><path d="M9 4.5v13M15 6.5v13"/></svg></span>
     </a>
-    <a class="dock-item" href="#tastes" data-nav="tastes">
+    <a class="dock-item" href="#tastes" data-nav="taste">
       <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16a8 8 0 0 1-16 0Z"/><path d="M9 3.5v3.5M15 3.5v3.5M12 5v2"/><path d="M9 20.5h6"/></svg></span>
       <span>Taste</span>
     </a>
-    <button type="button" class="dock-item" id="dock-days-btn" data-nav="timeline" aria-haspopup="dialog" aria-controls="itinerary-drawer">
-      <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="15" rx="2.2"/><path d="M4 10h16M9 3v4M15 3v4"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg></span>
-      <span>Days</span>
-    </button>
+    <a class="dock-item" href="#board" data-nav="plan">
+      <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13.5c1.5 4 5 6 9 6s7.5-2 9-6Z"/><ellipse cx="8.6" cy="11" rx="3" ry="1.9"/><path d="M5.8 9.4c1.7-1.1 4-1.1 5.6 0"/><ellipse cx="15.8" cy="11" rx="3" ry="1.9"/><path d="M13 9.4c1.7-1.1 4-1.1 5.6 0"/></svg></span>
+      <span>Plan</span>
+    </a>
+    <a class="dock-item" href="#faq" data-nav="faq">
+      <span class="dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M9.6 9.3a2.4 2.4 0 0 1 4.7.7c0 1.5-2.3 1.9-2.3 3.2"/><circle cx="12" cy="16.4" r="0.4" fill="currentColor"/></svg></span>
+      <span>FAQ</span>
+    </a>
   </nav>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js?v=20260730e"></script>
-  <script src="js/data.js?v=20260730e"></script>
-  <script src="js/api.js?v=20260730e"></script>
-  <script src="js/main.js?v=20260730e"></script>
+  <script src="js/config.js?v=20260830a"></script>
+  <script src="js/data.js?v=20260830a"></script>
+  <script src="js/api.js?v=20260830a"></script>
+  <script src="js/chat.js?v=20260830a"></script>
+  <script src="js/main.js?v=20260830a"></script>
 </body>
 </html>

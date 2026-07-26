@@ -1,6 +1,6 @@
 /**
  * Paste your Supabase project values here.
- * Project Settings → API → Project URL + anon public / publishable key
+ * Project Settings → API → Project URL + anon public key
  *
  * Leave empty to use local-only mode (localStorage) for development.
  */

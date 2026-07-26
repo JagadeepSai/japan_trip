@@ -13,6 +13,10 @@ const state = {
   showHidden: false,
   shopping: [],
   groupOpen: {},
+  inboxFilter: { q: "", type: "all", city: "all" },
+  view: "plan", // plan | shop | taste | journey — one section on screen at a time
+  viewDirty: {}, // views that missed a data change while hidden
+  mapDirty: false, // markers/index missed a change while the map modal was closed
   indexOpen: false,
   boardView: "full", // full | min (compact rows)
   activePinId: null,
@@ -42,6 +46,7 @@ const STORE = {
   night: "jp-night",
   boardView: "jp-board-view",
   inboxOpen: "jp-inbox-open",
+  view: "jp-view",
 };
 
 function loadJSON(key, fallback) {
@@ -73,6 +78,88 @@ function dayById(id) {
   return TRIP.days.find((d) => d.id === id);
 }
 
+/* ---------- Trip dates — the day list is generated from a shared range ---------- */
+
+// The curated 12-day plan is the template: day k keeps its city/title while
+// dates shift with the chosen start; extra days beyond it become open days.
+const DAY_TEMPLATE = TRIP.days.map((d) => ({ ...d }));
+const TRIP_DATES_KEY = "trip-dates";
+const MAX_TRIP_DAYS = 30;
+
+function isoFromDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function applyTripDates(startIso, endIso) {
+  const start = new Date(startIso + "T12:00:00");
+  const end = new Date(endIso + "T12:00:00");
+  if (isNaN(start) || isNaN(end) || end < start) return false;
+  const n = Math.min(MAX_TRIP_DAYS, Math.round((end - start) / 86400000) + 1);
+  const lastCity = DAY_TEMPLATE[DAY_TEMPLATE.length - 1].cityId;
+  TRIP.days.length = 0;
+  for (let i = 0; i < n; i++) {
+    const t = DAY_TEMPLATE[i] || { cityId: lastCity, title: "Open day" };
+    TRIP.days.push({ ...t, id: `d${i + 1}`, date: isoFromDate(new Date(start.getTime() + i * 86400000)) });
+  }
+  TRIP.departureDate = TRIP.days[0].date;
+  state.tripDates = { start: TRIP.days[0].date, end: TRIP.days[TRIP.days.length - 1].date };
+  return true;
+}
+
+function syncTripDateInputs() {
+  const s = document.getElementById("trip-start");
+  const e = document.getElementById("trip-end");
+  if (s) s.value = TRIP.days[0].date;
+  if (e) e.value = TRIP.days[TRIP.days.length - 1].date;
+}
+
+async function loadTripDates() {
+  try {
+    const saved = await SettingsStore.get(TRIP_DATES_KEY);
+    if (saved?.start && saved?.end) applyTripDates(saved.start, saved.end);
+  } catch (err) {
+    console.error("[trip-dates] load", err);
+  }
+  state.tripDates = state.tripDates || { start: TRIP.days[0].date, end: TRIP.days[TRIP.days.length - 1].date };
+}
+
+function initTripDates() {
+  syncTripDateInputs();
+  const commit = async () => {
+    const s = document.getElementById("trip-start")?.value;
+    const e = document.getElementById("trip-end")?.value;
+    if (!s || !e || e < s || !applyTripDates(s, e)) {
+      syncTripDateInputs(); // reject and restore — end before start etc.
+      return;
+    }
+    syncTripDateInputs(); // reflects the 30-day cap if it clamped
+    renderDayOptions();
+    try {
+      await SettingsStore.set(TRIP_DATES_KEY, { ...state.tripDates });
+    } catch (err) {
+      console.error("[trip-dates] save", err);
+    }
+    await refreshWishes();
+  };
+  document.getElementById("trip-start")?.addEventListener("change", commit);
+  document.getElementById("trip-end")?.addEventListener("change", commit);
+
+  // Friends' edits arrive live in supabase mode
+  SettingsStore.subscribe(async () => {
+    try {
+      const saved = await SettingsStore.get(TRIP_DATES_KEY);
+      if (saved?.start && saved?.end && (saved.start !== state.tripDates.start || saved.end !== state.tripDates.end)) {
+        applyTripDates(saved.start, saved.end);
+        syncTripDateInputs();
+        renderDayOptions();
+        await refreshWishes();
+      }
+    } catch (err) {
+      console.error("[trip-dates] sync", err);
+    }
+  });
+}
+
 /* ---------- Hidden events (秘密) — revealed only via the night boat ---------- */
 
 function isHidden(wish) {
@@ -83,12 +170,12 @@ function visibleWishes() {
   return state.wishes.filter((w) => state.showHidden || !isHidden(w));
 }
 
-function setShowHidden(on) {
+function setShowHidden(on, { render = true } = {}) {
   state.showHidden = !!on;
   const btn = document.getElementById("hidden-toggle");
   btn?.classList.toggle("on", state.showHidden);
   btn?.setAttribute("aria-pressed", state.showHidden ? "true" : "false");
-  refreshWishes().catch(console.error);
+  if (render) refreshWishes().catch(console.error);
 }
 
 // First-run demo content: two secret stops (local mode only, never duplicated)
@@ -112,7 +199,7 @@ const TRANSIT_KEYS = { mode: "transit:mode", depart: "transit:depart", duration:
 // Meta keys the app owns (never shown in the Links & notes editor)
 function isReservedMetaKey(key) {
   const k = String(key || "").toLowerCase();
-  return k === "group" || k === "time" || k === "info" || k.startsWith("transit:");
+  return k === "group" || k === "time" || k === "info" || k === "image" || k === "duration" || k.startsWith("transit:");
 }
 
 function metaValue(metaLike, key) {
@@ -125,6 +212,51 @@ function wishTime(w) {
 
 function wishInfo(w) {
   return metaValue(w.meta, "info");
+}
+
+/* ---------- Durations — how long an event takes to enjoy (approximate) ---------- */
+
+// "2h", "1h 30m", "90m", "1.5h" → minutes
+function parseDurationMin(text) {
+  const s = String(text || "").toLowerCase().replace(/[~≈]/g, "").trim();
+  if (!s) return null;
+  let min = 0;
+  const h = s.match(/(\d+(?:\.\d+)?)\s*h/);
+  const m = s.match(/(\d+)\s*m/);
+  if (h) min += parseFloat(h[1]) * 60;
+  if (m) min += parseInt(m[1], 10);
+  if (!h && !m) {
+    const bare = parseFloat(s);
+    if (isNaN(bare)) return null;
+    min = bare <= 12 ? bare * 60 : bare; // "2" means hours, "90" means minutes
+  }
+  return Math.round(min) || null;
+}
+
+function formatDurationMin(min) {
+  if (!min) return "";
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return h ? (m ? `${h}h ${m}m` : `${h}h`) : `${m}m`;
+}
+
+const TYPE_DEFAULT_DURATION = { experience: 120, place: 90, food: 75, shop: 60, transit: 60 };
+
+// Priority: the event's own meta → curated per-label default → type default
+function wishDurationMin(w) {
+  const own = parseDurationMin(metaValue(w.meta, "duration"));
+  if (own) return own;
+  if (w.type === "transit") {
+    const t = parseDurationMin(wishTransit(w.meta).duration);
+    if (t) return t;
+  }
+  const curated = parseDurationMin((TRIP.durations || {})[w.label]);
+  if (curated) return curated;
+  return TYPE_DEFAULT_DURATION[w.type || "place"] || 90;
+}
+
+function wishImage(w) {
+  return metaValue(w.meta, "image");
 }
 
 function wishTransit(metaLike) {
@@ -292,6 +424,42 @@ async function ensureCloudSeeds() {
   console.info("[seed] done —", state.wishes.length, "rows");
 }
 
+// Boards seeded before images existed get them merged in once (by label match)
+// Early seeds shipped two wrong-subject portraits; boards that already carry
+// them get the corrected venue photo (user-chosen images are never touched)
+const BAD_SEED_IMAGES = [
+  "Mick_Foley_Photo_Op_GalaxyCon_Oklahoma_City_2024",
+  "Bang_Kieu",
+  "SHIBUYA_SCRAMBLE_SQUARE_East_Tower",
+  "Chado.svg",
+  "Kodo_Sawaki_Zazen",
+];
+
+async function ensureImageEnrichment() {
+  // Runs in BOTH modes: local boards and cloud rows seeded before images/
+  // durations existed get backfilled (additive, idempotent by-label merges)
+  const seedImg = new Map();
+  const seedDur = new Map();
+  (TRIP.seedWishes || []).forEach((w) => {
+    const img = (w.meta || []).find((m) => m.key === "image")?.value;
+    if (img) seedImg.set(w.label, img);
+    const dur = (w.meta || []).find((m) => m.key === "duration")?.value;
+    if (dur) seedDur.set(w.label, dur);
+  });
+  const isBad = (url) => !!url && BAD_SEED_IMAGES.some((frag) => url.includes(frag));
+  const needsImg = (w) => seedImg.has(w.label) && (!wishImage(w) || isBad(wishImage(w)));
+  const needsDur = (w) => seedDur.has(w.label) && !metaValue(w.meta, "duration");
+  const stale = state.wishes.filter((w) => needsImg(w) || needsDur(w));
+  if (!stale.length) return;
+  for (const w of stale) {
+    let meta = WishStore.normalizeMeta(w.meta);
+    if (needsImg(w)) meta = [...meta.filter((m) => m.key !== "image"), { key: "image", value: seedImg.get(w.label) }];
+    if (needsDur(w)) meta = [...meta, { key: "duration", value: seedDur.get(w.label) }];
+    await WishStore.update(w.id, { meta });
+  }
+  await refreshWishes();
+}
+
 /* Home city for a wish — the assigned day's city, else the nearest trip city */
 function wishCity(wish) {
   if (wish.day_id) {
@@ -357,9 +525,121 @@ function mapsPlaceUrl(loc) {
   return null;
 }
 
-/* ---------- Hero hubs: board ↔ map navigation ---------- */
+/* ---------- Views: one section on screen at a time, the dock switches ---------- */
 
+const SECTION_VIEW = { board: "plan", shopping: "shop", tastes: "taste", journey: "journey", faq: "faq" };
+const VIEW_SECTION = { plan: "board", shop: "shopping", taste: "tastes", journey: "journey", faq: "faq" };
+const VIEW_KICKER = {
+  plan: "寿司舟 · Plan",
+  journey: "旅路 · Journey",
+  shop: "買い物 · Shop",
+  taste: "味 · Taste",
+  faq: "案内 · Guide",
+};
+const VIEW_TITLE = {
+  plan: "Sushi Boat",
+  journey: "The Journey",
+  shop: "Shopping list",
+  taste: "Food list",
+  faq: "Before you go",
+};
+
+function isViewActive(view) {
+  return state.view === view;
+}
+
+// Re-render only what changed while a view was hidden — a store change no longer
+// pays for board + journey + map + lists all at once.
+function flushView(view) {
+  if (!state.viewDirty[view]) return;
+  state.viewDirty[view] = false;
+  if (view === "plan") renderKanban();
+  else if (view === "journey") renderJourney();
+  else if (view === "shop") {
+    renderShopIdeas();
+    renderShopProgress(); // its idea count reads the freshly rendered list
+  } else if (view === "taste") renderTastes();
+  else if (view === "faq") renderFaq();
+}
+
+function setView(view, { scroll = true } = {}) {
+  if (!Object.hasOwn(VIEW_SECTION, view)) view = "plan";
+  state.view = view;
+  localStorage.setItem(STORE.view, view);
+  document.body.dataset.view = view; // drives the per-tab palette + hero artwork
+  const kicker = document.getElementById("hero-kicker");
+  if (kicker) kicker.textContent = VIEW_KICKER[view];
+  const heroTitle = document.getElementById("hero-view-title");
+  if (heroTitle) heroTitle.textContent = VIEW_TITLE[view];
+  document.querySelectorAll("main > .section[data-view]").forEach((s) => {
+    s.classList.toggle("is-active-view", s.dataset.view === view);
+  });
+  document.querySelectorAll(".dock-item[data-nav]").forEach((a) => {
+    a.classList.toggle("active", a.dataset.nav === view);
+  });
+  closeMapModal();
+  flushView(view);
+  // Land at the very top so the banner reads as the tab's header.
+  // Re-assert next frame: swapping sections re-clamps the scroll offset after
+  // this handler returns and would otherwise drag us back down ~100px.
+  // ("instant": html { scroll-behavior: smooth } would animate a blank pan)
+  if (scroll) {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  }
+}
+
+/* ---------- Map modal ---------- */
+
+function mapVisible() {
+  return document.getElementById("map-overlay")?.classList.contains("open") ?? false;
+}
+
+function openMapModal() {
+  const ov = document.getElementById("map-overlay");
+  if (!ov || ov.classList.contains("open")) return;
+  ov.classList.add("open");
+  ov.setAttribute("aria-hidden", "false");
+  document.body.classList.add("map-open");
+  document.querySelector('.dock-item[data-nav="map"]')?.classList.add("active");
+  if (state.mapDirty) {
+    state.mapDirty = false;
+    renderDayFilters();
+    renderFilterCounts();
+    renderMapIndex();
+    syncMapMarkers();
+    renderTripPulse();
+  }
+  state.setMapActive?.(true);
+  // Leaflet sized itself against the hidden overlay — nudge once it's on screen
+  setTimeout(() => state.map?.invalidateSize(), 80);
+}
+
+function closeMapModal() {
+  const ov = document.getElementById("map-overlay");
+  if (!ov || !ov.classList.contains("open")) return;
+  ov.classList.remove("open");
+  ov.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("map-open");
+  document.querySelector('.dock-item[data-nav="map"]')?.classList.toggle("active", false);
+  // restore the dock highlight for the underlying view
+  document.querySelectorAll(".dock-item[data-nav]").forEach((a) => {
+    a.classList.toggle("active", a.dataset.nav === state.view);
+  });
+}
+
+// Every legacy "jump to section" call routes here: the map opens as a modal,
+// the rest switch the active view.
 function scrollToSection(id) {
+  if (id === "map") {
+    openMapModal();
+    return;
+  }
+  const view = SECTION_VIEW[id];
+  if (view) {
+    setView(view);
+    return;
+  }
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -555,10 +835,12 @@ function transitLabelFull(t) {
 
 function initLantern() {
   if (localStorage.getItem(STORE.night) === "1") document.body.classList.add("night");
+  // Night reveals the hidden events everywhere — the red boat rides lit
+  setShowHidden(document.body.classList.contains("night"), { render: false });
   document.getElementById("lantern-toggle").addEventListener("click", () => {
     document.body.classList.toggle("night");
     localStorage.setItem(STORE.night, document.body.classList.contains("night") ? "1" : "0");
-    if (!document.body.classList.contains("night") && state.showHidden) setShowHidden(false);
+    setShowHidden(document.body.classList.contains("night"));
   });
 }
 
@@ -616,34 +898,39 @@ function initStarfield() {
 }
 
 function initDock() {
-  const items = [...document.querySelectorAll(".dock-item[data-nav]")];
-  const daysBtn = document.getElementById("dock-days-btn");
-  const sections = ["board", "tastes", "map", "shopping"]
-    .map((id) => document.getElementById(id))
-    .filter(Boolean);
-
-  function setActive(id) {
-    items.forEach((a) => a.classList.toggle("active", a.dataset.nav === id));
-  }
-
-  daysBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    openItinerary();
-    setActive("timeline");
+  document.querySelectorAll(".dock-item[data-nav]").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      const nav = a.dataset.nav;
+      if (nav === "map") {
+        mapVisible() ? closeMapModal() : openMapModal();
+        return;
+      }
+      setView(nav);
+    });
   });
+}
 
-  const io = new IntersectionObserver(
-    (entries) => {
-      const drawerOpen = !document.getElementById("itinerary-overlay")?.hidden;
-      if (drawerOpen) return;
-      const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      setActive(visible.target.id);
-    },
-    { rootMargin: "-35% 0px -45% 0px", threshold: [0.1, 0.35, 0.6] }
-  );
-  sections.forEach((s) => io.observe(s));
-  setActive("board");
+// Mirrors the per-view .hero-photo URLs in Pass W — prefetched after load so a
+// tab's first visit doesn't flash an empty banner
+const VIEW_HERO_PREFETCH = [
+  "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=1600&q=80&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1600&q=80&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=1600&q=80&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=1600&q=80&auto=format&fit=crop",
+];
+
+function initViews() {
+  const saved = localStorage.getItem(STORE.view);
+  setView(saved && Object.hasOwn(VIEW_SECTION, saved) ? saved : "plan", { scroll: false });
+  window.addEventListener("load", () => {
+    const go = () => VIEW_HERO_PREFETCH.forEach((src) => { new Image().src = src; });
+    "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 4000 }) : setTimeout(go, 2500);
+  }, { once: true });
+  document.getElementById("map-close")?.addEventListener("click", closeMapModal);
+  document.getElementById("map-overlay")?.addEventListener("click", (e) => {
+    if (e.target.closest("[data-map-close]")) closeMapModal();
+  });
 }
 
 /* ---------- Hero ---------- */
@@ -654,20 +941,6 @@ function initHero() {
   const sub = document.getElementById("hero-sub");
   if (sub) sub.textContent = TRIP.subtitle || "一期一会 — every encounter, once in a lifetime.";
   document.title = `${TRIP.titleJa} — ${TRIP.title}`;
-  const target = new Date(TRIP.departureDate + "T00:00:00");
-  function tick() {
-    let diff = Math.max(0, target.getTime() - Date.now());
-    const days = Math.floor(diff / 86400000);
-    diff %= 86400000;
-    const hours = Math.floor(diff / 3600000);
-    diff %= 3600000;
-    const mins = Math.floor(diff / 60000);
-    const secs = Math.floor((diff % 60000) / 1000);
-    document.getElementById("cd-days").textContent = String(days);
-    document.getElementById("cd-clock").textContent = `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  }
-  tick();
-  setInterval(tick, 1000);
 }
 
 function updateSyncPill() {
@@ -1034,7 +1307,10 @@ function resetWishForm() {
   document.getElementById("group-new-end").value = "";
   document.getElementById("group-new-fields").hidden = true;
   document.getElementById("wish-time").value = "";
+  const dur = document.getElementById("wish-duration");
+  if (dur) dur.value = "";
   document.getElementById("wish-info").value = "";
+  document.getElementById("wish-image").value = "";
   clearMetaRows();
   updateItemsBlock();
 }
@@ -1086,12 +1362,20 @@ function openWishModal(opts = {}) {
     document.getElementById("transit-duration").value = t.duration || "";
     if (gsel) gsel.value = effectiveGroupId(wish) || "";
     document.getElementById("wish-time").value = wishTime(wish) || "";
+    const durInput = document.getElementById("wish-duration");
+    if (durInput) durInput.value = metaValue(wish.meta, "duration") || "";
     document.getElementById("wish-info").value = wishInfo(wish) || "";
+    document.getElementById("wish-image").value = wishImage(wish) || "";
     title.textContent = "Edit sushi";
     submit.textContent = "Save changes";
   } else {
     if (opts.dayId) document.getElementById("wish-day").value = opts.dayId;
     if (opts.type) document.getElementById("wish-type").value = opts.type;
+    if (opts.time) document.getElementById("wish-time").value = opts.time;
+    if (opts.duration) {
+      const durInput = document.getElementById("wish-duration");
+      if (durInput) durInput.value = opts.duration;
+    }
     title.textContent = "Add sushi";
     submit.textContent = "Add to boat";
   }
@@ -1105,11 +1389,16 @@ function closeWishModal() {
   resetWishForm();
 }
 
-function initWishForm() {
+function renderDayOptions() {
   const daySelect = document.getElementById("wish-day");
+  if (!daySelect) return;
   daySelect.innerHTML =
     `<option value="">Inbox</option>` +
     TRIP.days.map((d) => `<option value="${d.id}">${dayLabel(d)} — ${escapeHtml(d.title)}</option>`).join("");
+}
+
+function initWishForm() {
+  renderDayOptions();
 
   document.getElementById("open-wish-modal")?.addEventListener("click", () => openWishModal());
   document.getElementById("wish-modal-close")?.addEventListener("click", closeWishModal);
@@ -1197,8 +1486,12 @@ function initWishForm() {
       const timeVal = document.getElementById("wish-time").value;
       if (timeVal) meta.push({ key: "time", value: timeVal });
     }
+    const durVal = document.getElementById("wish-duration")?.value.trim();
+    if (durVal && parseDurationMin(durVal)) meta.push({ key: "duration", value: formatDurationMin(parseDurationMin(durVal)) });
     const infoVal = document.getElementById("wish-info").value.trim();
     if (infoVal) meta.push({ key: "info", value: infoVal });
+    const imageVal = document.getElementById("wish-image").value.trim();
+    if (imageVal && isHttpUrl(imageVal)) meta.push({ key: "image", value: imageVal });
     const payload = {
       label,
       type,
@@ -1254,7 +1547,6 @@ function initWishForm() {
 async function refreshWishes() {
   state.wishes = await WishStore.list();
   renderKanban();
-  renderTimeline();
   renderDayFilters();
   renderFilterCounts();
   renderMapIndex();
@@ -1263,11 +1555,15 @@ async function refreshWishes() {
   renderShopIdeas();
   renderTripPulse();
   renderShopProgress();
+  renderJourney();
+  renderFaq();
 }
 
 function wishesForDay(dayId) {
   return visibleWishes()
-    .filter((w) => (dayId === null ? !w.day_id : w.day_id === dayId))
+    // Days outside the current trip range fall back to the inbox, so shrinking
+    // the trip never hides events
+    .filter((w) => (dayId === null ? !w.day_id || !dayById(w.day_id) : w.day_id === dayId))
     .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
 }
 
@@ -1342,9 +1638,11 @@ function renderWishCard(wish, minimal = false, omitCityId = null) {
                   title="${active ? "On the day’s route — tied by the thread" : "Maybe — not on the route"}" aria-label="Toggle on route">
             <span class="wc-bead"></span>
           </button>
+          <button type="button" class="icon-btn is-bare is-sm wc-chat" data-chat-add="${wish.id}" title="Ask the chat about this" aria-label="Add to chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5c-1.2 0-2.4-.25-3.4-.72L4 20l1.8-4.4A7.5 7.5 0 1 1 20 11.5Z"/></svg></button>
           <button type="button" class="icon-btn is-bare is-sm wc-more" data-more="${wish.id}" aria-label="More" aria-haspopup="true" aria-expanded="false">⋯</button>
         </div>
       </div>
+      ${!transit && wishImage(wish) ? `<img class="wc-img" src="${escapeHtml(wishImage(wish))}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : ""}
       <h4 class="wc-title">${escapeHtml(wish.label)}</h4>
       <p class="wc-loc ${wish.location_name ? "" : "muted"}">${escapeHtml(wish.location_name || "No place yet")}</p>
       ${transit ? `<div class="wc-transit-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3.5" width="14" height="13" rx="2.5"/><path d="M5 10h14M9.5 20.5 8 17M14.5 20.5 16 17"/><circle cx="9" cy="13.5" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="13.5" r="0.9" fill="currentColor" stroke="none"/></svg><span>${escapeHtml([transit.mode || "Transit", transit.depart, transit.duration].filter(Boolean).join(" · "))}</span></div>` : ""}
@@ -1355,6 +1653,7 @@ function renderWishCard(wish, minimal = false, omitCityId = null) {
             ? `<button type="button" class="chip is-xs is-info" data-focus-wish="${wish.id}">On map</button>`
             : `<button type="button" class="chip is-xs" data-pick-wish="${wish.id}">Add pin</button>`
         }
+        ${dir ? `<a class="chip is-xs" href="${dir}" target="_blank" rel="noopener noreferrer">Directions</a>` : ""}
       </div>
       <div class="wc-menu" data-menu="${wish.id}" hidden>
         <button type="button" data-edit-wish="${wish.id}">Edit</button>
@@ -1407,22 +1706,559 @@ function renderGroupBlock(group, minimal) {
   </div>`;
 }
 
+/* Calendar grid — the month view of the same board (cells are drop zones) */
+function renderCalendar(board, minimal) {
+  const days = TRIP.days;
+  const first = new Date(days[0].date + "T12:00:00");
+  const last = new Date(days[days.length - 1].date + "T12:00:00");
+  const start = new Date(first);
+  start.setDate(start.getDate() - ((start.getDay() + 6) % 7)); // back to Monday
+  const end = new Date(last);
+  end.setDate(end.getDate() + (6 - ((end.getDay() + 6) % 7))); // forward to Sunday
+
+  const byDate = Object.fromEntries(days.map((d) => [d.date, d]));
+  const cells = [];
+  for (let t = new Date(start); t <= end; t.setDate(t.getDate() + 1)) {
+    const iso = t.toISOString().slice(0, 10);
+    const d = byDate[iso];
+    if (!d) {
+      cells.push(`<div class="cal-cell is-off"><span class="cal-date">${t.getDate()}</span></div>`);
+      continue;
+    }
+    const city = cityById(d.cityId);
+    const entries = dayTopLevel(d.id);
+    const rows = entries
+      .map((w) => {
+        if (isGroup(w)) {
+          const n = membersOf(w.id).length;
+          return `<button type="button" class="cal-group" data-group-edit="${w.id}" title="Edit bundle">
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 12a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/><path d="M3.5 12h3.5M17 12h3.5"/></svg>
+            <span>${escapeHtml(w.label)}</span><em>${n}</em>
+          </button>`;
+        }
+        return renderWishCard(w, true, d.cityId);
+      })
+      .join("");
+    cells.push(`
+      <div class="cal-cell" data-col="${d.id}">
+        <div class="cal-cell-head">
+          <span class="cal-date">${t.getDate()}</span>
+          <span class="cal-day">${escapeHtml(dayLabel(d).split("·")[0].trim())}</span>
+          <span class="cal-city">${escapeHtml(city?.name || "")}</span>
+        </div>
+        <div class="kanban-cards cal-cards" data-drop="${d.id}">${rows || `<p class="day-empty">Drop sushi here</p>`}</div>
+      </div>`);
+  }
+  const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    .map((w) => `<div class="cal-weekday">${w}</div>`)
+    .join("");
+  board.innerHTML = `<div class="cal-grid">${weekdays}${cells.join("")}</div>`;
+}
+
+/* ---------- Timeline mode — the trip as one continuous 24h/day strip ---------- */
+
+function wishTimeMin(w) {
+  const t = w.type === "transit" ? wishTransit(w.meta).depart : wishTime(w);
+  const m = String(t || "").match(/^(\d{1,2}):(\d{2})$/);
+  return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
+}
+
+const TL_PX_H = 54; // px per hour — a 1h event stays readable
+const TL_DAY_W = 24 * TL_PX_H;
+
+const TL_HEAD_H = 38;
+const TL_WX_H = 34; // weather ribbon lane between the day chips and the ruler
+
+/* ---------- Sun & weather (real data on the timeline) ---------- */
+
+// NOAA approximation — sunrise/sunset for any date, minutes-of-day in JST.
+// Local math, so it works for trip dates far beyond any forecast horizon.
+function sunTimes(dateIso, lat, lng) {
+  const rad = Math.PI / 180;
+  const d = new Date(dateIso + "T12:00:00Z");
+  const doy = Math.floor((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 0))) / 86400000);
+  const calc = (isRise) => {
+    const lngHour = lng / 15;
+    const t = doy + ((isRise ? 6 : 18) - lngHour) / 24;
+    const M = 0.9856 * t - 3.289;
+    let L = M + 1.916 * Math.sin(M * rad) + 0.02 * Math.sin(2 * M * rad) + 282.634;
+    L = ((L % 360) + 360) % 360;
+    let RA = (Math.atan(0.91764 * Math.tan(L * rad)) / rad + 360) % 360;
+    RA = (RA + (Math.floor(L / 90) - Math.floor(RA / 90)) * 90) / 15;
+    const sinDec = 0.39782 * Math.sin(L * rad);
+    const cosDec = Math.cos(Math.asin(sinDec));
+    const cosH = (Math.cos(90.833 * rad) - sinDec * Math.sin(lat * rad)) / (cosDec * Math.cos(lat * rad));
+    if (cosH > 1 || cosH < -1) return null;
+    const H = (isRise ? 360 - Math.acos(cosH) / rad : Math.acos(cosH) / rad) / 15;
+    const T = H + RA - 0.06571 * t - 6.622;
+    const UT = (((T - lngHour) % 24) + 24) % 24;
+    return Math.round(((UT + 9) % 24) * 60); // JST = UTC+9, no DST
+  };
+  return { rise: calc(true), set: calc(false) };
+}
+
+const WX_CACHE_KEY = "jp-weather-v1";
+
+// Hourly weather per day, one request per consecutive same-city run.
+// Within the 16-day forecast horizon → live Open-Meteo forecast; further out →
+// the same dates last year (ERA5 archive) as a "typical" stand-in (≈).
+async function getTripWeather() {
+  const runs = [];
+  TRIP.days.forEach((d, di) => {
+    const last = runs[runs.length - 1];
+    if (last && last.cityId === d.cityId) last.days.push({ d, di });
+    else runs.push({ cityId: d.cityId, days: [{ d, di }] });
+  });
+  const cache = loadJSON(WX_CACHE_KEY, {});
+  const horizon = new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10);
+  const byDay = {};
+  await Promise.all(
+    runs.map(async (run) => {
+      const city = cityById(run.cityId);
+      if (!city) return;
+      const start = run.days[0].d.date;
+      const end = run.days[run.days.length - 1].d.date;
+      const typical = end > horizon;
+      const shift = (iso) => (typical ? `${Number(iso.slice(0, 4)) - 1}${iso.slice(4)}` : iso);
+      const key = `${run.cityId}:${start}:${end}:${typical ? "era5" : "fc"}`;
+      const ttl = typical ? 7 * 86400000 : 3 * 3600000;
+      let data = cache[key] && Date.now() - cache[key].ts < ttl ? cache[key].data : null;
+      if (!data) {
+        const base = typical ? "https://archive-api.open-meteo.com/v1/archive" : "https://api.open-meteo.com/v1/forecast";
+        const url = `${base}?latitude=${city.lat}&longitude=${city.lng}&hourly=temperature_2m,precipitation,relative_humidity_2m&timezone=Asia%2FTokyo&start_date=${shift(start)}&end_date=${shift(end)}`;
+        try {
+          const res = await fetch(url);
+          if (!res.ok) return;
+          const json = await res.json();
+          data = json?.hourly;
+          if (!data?.time?.length) return;
+          cache[key] = { ts: Date.now(), data };
+          saveJSON(WX_CACHE_KEY, cache);
+        } catch {
+          return; // offline — the timeline simply skips the ribbon
+        }
+      }
+      run.days.forEach(({ d, di }, i) => {
+        const hours = [];
+        for (let h = 0; h < 24; h++) {
+          const idx = i * 24 + h;
+          hours.push({
+            t: data.temperature_2m?.[idx] ?? null,
+            p: data.precipitation?.[idx] ?? 0,
+            rh: data.relative_humidity_2m?.[idx] ?? null,
+          });
+        }
+        const temps = hours.map((x) => x.t).filter((x) => x != null);
+        if (!temps.length) return;
+        byDay[d.id] = {
+          di,
+          hours,
+          tmax: Math.round(Math.max(...temps)),
+          tmin: Math.round(Math.min(...temps)),
+          rh: Math.round(hours.reduce((a, x) => a + (x.rh ?? 0), 0) / 24),
+          typical,
+        };
+      });
+    })
+  );
+  return byDay;
+}
+
+// Injected after the strip renders: hourly temp curve + rain bars in the WX
+// lane, sunrise/sunset markers on the ruler, per-day summary beside the chips
+async function decorateTimelineWeather(board) {
+  const token = String(performance.now()) + Math.random();
+  board.dataset.wxToken = token;
+  let wx;
+  try {
+    wx = await getTripWeather();
+  } catch (err) {
+    console.warn("[weather]", err);
+    return;
+  }
+  const strip = board.querySelector(".tl-strip");
+  if (!strip || board.dataset.wxToken !== token) return;
+
+  // sunrise / sunset (always available — pure astronomy)
+  const suns = TRIP.days
+    .map((d, di) => {
+      const city = cityById(d.cityId);
+      if (!city) return "";
+      const { rise, set } = sunTimes(d.date, city.lat, city.lng);
+      const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+      const y = TL_HEAD_H + TL_WX_H;
+      const mark = (m, cls, glyph) =>
+        m == null ? "" : `<span class="tl-sun ${cls}" style="left:${di * TL_DAY_W + (m / 60) * TL_PX_H}px; top:${y}px">${glyph} ${fmt(m)}</span>`;
+      return mark(rise, "is-rise", "▲") + mark(set, "is-set", "▼");
+    })
+    .join("");
+
+  const entries = Object.values(wx);
+  let band = "";
+  if (entries.length) {
+    const all = entries.flatMap((e) => e.hours.map((h) => h.t)).filter((t) => t != null);
+    const tMin = Math.min(...all);
+    const tMax = Math.max(...all);
+    const pad = 5;
+    const y0 = TL_HEAD_H + pad;
+    const yH = TL_WX_H - pad * 2;
+    const yFor = (t) => y0 + (1 - (t - tMin) / (tMax - tMin || 1)) * yH;
+    const pts = [];
+    const bars = [];
+    entries
+      .sort((a, b) => a.di - b.di)
+      .forEach((e) => {
+        e.hours.forEach((h, hi) => {
+          const x = e.di * TL_DAY_W + (hi + 0.5) * TL_PX_H;
+          if (h.t != null) pts.push(`${Math.round(x)},${Math.round(yFor(h.t) * 10) / 10}`);
+          if (h.p > 0.05) {
+            const bh = Math.min(1, h.p / 4) * yH;
+            bars.push(`<rect x="${Math.round(x - TL_PX_H / 2 + 4)}" y="${y0 + yH - bh}" width="${TL_PX_H - 8}" height="${bh}" rx="2" class="tl-wx-rain"/>`);
+          }
+        });
+      });
+    band = `<svg class="tl-wx" width="${strip.style.width.replace("px", "")}" height="${TL_HEAD_H + TL_WX_H}" aria-hidden="true">
+      ${bars.join("")}
+      <polyline class="tl-wx-temp" points="${pts.join(" ")}"/>
+    </svg>`;
+  }
+  strip.insertAdjacentHTML("beforeend", band + suns);
+
+  // per-day summary riding beside the sticky chip
+  strip.querySelectorAll(".tl-day-head-inner").forEach((chip, i) => {
+    const e = wx[TRIP.days[i]?.id];
+    if (!e || chip.querySelector(".tl-day-wx")) return;
+    chip.insertAdjacentHTML(
+      "beforeend",
+      `<span class="tl-day-wx" title="${e.typical ? "typical — same dates last year" : "live forecast"}">${e.typical ? "≈" : ""}${e.tmax}°/${e.tmin}° · <svg class="wx-drop" viewBox="0 0 24 24" aria-label="humidity"><path d="M12 3c3.4 4.3 6 7.5 6 10.5a6 6 0 1 1-12 0C6 10.5 8.6 7.3 12 3Z"/></svg>${e.rh}%</span>`
+    );
+  });
+}
+
+function renderTimelineBoard(board) {
+  const PX_H = TL_PX_H;
+  const DAY_W = TL_DAY_W;
+  const HEAD_H = TL_HEAD_H;
+  const WX_H = TL_WX_H;
+  const RULER_H = 24;
+  const LANE_H = 66;
+  const LANE_GAP = 8;
+  const MIN_LABEL_W = 176; // every block shows photo + full name + time without clicking
+  const FLOW_START = 9 * 60; // untimed events flow from 09:00 in board order
+  const FLOW_GAP = 15;
+
+  // Collect blocks: timed events pin to their clock time, untimed ones flow
+  // sequentially through the day so every day reads as a plausible plan
+  const blocks = [];
+  TRIP.days.forEach((d, di) => {
+    const seq = [];
+    dayTopLevel(d.id).forEach((t) =>
+      isGroup(t) ? membersOf(t.id).forEach((m) => seq.push({ w: m, g: t })) : seq.push({ w: t, g: null })
+    );
+    let cursor = FLOW_START;
+    seq.forEach(({ w, g }) => {
+      const dur = Math.max(20, wishDurationMin(w));
+      const timed = wishTimeMin(w);
+      let start = timed ?? cursor;
+      start = Math.max(0, Math.min(start, 24 * 60 - dur - 2));
+      cursor = Math.max(cursor, start + dur + FLOW_GAP);
+      blocks.push({ w, g, di, day: d, start, dur, timed: timed != null });
+    });
+  });
+
+  // Stack overlaps: first free lane per day. Lanes reserve the VISUAL span —
+  // blocks render at label width (photo + name + time) even for short events,
+  // so a 30m stop books ~3h of strip and stacking keeps everything readable
+  const minVisualMin = Math.ceil(((MIN_LABEL_W + 8) / PX_H) * 60);
+  const laneEnds = {};
+  blocks.sort((a, b) => a.di - b.di || a.start - b.start || a.dur - b.dur);
+  blocks.forEach((b) => {
+    const lanes = (laneEnds[b.di] ||= []);
+    let li = lanes.findIndex((end) => end <= b.start);
+    if (li === -1) {
+      li = lanes.length;
+      lanes.push(0);
+    }
+    lanes[li] = b.start + Math.max(b.dur, minVisualMin);
+    b.lane = li;
+  });
+  const maxLanes = Math.max(1, ...Object.values(laneEnds).map((l) => l.length));
+  const stripH = HEAD_H + WX_H + RULER_H + maxLanes * (LANE_H + LANE_GAP) + 18;
+  const totalW = TRIP.days.length * DAY_W;
+  const fmtHM = (min) => `${String(Math.floor(min / 60) % 24).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
+
+  const dayBands = TRIP.days.map((d, di) => {
+    const city = cityById(d.cityId);
+    const tint = JOURNEY_CITY_TINT[d.cityId] || "rgba(30,58,95,0.05)";
+    const ticks = [];
+    for (let h = 0; h < 24; h++) {
+      const x = di * DAY_W + h * PX_H;
+      ticks.push(`<span class="tl-tick ${h % 12 === 0 ? "is-major" : ""}" style="left:${x}px; top:${HEAD_H + WX_H}px"></span>`);
+      if (h % 2 === 0) ticks.push(`<span class="tl-hour" style="left:${x + 3}px; top:${HEAD_H + WX_H + 2}px">${String(h).padStart(2, "0")}</span>`);
+    }
+    return `
+    <div class="tl-city-ribbon" style="left:${di * DAY_W}px; width:${DAY_W + 1}px; background:${tint.replace(/[\d.]+\)$/, "0.9)")}"></div>
+    <div class="tl-day-head" style="left:${di * DAY_W}px; width:${DAY_W}px; height:${HEAD_H}px">
+      <span class="tl-day-head-inner"><strong>D${di + 1}</strong> · ${escapeHtml([new Date(d.date + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }), city?.name].filter(Boolean).join(" · "))}</span>
+    </div>
+    ${ticks.join("")}`;
+  });
+
+  // Fluid group bubbles wrap their members' blocks
+  const byGroup = {};
+  blocks.forEach((b) => {
+    if (b.g) (byGroup[`${b.g.id}:${b.di}`] ||= { g: b.g, items: [] }).items.push(b);
+  });
+  const bubbles = Object.values(byGroup).map(({ g, items }) => {
+    const x0 = Math.min(...items.map((b) => b.di * DAY_W + (b.start / 60) * PX_H));
+    const x1 = Math.max(...items.map((b) => b.di * DAY_W + ((b.start + b.dur) / 60) * PX_H));
+    const l0 = Math.min(...items.map((b) => b.lane));
+    const l1 = Math.max(...items.map((b) => b.lane));
+    const top = HEAD_H + WX_H + RULER_H + l0 * (LANE_H + LANE_GAP) - 7;
+    const height = (l1 - l0 + 1) * (LANE_H + LANE_GAP) - LANE_GAP + 14;
+    const info = groupInfo(g);
+    const tag = info.start ? `${info.start} ⇢ ${info.end || info.start}` : "";
+    return `<div class="tl-group" style="left:${x0 - 9}px; top:${top}px; width:${x1 - x0 + 18}px; height:${height}px">
+      <button type="button" class="tl-group-tag" data-group-edit="${g.id}">結び ${escapeHtml(g.label)}${tag ? ` · ${escapeHtml(tag)}` : ""}</button>
+    </div>`;
+  });
+
+  const blockHtml = blocks.map((b) => {
+    const left = b.di * DAY_W + (b.start / 60) * PX_H;
+    const durW = Math.max(10, (b.dur / 60) * PX_H - 4);
+    const width = Math.max(MIN_LABEL_W, durW);
+    const top = HEAD_H + WX_H + RULER_H + b.lane * (LANE_H + LANE_GAP);
+    const passive = b.w.active === false;
+    const img = wishImage(b.w);
+    const range = b.timed ? `${fmtHM(b.start)}–${fmtHM(b.start + b.dur)}` : `~${formatDurationMin(b.dur)}`;
+    return `<button type="button" class="tl-block ${passive ? "is-passive" : ""} ${isHidden(b.w) ? "is-hidden" : ""} ${b.timed ? "is-timed" : ""} ${b.w.type === "transit" ? "is-transit" : ""}"
+      data-min-open="${b.w.id}" data-type="${escapeHtml(b.w.type || "place")}"
+      style="left:${left}px; top:${top}px; width:${width}px; height:${LANE_H}px" title="${escapeHtml(b.w.label)}">
+      ${img ? `<img class="tl-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : `<span class="tl-dot"></span>`}
+      <span class="tl-copy">
+        <strong>${escapeHtml(b.w.label)}</strong>
+        <small>${escapeHtml(range)}</small>
+      </span>
+      <span class="tl-span" style="width:${Math.min(durW, width - 2)}px"></span>
+    </button>`;
+  });
+
+  board.innerHTML = `<div class="tl-strip" style="width:${totalW}px; height:${stripH}px">
+    <div class="tl-sky" style="width:${totalW}px; background-size:${DAY_W}px 100%"></div>
+    ${dayBands.join("")}
+    ${bubbles.join("")}
+    ${blockHtml.join("")}
+  </div>`;
+  // wake up at breakfast, not midnight
+  if (!board.dataset.tlScrolled) {
+    board.scrollLeft = 8 * PX_H - 30;
+    board.dataset.tlScrolled = "1";
+  }
+  decorateTimelineWeather(board);
+}
+
+/* List mode — the trip as a plain agenda: date on the left, that day's
+   events flowing as chips */
+function renderAgenda(board) {
+  board.innerHTML = `<div class="agenda">${TRIP.days
+    .map((d, i) => {
+      const dt = new Date(d.date + "T12:00:00");
+      const city = cityById(d.cityId);
+      const seq = [];
+      dayTopLevel(d.id).forEach((t) =>
+        isGroup(t) ? seq.push({ g: t }, ...membersOf(t.id).map((m) => ({ w: m }))) : seq.push({ w: t })
+      );
+      const chips = seq
+        .map((x) => {
+          if (x.g) return `<button type="button" class="agenda-knot" data-group-edit="${x.g.id}">結び ${escapeHtml(x.g.label)}</button>`;
+          const w = x.w;
+          const tm = w.type === "transit" ? wishTransit(w.meta).depart : wishTime(w);
+          return `<button type="button" class="agenda-chip ${w.active === false ? "is-passive" : ""} ${isHidden(w) ? "is-hidden" : ""} ${w.type === "transit" ? "is-transit" : ""}"
+            data-min-open="${w.id}" data-type="${escapeHtml(w.type || "place")}">
+            ${tm ? `<span class="agenda-time">${escapeHtml(tm)}</span>` : ""}${escapeHtml(w.label)}</button>`;
+        })
+        .join("");
+      return `<div class="agenda-day">
+        <div class="agenda-date">
+          <strong>${dt.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</strong>
+          <span>${dt.toLocaleDateString("en-GB", { weekday: "short" })} · ${escapeHtml(city?.name || "")}</span>
+          <em>D${i + 1} · ${escapeHtml(d.title)}</em>
+        </div>
+        <div class="agenda-events">${chips || `<span class="agenda-empty">open day — drop something here from the inbox</span>`}</div>
+      </div>`;
+    })
+    .join("")}</div>`;
+}
+
+// Where on the trip does a viewport x land? (snapped to 15 minutes)
+function tlSpotFromX(clientX, scroller, wish) {
+  const rect = scroller.getBoundingClientRect();
+  const totalMin = ((clientX - rect.left + scroller.scrollLeft) / TL_PX_H) * 60;
+  const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor(totalMin / 1440)));
+  const dur = wish ? wishDurationMin(wish) : 60;
+  const startMin = Math.max(0, Math.min(Math.round((totalMin - di * 1440) / 15) * 15, 1440 - dur));
+  return { di, dayId: TRIP.days[di].id, startMin, hhmm: `${String(Math.floor(startMin / 60)).padStart(2, "0")}:${String(startMin % 60).padStart(2, "0")}` };
+}
+
+/* Drag a timeline block sideways to retime it — drop writes the snapped
+   start time (and the day, if the block crossed a boundary). Empty strip
+   works like Google Calendar: click or drag a range to add an event there. */
+function initTimelineDrag(board) {
+  let drag = null;
+  let create = null;
+  board.addEventListener("pointerdown", (e) => {
+    if (!board.classList.contains("kanban--tl") || e.button !== 0) return;
+    const block = e.target.closest(".tl-block");
+    if (block) {
+      drag = { block, startX: e.clientX, left0: parseFloat(block.style.left), moved: false, id: block.dataset.minOpen };
+      block.setPointerCapture(e.pointerId);
+      return;
+    }
+    const strip = e.target.closest(".tl-strip");
+    if (!strip || e.target.closest(".tl-day-head-inner, .tl-group-tag")) return;
+    create = { strip, startX: e.clientX, moved: false, ghost: null };
+  });
+  board.addEventListener("pointermove", (e) => {
+    if (create) {
+      const dx = e.clientX - create.startX;
+      if (!create.moved && Math.abs(dx) < 6) return;
+      create.moved = true;
+      if (!create.ghost) {
+        create.ghost = document.createElement("div");
+        create.ghost.className = "tl-ghost";
+        create.strip.appendChild(create.ghost);
+      }
+      const rect = board.getBoundingClientRect();
+      const snap = (cx) => Math.round(((cx - rect.left + board.scrollLeft) / TL_PX_H) * 4) / 4 * TL_PX_H;
+      const a = snap(Math.min(create.startX, e.clientX));
+      const b = Math.max(snap(Math.max(create.startX, e.clientX)), a + TL_PX_H / 2);
+      create.ghost.style.left = `${a}px`;
+      create.ghost.style.width = `${b - a}px`;
+      const mins = Math.round(((b - a) / TL_PX_H) * 60);
+      create.ghost.textContent = `+ ${formatDurationMin(mins)}`;
+      return;
+    }
+    if (!drag) return;
+    const dx = e.clientX - drag.startX;
+    if (!drag.moved && Math.abs(dx) < 6) return;
+    drag.moved = true;
+    drag.block.classList.add("is-dragging");
+    const snapped = Math.round(((drag.left0 + dx) / TL_PX_H) * 4) / 4 * TL_PX_H; // 15-min steps
+    drag.block.style.left = `${Math.max(0, snapped)}px`;
+  });
+  const finish = async (e) => {
+    if (create) {
+      const c = create;
+      create = null;
+      c.ghost?.remove();
+      if (e.type === "pointercancel") return;
+      const from = tlSpotFromX(Math.min(c.startX, e.clientX), board, null);
+      let duration = "1h";
+      if (c.moved) {
+        const to = tlSpotFromX(Math.max(c.startX, e.clientX), board, null);
+        const mins = Math.max(30, (to.di * 1440 + to.startMin) - (from.di * 1440 + from.startMin));
+        duration = formatDurationMin(mins);
+      }
+      state.tlDragUntil = performance.now() + 350;
+      openWishModal({ dayId: from.dayId, time: from.hhmm, duration });
+      return;
+    }
+    if (!drag) return;
+    const d = drag;
+    drag = null;
+    d.block.classList.remove("is-dragging");
+    if (!d.moved || e.type === "pointercancel") {
+      if (e.type === "pointercancel") d.block.style.left = `${d.left0}px`;
+      return;
+    }
+    // the click that may follow a drag must not open the preview — a lingering
+    // once-listener would eat the NEXT honest click, so use a time window
+    state.tlDragUntil = performance.now() + 350;
+    const w = state.wishes.find((x) => x.id === d.id);
+    if (!w) return;
+    const totalMin = (parseFloat(d.block.style.left) / TL_PX_H) * 60;
+    const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor(totalMin / 1440)));
+    const dur = wishDurationMin(w);
+    const start = Math.max(0, Math.min(Math.round((totalMin - di * 1440) / 15) * 15, 1440 - dur));
+    const hhmm = `${String(Math.floor(start / 60)).padStart(2, "0")}:${String(start % 60).padStart(2, "0")}`;
+    const timeKey = w.type === "transit" ? TRANSIT_KEYS.depart : "time";
+    const meta = [...WishStore.normalizeMeta(w.meta).filter((m) => m.key !== timeKey), { key: timeKey, value: hhmm }];
+    const patch = { meta };
+    const newDayId = TRIP.days[di].id;
+    if (newDayId !== w.day_id) patch.day_id = newDayId;
+    try {
+      await WishStore.update(w.id, patch);
+      await refreshWishes();
+    } catch (err) {
+      console.error("[timeline drag]", err);
+      renderKanban();
+    }
+  };
+  board.addEventListener("pointerup", finish);
+  board.addEventListener("pointercancel", finish);
+}
+
 function renderKanban() {
+  if (!isViewActive("plan")) {
+    state.viewDirty.plan = true;
+    return;
+  }
   const minimal = state.boardView === "min";
   const inbox = dayTopLevel(null);
 
+  const passesInboxFilter = (w) => {
+    const f = state.inboxFilter;
+    if (f.type !== "all" && (w.type || "place") !== f.type) return false;
+    if (f.city !== "all") {
+      const c = wishCity(w);
+      if (!c || c.id !== f.city) return false;
+    }
+    if (f.q) {
+      const q = f.q.toLowerCase();
+      if (!w.label.toLowerCase().includes(q) && !(w.location_name || "").toLowerCase().includes(q)) return false;
+    }
+    return true;
+  };
+  const inboxShown = inbox.filter((w) => (isGroup(w) ? membersOf(w.id).some(passesInboxFilter) : passesInboxFilter(w)));
+
+  // Calendar/timeline/list modes keep the inbox compact — full cards would
+  // push the actual view thousands of pixels down, especially on mobile
+  const inboxMinimal = minimal || ["cal", "tl", "list"].includes(state.boardView);
   const tray = document.getElementById("inbox-tray");
   if (tray) {
-    tray.classList.toggle("is-min", minimal);
-    tray.innerHTML = inbox.length
-      ? inbox.map((w) => (isGroup(w) ? renderGroupBlock(w, minimal) : renderWishCard(w, minimal))).join("")
-      : `<p class="day-empty">Inbox is clear — every sushi has a day</p>`;
+    tray.classList.toggle("is-min", inboxMinimal);
+    tray.innerHTML = inboxShown.length
+      ? inboxShown.map((w) => (isGroup(w) ? renderGroupBlock(w, inboxMinimal) : renderWishCard(w, inboxMinimal))).join("")
+      : inbox.length
+        ? `<p class="day-empty">No matches — clear the filters above</p>`
+        : `<p class="day-empty">Inbox is clear — every sushi has a day</p>`;
   }
   const count = document.getElementById("inbox-count");
-  if (count) count.textContent = String(inbox.length);
+  if (count) count.textContent = state.inboxFilter.q || state.inboxFilter.type !== "all" || state.inboxFilter.city !== "all"
+    ? `${inboxShown.length}/${inbox.length}`
+    : String(inbox.length);
 
   const board = document.getElementById("kanban");
   board.classList.toggle("is-min", minimal);
+  const isCal = state.boardView === "cal";
+  const isTl = state.boardView === "tl";
+  const isList = state.boardView === "list";
+  board.classList.toggle("kanban--cal", isCal);
+  board.classList.toggle("kanban--tl", isTl);
+  board.classList.toggle("kanban--list", isList);
+  document.querySelector(".board-lane-wrap")?.classList.toggle("is-cal", isCal || isTl || isList);
+  if (isCal) {
+    renderCalendar(board, minimal);
+    return;
+  }
+  if (isTl) {
+    renderTimelineBoard(board);
+    return;
+  }
+  if (isList) {
+    renderAgenda(board);
+    return;
+  }
   board.innerHTML = TRIP.days
     .map((d) => {
       const wishes = dayTopLevel(d.id);
@@ -1450,6 +2286,12 @@ function renderKanban() {
 function drawThreads() {
   const board = document.getElementById("kanban");
   if (!board) return;
+  // A resize while the board is hidden would measure zero rects and wipe the
+  // threads — defer to the next flushView instead
+  if (!isViewActive("plan")) {
+    state.viewDirty.plan = true;
+    return;
+  }
   board.querySelectorAll(".kanban-col").forEach((col) => {
     col.querySelector(".thread-layer")?.remove();
     col.classList.remove("has-thread");
@@ -1532,7 +2374,8 @@ function initKanban() {
   // The section wraps both the inbox tray and the day lane, so one set of
   // delegated handlers serves dragging between them.
   const board = document.getElementById("board");
-  const DROP_ZONES = ".kanban-col, .inbox-tray";
+  const DROP_ZONES = ".kanban-col, .inbox-tray, .cal-cell";
+  initTimelineDrag(document.getElementById("kanban"));
   let dragId = null;
 
   board.addEventListener("dragstart", (e) => {
@@ -1552,6 +2395,11 @@ function initKanban() {
   });
 
   board.addEventListener("dragover", (e) => {
+    // the timeline strip is a drop target too — dropping sets day AND time
+    if (e.target.closest(".kanban--tl")) {
+      e.preventDefault();
+      return;
+    }
     const col = e.target.closest(DROP_ZONES);
     if (!col) return;
     e.preventDefault();
@@ -1566,6 +2414,27 @@ function initKanban() {
   });
 
   board.addEventListener("drop", async (e) => {
+    // Inbox card dropped onto the timeline: place it at the hour under the cursor
+    const strip = e.target.closest(".kanban--tl");
+    if (strip) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData("text/plain") || dragId;
+      const wish = state.wishes.find((w) => w.id === id);
+      if (!wish) return;
+      const k = document.getElementById("kanban");
+      const spot = tlSpotFromX(e.clientX, k, wish);
+      const patch = { day_id: spot.dayId };
+      if (!isGroup(wish)) {
+        const timeKey = wish.type === "transit" ? TRANSIT_KEYS.depart : "time";
+        patch.meta = [...WishStore.normalizeMeta(wish.meta).filter((m) => m.key !== timeKey && m.key.toLowerCase() !== "group"), { key: timeKey, value: spot.hhmm }];
+      }
+      await WishStore.update(id, patch);
+      if (isGroup(wish)) {
+        for (const m of state.wishes.filter((w) => wishGroupId(w) === id)) await WishStore.update(m.id, { day_id: spot.dayId });
+      }
+      await refreshWishes();
+      return;
+    }
     const col = e.target.closest(DROP_ZONES);
     const drop = col?.querySelector("[data-drop]");
     if (!drop) return;
@@ -1616,6 +2485,7 @@ function initKanban() {
   });
 
   board.addEventListener("click", async (e) => {
+    if (state.tlDragUntil && performance.now() < state.tlDragUntil) return; // just finished a timeline drag
     const gToggle = e.target.closest("[data-group-toggle]");
     if (gToggle) {
       const g = state.wishes.find((x) => x.id === gToggle.dataset.groupToggle);
@@ -1705,7 +2575,8 @@ function initKanban() {
   window.addEventListener("resize", debounce(drawThreads, 150));
 
   // Card density toggle (full cards vs compact rows)
-  state.boardView = localStorage.getItem(STORE.boardView) === "min" ? "min" : "full";
+  const savedView = localStorage.getItem(STORE.boardView);
+  state.boardView = ["full", "min", "cal", "tl", "list"].includes(savedView) ? savedView : "full";
   const viewToggle = document.getElementById("board-view-toggle");
   const syncViewChips = () =>
     viewToggle?.querySelectorAll("[data-view]").forEach((b) => b.classList.toggle("is-active", b.dataset.view === state.boardView));
@@ -1731,6 +2602,40 @@ function initKanban() {
   if (localStorage.getItem(STORE.inboxOpen) === "0") setTray(false);
   trayToggle?.addEventListener("click", () => setTray(trayBody?.hidden));
 
+  // Inbox filters: search + type + city
+  const syncInboxChips = () => {
+    document.querySelectorAll("#inbox-type-filters .chip").forEach((c) => c.classList.toggle("is-active", c.dataset.itype === state.inboxFilter.type));
+    document.querySelectorAll("#inbox-city-filters .chip").forEach((c) => c.classList.toggle("is-active", c.dataset.icity === state.inboxFilter.city));
+  };
+  const cityChips = document.getElementById("inbox-city-filters");
+  if (cityChips) {
+    cityChips.innerHTML =
+      `<button type="button" class="chip is-xs is-active" data-icity="all">All cities</button>` +
+      TRIP.cities.map((c) => `<button type="button" class="chip is-xs" data-icity="${c.id}">${escapeHtml(c.name)}</button>`).join("");
+  }
+  document.getElementById("inbox-filters")?.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-itype]");
+    if (t) {
+      state.inboxFilter.type = t.dataset.itype;
+      syncInboxChips();
+      renderKanban();
+      return;
+    }
+    const c = e.target.closest("[data-icity]");
+    if (c) {
+      state.inboxFilter.city = c.dataset.icity;
+      syncInboxChips();
+      renderKanban();
+    }
+  });
+  document.getElementById("inbox-search")?.addEventListener(
+    "input",
+    debounce((e) => {
+      state.inboxFilter.q = e.target.value.trim();
+      renderKanban();
+    }, 180)
+  );
+
   // Day-lane arrows — wrap around at either end so the days loop
   const lane = document.getElementById("kanban");
   const jumpLane = (dir) => {
@@ -1744,7 +2649,7 @@ function initKanban() {
   document.getElementById("lane-next")?.addEventListener("click", () => jumpLane(1));
 
   // 秘密 — the night boat reveals hidden events
-  document.getElementById("hidden-toggle")?.addEventListener("click", () => setShowHidden(!state.showHidden));
+  // The boat is an indicator now — night keeps it (and the hidden events) lit
 
   board.addEventListener("change", async (e) => {
     const sel = e.target.closest("[data-assign]");
@@ -1811,8 +2716,8 @@ function initMap() {
 
   // Trackpad model: pinch (ctrl+wheel) always zooms at the cursor. Two-finger
   // scroll pans ONLY while the map is ACTIVE — activated by clicking the map or
-  // the hand control; deactivated by clicking or scrolling outside. Inactive,
-  // the page scrolls straight past the map.
+  // The map lives in a modal now, so scroll-to-pan stays ACTIVE permanently —
+  // there is no page behind it to scroll past.
   const mapEl = state.map.getContainer();
 
   function setMapActive(on) {
@@ -1824,6 +2729,8 @@ function initMap() {
       btn.setAttribute("aria-pressed", state.mapActive ? "true" : "false");
     }
   }
+  state.setMapActive = setMapActive;
+  setMapActive(true);
 
   mapEl.addEventListener(
     "wheel",
@@ -1846,16 +2753,6 @@ function initMap() {
     if (e.target.closest(".leaflet-control")) return; // buttons manage themselves
     setMapActive(true);
   });
-  document.addEventListener("pointerdown", (e) => {
-    if (state.mapActive && !e.target.closest(".map-frame")) setMapActive(false);
-  });
-  window.addEventListener(
-    "wheel",
-    (e) => {
-      if (state.mapActive && !mapEl.contains(e.target)) setMapActive(false);
-    },
-    { passive: true }
-  );
 
   // Cluster overlapping stops into a single washi badge per metro; individual
   // pins (and their day threads) resolve once you zoom into a city.
@@ -1977,7 +2874,7 @@ function initMap() {
     if (!go) return;
     const target = go.dataset.go;
     if (target === "timeline" || target === "days") {
-      openItinerary();
+      scrollToSection("journey");
       return;
     }
     scrollToSection(target);
@@ -2008,7 +2905,7 @@ function initMap() {
       hideWishPreview();
       return;
     }
-    if (!document.getElementById("itinerary-overlay")?.hidden) closeItinerary();
+    if (mapVisible()) closeMapModal();
   });
 }
 
@@ -2132,7 +3029,9 @@ function hoverCardHtml(entry) {
   const maybe = entry.active === false;
   const t = entry.kind === "transit" ? wishTransit(entry.meta) : null;
   const tLine = t ? [t.mode, t.depart, t.duration].filter(Boolean).join(" · ") : "";
+  const hcImg = metaValue(entry.meta, "image");
   return `<div class="hc ${entry.hidden ? "is-hidden" : ""}" data-type="${escapeHtml(entry.kind)}">
+      ${hcImg ? `<img class="hc-img" src="${escapeHtml(hcImg)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : ""}
       <span class="hc-kicker">${entry.hidden ? "秘密 · " : ""}${entry.group ? escapeHtml(entry.group) + " · " : ""}${escapeHtml(kind)}${when ? " · " + escapeHtml(when) : ""}</span>
       <strong>${escapeHtml(entry.label)}</strong>
       ${entry.location_name ? `<small>${escapeHtml(entry.location_name)}</small>` : ""}
@@ -2156,6 +3055,10 @@ function popupHtml(entry) {
 
 function syncMapMarkers() {
   if (!state.map) return;
+  if (!mapVisible()) {
+    state.mapDirty = true;
+    return;
+  }
   if (state.markerCluster) state.markerCluster.clearLayers();
   state.markers = {};
   if (!state.edgeLayer) state.edgeLayer = L.layerGroup().addTo(state.map);
@@ -2273,6 +3176,10 @@ function drawMapEdges(entries) {
 }
 
 function renderMapIndex() {
+  if (!mapVisible()) {
+    state.mapDirty = true;
+    return;
+  }
   const list = document.getElementById("map-index-list");
   const items = filteredEntries();
   if (!items.length) {
@@ -2307,7 +3214,7 @@ function renderMapIndex() {
     }
     const openDay = e.target.closest("[data-open-day]");
     if (openDay) {
-      openItinerary(openDay.dataset.openDay);
+      journeyFocusDay(openDay.dataset.openDay);
       return;
     }
     const focus = e.target.closest("[data-focus]");
@@ -2345,6 +3252,146 @@ function focusPin(id) {
   }
 }
 
+/* ---------- 旅路 Journey — the trip as one end-to-end timeline ---------- */
+
+const CITY_NAV_TINT = {
+  tokyo: "rgba(30, 58, 95, 0.14)",
+  hakone: "rgba(176, 141, 87, 0.22)",
+  kyoto: "rgba(196, 92, 74, 0.16)",
+  nara: "rgba(120, 140, 90, 0.2)",
+  osaka: "rgba(74, 109, 147, 0.2)",
+  kobe: "rgba(84, 130, 120, 0.22)",
+};
+
+function journeyGoToDay(di) {
+  document.getElementById("journey-timeline")?.scrollTo({ left: Math.max(0, di * TL_DAY_W - 24), behavior: "smooth" });
+}
+
+function journeyFocusDay(dayId) {
+  scrollToSection("journey");
+  const di = TRIP.days.findIndex((d) => d.id === dayId);
+  if (di >= 0) setTimeout(() => journeyGoToDay(di), 380);
+}
+
+// Which cities a day actually touches — inferred from its events' own places
+// (the first event starting that day leads; transits are arrivals, not stays)
+function journeyDayCities(d) {
+  const seq = [];
+  dayTopLevel(d.id).forEach((t) => (isGroup(t) ? seq.push(...membersOf(t.id)) : seq.push(t)));
+  const ids = [];
+  seq.forEach((w) => {
+    if (w.type === "transit") return;
+    const c = wishCity(w);
+    if (c && !ids.includes(c.id)) ids.push(c.id);
+  });
+  return ids.length ? ids : [d.cityId];
+}
+
+function renderJourneyNav() {
+  const nav = document.getElementById("journey-nav");
+  if (!nav) return;
+  const dayCities = TRIP.days.map(journeyDayCities);
+  const order = [];
+  dayCities.forEach((l) => l.forEach((c) => { if (!order.includes(c)) order.push(c); }));
+  const n = TRIP.days.length;
+  // one fluid bubble per city spanning every date it touches — a multi-city
+  // date sits inside two overlapping bubbles
+  const segs = order.map((c) => {
+    const idxs = dayCities.map((l, i) => (l.includes(c) ? i : -1)).filter((i) => i >= 0);
+    return { c, a: Math.min(...idxs), b: Math.max(...idxs) };
+  });
+  nav.innerHTML = `
+    <div class="jnav-track">
+      ${segs
+        .map((s) => {
+          const city = cityById(s.c);
+          const tint = CITY_NAV_TINT[s.c] || "rgba(30,58,95,0.12)";
+          return `<div class="jnav-bubble" style="left:${(s.a / n) * 100}%; width:${((s.b - s.a + 1) / n) * 100}%; background:${tint}"><span>${escapeHtml(city?.name || s.c)}</span></div>`;
+        })
+        .join("")}
+      <div class="jnav-days">
+        ${TRIP.days
+          .map((d, i) => {
+            const dt = new Date(d.date + "T12:00:00");
+            return `<button type="button" class="jnav-day" data-jnav="${i}"><strong>D${i + 1}</strong><span>${dt.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span></button>`;
+          })
+          .join("")}
+      </div>
+    </div>`;
+  updateJourneyNav();
+}
+
+function updateJourneyNav() {
+  const tl = document.getElementById("journey-timeline");
+  const nav = document.getElementById("journey-nav");
+  if (!tl || !nav) return;
+  const di = Math.max(0, Math.min(TRIP.days.length - 1, Math.floor((tl.scrollLeft + tl.clientWidth * 0.35) / TL_DAY_W)));
+  nav.querySelectorAll(".jnav-day").forEach((el) => el.classList.toggle("active", Number(el.dataset.jnav) === di));
+}
+
+// The journey fills the viewport exactly — the page never scrolls; tall days
+// scroll inside the strip
+function sizeJourneyHero() {
+  const tl = document.getElementById("journey-timeline");
+  if (!tl || !isViewActive("journey")) return;
+  window.scrollTo(0, 0);
+  const top = tl.getBoundingClientRect().top;
+  tl.style.height = `${Math.max(280, window.innerHeight - top - 14)}px`;
+}
+
+function renderJourney() {
+  if (!isViewActive("journey")) {
+    state.viewDirty.journey = true;
+    return;
+  }
+  const tlHost = document.getElementById("journey-timeline");
+  if (tlHost) renderTimelineBoard(tlHost);
+  renderJourneyNav();
+  sizeJourneyHero();
+}
+
+function initJourney() {
+  const tl = document.getElementById("journey-timeline");
+  document.getElementById("journey-nav")?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-jnav]");
+    if (btn) journeyGoToDay(Number(btn.dataset.jnav));
+  });
+  tl?.addEventListener("scroll", () => requestAnimationFrame(updateJourneyNav), { passive: true });
+  tl?.addEventListener("click", (e) => {
+    const open = e.target.closest("[data-min-open]");
+    if (open) {
+      showWishPreview(open.dataset.minOpen, open);
+      return;
+    }
+    const gEdit = e.target.closest("[data-group-edit]");
+    if (gEdit) openGroupModal(gEdit.dataset.groupEdit);
+  });
+  window.addEventListener("resize", debounce(renderJourney, 200));
+}
+
+/* Day-band tints for the timeline strip */
+const JOURNEY_CITY_TINT = {
+  tokyo: "rgba(30, 58, 95, 0.055)",
+  hakone: "rgba(176, 141, 87, 0.08)",
+  kyoto: "rgba(196, 92, 74, 0.06)",
+  nara: "rgba(120, 140, 90, 0.07)",
+  osaka: "rgba(74, 109, 147, 0.07)",
+  kobe: "rgba(84, 130, 120, 0.08)",
+};
+
+
+
+/* Date rail — every trip day spread down the left edge; the day under the
+   viewport stays lit, clicking one sails the river there */
+
+
+
+
+
+
+
+
+
 /* ---------- Itinerary drawer ---------- */
 
 function openItinerary(focusDayId = null) {
@@ -2364,7 +3411,8 @@ function openItinerary(focusDayId = null) {
 }
 
 function closeItinerary() {
-  document.getElementById("itinerary-overlay").hidden = true;
+  const overlay = document.getElementById("itinerary-overlay");
+  if (overlay) overlay.hidden = true;
   document.body.classList.remove("drawer-open");
   hideWishPreview();
 }
@@ -2424,6 +3472,7 @@ function showWishPreview(wishId, anchorEl) {
   const pvInfo = wishInfo(wish);
   pop.innerHTML = `
     <button type="button" class="wish-preview-close" data-preview-close aria-label="Close">×</button>
+    ${wishImage(wish) ? `<img class="wish-preview-img" src="${escapeHtml(wishImage(wish))}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : ""}
     <span class="wish-card-type">${escapeHtml(wish.type || "place")}</span>
     <strong>${escapeHtml(wish.label)}</strong>
     <p>${escapeHtml(wish.location_name || "No place yet")}</p>
@@ -2432,11 +3481,31 @@ function showWishPreview(wishId, anchorEl) {
     <div class="wish-preview-actions">
       ${mapped ? `<button type="button" class="chip-link ghost" data-preview-map="${wish.id}">On map</button>` : ""}
       <button type="button" class="chip-link ghost" data-preview-edit="${wish.id}">Edit</button>
-      <button type="button" class="chip-link ghost" data-preview-board="${wish.id}">Board</button>
+      <button type="button" class="chip-link ghost" data-chat-add="${wish.id}">Chat</button>
+      ${mapsDirectionsUrl(wish) ? `<a class="chip-link ghost" href="${mapsDirectionsUrl(wish)}" target="_blank" rel="noopener noreferrer">Directions</a>` : ""}
     </div>`;
   pop.hidden = false;
-  const rect = anchorEl.getBoundingClientRect();
-  const top = Math.min(window.innerHeight - 180, rect.bottom + 8);
+  state.previewAnchor = anchorEl;
+  positionWishPreview();
+}
+
+// Measure the real popover (image + info make it 300-400px) and flip above
+// the anchor when it would fall off-screen — actions must stay reachable.
+// Re-run on scroll so the card travels with its anchor.
+function positionWishPreview() {
+  const pop = document.getElementById("wish-preview");
+  const anchor = state.previewAnchor;
+  if (!pop || pop.hidden || !anchor?.isConnected) return;
+  const rect = anchor.getBoundingClientRect();
+  // Anchor scrolled out of sight → the card must not float on its own
+  if (rect.bottom < 0 || rect.top > window.innerHeight || rect.right < 0 || rect.left > window.innerWidth) {
+    hideWishPreview();
+    return;
+  }
+  const ph = pop.offsetHeight;
+  let top = rect.bottom + 8;
+  if (top + ph > window.innerHeight - 12) top = rect.top - ph - 8;
+  top = Math.min(top, window.innerHeight - ph - 12);
   let left = rect.left;
   if (left + 300 > window.innerWidth - 16) left = window.innerWidth - 316;
   pop.style.top = `${Math.max(12, top)}px`;
@@ -2446,6 +3515,7 @@ function showWishPreview(wishId, anchorEl) {
 function hideWishPreview() {
   const pop = document.getElementById("wish-preview");
   if (pop) pop.hidden = true;
+  state.previewAnchor = null;
 }
 
 function initWishPreview() {
@@ -2467,21 +3537,15 @@ function initWishPreview() {
       openWishModal({ wishId: edit.dataset.previewEdit });
       return;
     }
-    const board = e.target.closest("[data-preview-board]");
-    if (board) {
-      hideWishPreview();
-      closeItinerary();
-      openWishOnBoard(board.dataset.previewBoard);
-    }
   });
 
-  // The popover is fixed-position: it must not float free of its anchor, so any
-  // scroll dismisses it, and clicking anywhere outside closes it.
-  window.addEventListener("scroll", () => hideWishPreview(), { capture: true, passive: true });
+  // Stays open while scrolling and travels with its anchor; closes only via ×,
+  // Escape, or a click outside.
+  window.addEventListener("scroll", () => requestAnimationFrame(positionWishPreview), { capture: true, passive: true });
   document.addEventListener("click", (e) => {
     const pop = document.getElementById("wish-preview");
     if (!pop || pop.hidden) return;
-    if (e.target.closest("#wish-preview") || e.target.closest("[data-preview-wish]") || e.target.closest("[data-min-open]") || e.target.closest("[data-info]")) return;
+    if (e.target.closest("#wish-preview") || e.target.closest("[data-preview-wish]") || e.target.closest("[data-min-open]") || e.target.closest("[data-info]") || e.target.closest("[data-jopen]")) return;
     hideWishPreview();
   });
 }
@@ -2834,6 +3898,10 @@ function initShopping() {
 }
 
 function renderShopIdeas() {
+  if (!isViewActive("shop")) {
+    state.viewDirty.shop = true;
+    return;
+  }
   const promoted = getPromoted();
   // An idea is also "promoted" when a buy-list row (possibly a friend's) came from it
   getShopping().forEach((s) => {
@@ -2889,6 +3957,10 @@ function renderShopProgress() {
 /* ---------- Food tastes ---------- */
 
 function renderTastes() {
+  if (!isViewActive("taste")) {
+    state.viewDirty.taste = true;
+    return;
+  }
   const tried = loadJSON(STORE.tastes, {});
   const tastes = [];
   visibleWishes()
@@ -3020,6 +4092,7 @@ function initPacking() {
     else delete data[e.target.dataset.id];
     saveJSON(STORE.packing, data);
     renderPackingProgress();
+    renderFaq(); // the FAQ packing card shows the packed count
   });
 }
 
@@ -3035,15 +4108,99 @@ function initTips() {
     .join("");
 }
 
+/* ---------- 案内 FAQ — reference guide view ---------- */
+
+const FAQ_CARD_META = {
+  visa: { ja: "査証", hint: "Papers first" },
+  bookings: { ja: "予約", hint: "Book before it sells out" },
+  money: { ja: "両替", hint: "Cash, cards, IC & rail" },
+  october: { ja: "十月", hint: "Weather & what's on" },
+};
+
+function renderFaq() {
+  if (!isViewActive("faq")) {
+    state.viewDirty.faq = true;
+    return;
+  }
+  const facts = document.getElementById("faq-facts");
+  const grid = document.getElementById("faq-grid");
+  if (!facts || !grid) return;
+
+  const first = new Date(TRIP.days[0].date + "T12:00:00");
+  const last = new Date(TRIP.days[TRIP.days.length - 1].date + "T12:00:00");
+  const span = `${first.toLocaleDateString("en-GB", { day: "numeric", month: "short" })} – ${last.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`;
+  const cities = new Set(TRIP.days.map((d) => d.cityId)).size;
+  const events = state.wishes.filter((w) => !isGroup(w));
+  const placed = events.filter((w) => w.day_id).length;
+  const daysToGo = Math.max(0, Math.ceil((new Date(TRIP.departureDate + "T00:00:00") - Date.now()) / 86400000));
+  const packed = Object.keys(loadJSON(STORE.packing, {})).length;
+
+  facts.innerHTML = [
+    { n: daysToGo, ja: "日まで", en: "days to go" },
+    { n: TRIP.days.length, ja: "日間", en: span },
+    { n: cities, ja: "都市", en: "Tokyo → Kobe" },
+    { n: `${placed}/${events.length}`, ja: "手配", en: "events on days" },
+  ]
+    .map((f) => `<div class="faq-fact"><strong>${escapeHtml(String(f.n))}</strong><span lang="ja">${f.ja}</span><small>${escapeHtml(f.en)}</small></div>`)
+    .join("");
+
+  const docCards = (TRIP.docs || []).map((d) => {
+    const meta = FAQ_CARD_META[d.id] || { ja: "案内", hint: "" };
+    const preview = (d.body || [""])[0].slice(0, 120);
+    return `
+    <button type="button" class="faq-card" data-doc="${escapeHtml(d.id)}">
+      <span class="faq-card-ja" lang="ja" aria-hidden="true">${meta.ja}</span>
+      <span class="faq-card-body">
+        <strong>${escapeHtml(d.title)}</strong>
+        <small>${escapeHtml(preview)}…</small>
+        <span class="faq-card-foot">${meta.hint ? escapeHtml(meta.hint) + " · " : ""}${(d.links || []).length} link${(d.links || []).length === 1 ? "" : "s"} →</span>
+      </span>
+    </button>`;
+  });
+
+  docCards.push(`
+    <button type="button" class="faq-card" data-open-modal="packing-modal">
+      <span class="faq-card-ja" lang="ja" aria-hidden="true">荷造</span>
+      <span class="faq-card-body">
+        <strong>Packing</strong>
+        <small>${escapeHtml(TRIP.packing.slice(0, 3).map((p) => p.label.split(" (")[0]).join(" · "))}…</small>
+        <span class="faq-card-foot">${packed}/${TRIP.packing.length} packed →</span>
+      </span>
+    </button>`);
+  docCards.push(`
+    <button type="button" class="faq-card" data-open-modal="tips-modal">
+      <span class="faq-card-ja" lang="ja" aria-hidden="true">心得</span>
+      <span class="faq-card-body">
+        <strong>Trip tips</strong>
+        <small>${escapeHtml((TRIP.tips || []).slice(0, 3).map((t) => t.title).join(" · "))}</small>
+        <span class="faq-card-foot">${(TRIP.tips || []).length} field notes →</span>
+      </span>
+    </button>`);
+
+  grid.innerHTML = docCards.join("");
+}
+
 /* ---------- Footer reference modals (packing / tips) ---------- */
 
+function openDocModal(docId) {
+  const docModal = document.getElementById("doc-modal");
+  const doc = (TRIP.docs || []).find((d) => d.id === docId);
+  if (!doc || !docModal) return;
+  document.getElementById("doc-modal-title").textContent = doc.title;
+  document.getElementById("doc-modal-body").innerHTML =
+    (doc.body || []).map((para) => `<p>${escapeHtml(para)}</p>`).join("") +
+    ((doc.links || []).length
+      ? `<div class="doc-links">${doc.links
+          .map((l) => `<a href="${escapeHtml(l.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label)} ↗</a>`)
+          .join("")}</div>`
+      : "");
+  docModal.hidden = false;
+}
+
 function initFooterModals() {
-  const wire = (openId, modalId, closeId) => {
+  const wire = (modalId, closeId) => {
     const modal = document.getElementById(modalId);
     if (!modal) return;
-    document.getElementById(openId)?.addEventListener("click", () => {
-      modal.hidden = false;
-    });
     document.getElementById(closeId)?.addEventListener("click", () => {
       modal.hidden = true;
     });
@@ -3051,35 +4208,75 @@ function initFooterModals() {
       if (e.target.id === modalId) modal.hidden = true;
     });
   };
-  wire("open-packing", "packing-modal", "packing-close");
-  wire("open-tips", "tips-modal", "tips-close");
+  wire("packing-modal", "packing-close");
+  wire("tips-modal", "tips-close");
 
-  // Reference docs (visa, bookings, money, october) share one modal
-  const docModal = document.getElementById("doc-modal");
-  document.querySelectorAll("[data-doc]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const doc = (TRIP.docs || []).find((d) => d.id === btn.dataset.doc);
-      if (!doc || !docModal) return;
-      document.getElementById("doc-modal-title").textContent = doc.title;
-      document.getElementById("doc-modal-body").innerHTML =
-        (doc.body || []).map((para) => `<p>${escapeHtml(para)}</p>`).join("") +
-        ((doc.links || []).length
-          ? `<div class="doc-links">${doc.links
-              .map((l) => `<a href="${escapeHtml(l.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label)} ↗</a>`)
-              .join("")}</div>`
-          : "");
-      docModal.hidden = false;
-    });
+  // Delegated: openers live in the FAQ grid, which re-renders — per-button
+  // bindings would go stale
+  document.body.addEventListener("click", (e) => {
+    const doc = e.target.closest("[data-doc]");
+    if (doc) {
+      openDocModal(doc.dataset.doc);
+      return;
+    }
+    const open = e.target.closest("[data-open-modal]");
+    if (open) {
+      const modal = document.getElementById(open.dataset.openModal);
+      if (modal) modal.hidden = false;
+    }
   });
-  document.getElementById("doc-modal-close")?.addEventListener("click", () => (docModal.hidden = true));
-  docModal?.addEventListener("click", (e) => {
-    if (e.target.id === "doc-modal") docModal.hidden = true;
+  wire("doc-modal", "doc-modal-close");
+}
+
+/* ---------- 関所 Password gate ---------- */
+
+// Free-tier DB connections are scarce: until the gate opens, NOTHING boots —
+// no store init, no fetches, no realtime subscriptions.
+const GATE_KEY = "jp-gate";
+const GATE_HASH = "78dc88de6dc36fcee21cfc735d034bccfa544ef785c965842817316ea5ebf6b8"; // sha-256 of the password
+
+function gateAuthed() {
+  try {
+    return localStorage.getItem(GATE_KEY) === GATE_HASH;
+  } catch {
+    return false;
+  }
+}
+
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function initGate() {
+  const form = document.getElementById("gate-form");
+  const err = document.getElementById("gate-err");
+  document.getElementById("gate-pass")?.focus();
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const value = document.getElementById("gate-pass").value.trim();
+    if ((await sha256Hex(value)) === GATE_HASH) {
+      try {
+        localStorage.setItem(GATE_KEY, GATE_HASH);
+      } catch { /* private mode — gate reappears next visit */ }
+      location.reload();
+    } else if (err) {
+      err.hidden = false;
+      form.classList.remove("gate-shake");
+      requestAnimationFrame(() => form.classList.add("gate-shake"));
+    }
   });
 }
 
 /* ---------- Boot ---------- */
 
 document.addEventListener("DOMContentLoaded", async () => {
+  if (!gateAuthed()) {
+    initGate();
+    return;
+  }
+  document.documentElement.classList.add("authed");
+  document.getElementById("gate")?.remove();
   const safe = (name, fn) => {
     try {
       fn();
@@ -3092,17 +4289,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   safe("starfield", initStarfield);
   safe("hero", initHero);
   safe("dock", initDock);
+  safe("views", initViews);
   safe("sync", updateSyncPill);
   safe("kanban", initKanban);
   safe("preview", initWishPreview);
   safe("picker", initLocationPicker);
   safe("wishForm", initWishForm);
   safe("groupModal", initGroupModal);
+  safe("journey", initJourney);
   safe("map", initMap);
   safe("shopping", initShopping);
   safe("packing", initPacking);
   safe("tips", initTips);
   safe("footerModals", initFooterModals);
+  safe("chat", initChat);
 
   document.getElementById("tastes")?.addEventListener("click", (e) => {
     const jump = e.target.closest("[data-filter-jump]");
@@ -3112,9 +4312,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   try {
+    await loadTripDates();
+    safe("tripDates", initTripDates);
+    safe("dayOptions", renderDayOptions);
     await refreshShopping();
     await refreshWishes();
     await ensureCloudSeeds();
+    await ensureImageEnrichment();
     await ensureHiddenSeeds();
     await ensureTransitSeeds();
     await ensureGroupSeeds();

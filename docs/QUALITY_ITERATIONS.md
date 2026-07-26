@@ -632,6 +632,361 @@ Seeds rebuilt from **docs/plan.md** (the 12-day itinerary) + **docs/things-to-do
 
 ---
 
+## Iteration 22 — event images + inbox filters (2026-07-26)
+
+- **Images:** reserved `image` meta (URL). Composer gets an Image URL field (Links & notes);
+  renders as a flush banner on full cards, atop map hover cards, and in the event popover
+  (lazy-loaded, self-removing on error). 23 iconic events seeded with Wikipedia thumbnails
+  (330px API-guaranteed sizes — 640px upscales 400'd). SQL seed regenerated with images.
+- **Inbox filters:** search + type chips + city chips inside the tray (hidden when collapsed).
+  Groups match when any member matches; badge shows `shown/total`. Verified: 85 → 6 on Food,
+  search "onsen" → 3.
+
+---
+
+## Iteration 23 — images everywhere · calendar view · 旅路 journey river (2026-07-26)
+
+- **Images for (almost) all events:** Wikipedia search API resolver → 103/147 non-transit events
+  carry a ~320px thumbnail (DB stores only URL strings; images hotlinked from Wikimedia — free-tier
+  safe). `ensureImageEnrichment` merges seed images into pre-existing boards by label (fixes
+  "can't see images"). SQL seed regenerated.
+- **Calendar view:** third board toggle — a Mon–Sun month grid over the trip window; trip cells show
+  compact rows + bundle chips and are full **drop zones** (drag between cells/inbox verified);
+  off-days muted.
+- **旅路 Journey section** (replaces the Days drawer): the trip as a **flowing river** — day bands
+  tinted by city and blending; the river bends toward each event so cards always sit adjacent
+  (solves far-side readability); **red fate-line railings** (dashed) carry rotated leg times;
+  animated flow strokes (pure SVG/CSS, no deps); **transit markers sit on the river** with mode ·
+  depart · duration · date and shift the river's hue per segment; event cards show images, open the
+  event popover; passive = dashed, hidden = neon. Left vertical **collapse bar** (persisted).
+  Dock: Days → Journey (river icon); map index "Day" buttons and data-go jump here.
+- Research pass on overview patterns (multi-view apps, storyline charts, map-trace) — writeup in chat.
+
+---
+
+## Iteration 24 — tabbed views · map modal · inset card images · perf (2026-07-26)
+
+- **Tabbed views:** dock switches one visible section (`setView`, localStorage `jp-view`);
+  renders are view-gated with dirty flags — a store change re-renders only the visible view
+  (refreshWishes: 416ms → ~10ms on non-plan views, ~260ms on plan; DCL −20%).
+- **Map = modal** (`#map-overlay`): FAB + every "On map"/day-Map/taste-jump path opens it;
+  ×/backdrop/Esc/view-switch close it; markers/index flush on open (`mapDirty`).
+- **Card images:** `.wc-img` full-bleed banner (overhung the 3px type border, clipped corners)
+  → inset framed 108px thumb below the tag row. `decoding=async` + wikimedia preconnect + favicon.
+- Footer: countdown moved from hero + link pills (superseded by iteration 25's FAQ tab).
+- Verified by a 5-agent adversarial workflow (39 checks passed). Its finds, all fixed:
+  resize-while-hidden wiped board threads (drawThreads now view-gated); journey card preview
+  dismissed by its own opening click (`data-jopen` in the ignore list); view switch smooth-scrolled
+  across blank page (`behavior:"instant"`); `jp-view="toString"` blanked main (`Object.hasOwn`);
+  null-deref in `closeItinerary` after drawer removal.
+
+## Iteration 25 — per-tab postcards · FAQ guide · map modal fit (2026-07-26)
+
+- **Dock:** Journey ↔ Plan swapped (Journey first), FAQ tab added, map FAB sits level
+  (removed the raised translateY; dock align-center).
+- **Per-tab theme:** `body[data-view]` — each tab gets its own hero postcard (plan: Chureito
+  pagoda+Fuji · journey: Fushimi Inari torii tunnel · shop: Shibuya neon · taste: ramen ·
+  faq: Hakone torii) + a matching ambient radial palette, day and night; photos idle-prefetched.
+- **Hero:** full-viewport → compact banner (clamp 300–440px) with a glass kicker pill naming
+  the tab (寿司舟 · Plan …); Fuji ridge SVG only on Plan.
+- **Map modal:** header is just "Map 地図" + close (eyebrow/pulse gone), flex column layout,
+  `overflow:hidden` (no scrollbars), map takes every spare pixel (560 → ~676px at 1440×900;
+  mobile `calc(100dvh − 210px)`).
+- **FAQ view (案内):** hosts all reference content — 4 fact tiles (days-to-go, dates, cities,
+  events-on-days) + 6 cards with vertical kanji spines (査証/予約/両替/十月/荷造/心得) opening the
+  existing modals; `[data-doc]`/`[data-open-modal]` now delegated (survives re-renders).
+  Footer keeps only the countdown.
+- Pin hovercard image → inset frame (was a misaligned full-bleed banner).
+
+## Iteration 26 — full verification-workflow findings fixed (2026-07-26)
+
+The 23-agent adversarial workflow (65+ passes) finished judging; every confirmed finding fixed:
+
+- **Preview popover overflow (major):** `showWishPreview` assumed ≤180px; with image+info it's
+  300–400px, pushing On map/Edit/Board off-screen (and any scroll dismisses it). Now measures the
+  rendered popover and flips above the anchor / clamps into the viewport.
+- **Mobile journey clipping (major):** right-bank `.jcard`s overflowed the viewport at 390px.
+  River AMP shrinks on narrow screens and right-side cards size to the space the bank leaves them
+  (verified: 51 cards, 0 overflowing).
+- **Night hero lede (major):** `.hero-lede` kept day ink (~1.3:1 on the night photo) — night
+  override added (#cdd9ec).
+- Pile titles over-truncated: the three hover-hidden header tools reserved ~88px — they now take
+  width only on hover/focus (title 67→151px at rest).
+- Calendar mode renders the inbox compact (the month grid sat ~19,700px below the toggle on
+  mobile behind full cards; now ~2,100px with 100 mini rows).
+- Wrong-subject seed images: Oedo Antique Market (a wrestler portrait) and Golden Gai (a singer
+  portrait) → venue photos in data.js + schema.sql; `ensureImageEnrichment` swaps the known-bad
+  URLs on existing boards without touching user-chosen images.
+- Mobile sync pill scrolls away with the hero (was fixed over the Add Sushi button); city letter
+  pins step back at national zoom (opacity .6, scale .85) so cluster counts read; map-close is a
+  40px bordered round button; footer band tightened (section 6rem→3.5rem bottom padding).
+- Accepted as-is: renderKanban's ~200ms plan-view re-render (residual hotspot, offered as a
+  future per-column optimization).
+
+---
+
+## Iteration 27 — 関所 password gate · integrated banner · popover behavior (2026-07-26)
+
+- **Password gate:** full-screen 関所 card before anything else; the boot handler returns before
+  ANY init when unauthed — no store init, no fetches, no realtime (verified: zero Supabase/OSRM
+  requests while gated; only static assets load). Password is checked as a SHA-256 hash (the
+  plaintext never appears in source) and persisted in localStorage, so a browser unlocks once.
+  An inline head script restores `html.authed` instantly on revisits (no gate flash).
+  Note: client-side gating — it stops casual visitors from consuming free-tier DB connections,
+  not a determined reader of the source.
+- **Banner integrated:** the hero is now a rounded postcard strip (~230px) inside the content
+  column; the board heading sits at y≈313 — no scroll-past-a-hero at the start. Fuji ridge SVG
+  retired.
+- **Popover:** scrolling no longer dismisses the event card (it pins to the viewport); closes
+  only via ×, Escape, or clicking outside.
+- **Image quality:** aspect-scanned all 93 seed thumbs; replaced 3 that cover-crop badly or show
+  the wrong subject — Shibuya Sky (skinny tower on white sky → open-air deck view), Tea ceremony
+  (SVG glyph → Gokoku-ji ceremony photo), Zazen (monk portrait → Ryōan-ji kare-sansui).
+  data.js + schema.sql + `BAD_SEED_IMAGES` migration for existing boards.
+
+## Iteration 28 — banner joins the tab header (2026-07-26)
+
+- Tab switches now land at the very top: banner postcard + section heading as one unit
+  (gap tightened 2.4rem → 1.5rem). Gotcha: swapping sections re-clamps the scroll offset
+  *after* the click handler returns, dragging the page ~100px down — `setView` re-asserts
+  `scrollTo(0)` on the next animation frame.
+
+## Iteration 29 — shared trip dates · journey date rail · 3D anime river (2026-07-26)
+
+- **Countdown removed** from the page bottom (footer deleted; FAQ keeps its days-to-go fact).
+- **Trip start/end dates** (Plan toolbar): `TRIP.days` is now generated from a shared range —
+  the curated 12-day plan is the template (day k keeps its city/title), extra days append as
+  "Open day", 30-day cap, end<start rejected. Board, calendar, journey, day-selects and FAQ all
+  follow. Days dropped by shrinking fall back to the Inbox (nothing is ever hidden) and return
+  when the range grows back. Synced via a new `settings` table (key/value jsonb; realtime) with
+  the same local-mode fallback — schema.sql + COMMANDS.md updated.
+- **Journey date rail** replaces the collapse bar: all trip days spread down a fixed left rail,
+  the day under the viewport stays lit while scrolling (verified exact for d4/d8/d11), clicking
+  a date sails the river there. Hidden under 940px.
+- **3D anime river:** the flat stroke became a ribbon — blurred grassy bank underlay, extruded
+  side wall (same path shifted +DEPTH, darkened), sunlit per-segment surface, rim-light stroke,
+  feDropShadow over the whole ribbon, node pins with elliptical ground shadows, a sparkle layer
+  over the two flow streams (all pause off-screen), and deeper layered shadows + hover
+  perspective tilt on day plaques / cards / transit tickets. Night mode: neon railings, moonlit
+  water, glowing rail chip.
+
+## Iteration 30 — the valley around the river (2026-07-26)
+
+- Procedural SVG scenery, deterministically placed (hash of slot index — re-renders never
+  shuffle the landscape): **taiko bridges** under every transit ticket (wider than the card so
+  the ends show), **torii** at each day station, **stone lanterns** (glow + halo at night),
+  bushes/grass/rocks scattered on the bank opposite each card, a **source pond** and an
+  **end-of-trip lake** (so the ribbon no longer tapers like a snake), and three bobbing
+  **sushi boats** (bob animates the group's children — a CSS transform on the positioned
+  group would override its SVG placement).
+- Journey rail enlarged (0.62→0.8rem day, 0.55→0.68rem date, taller, active chip shadow).
+- Counts verified: 12 torii, 10 bridges (=transits), 11 lamps, 43 bushes, 59 grass, 8 rocks,
+  3 boats at exact declared coordinates; no page errors.
+
+## Iteration 31 — timeline mode · durations · banner = header (2026-07-26)
+
+- **Timeline** (4th board density): one continuous horizontal strip, 24h per day at 54px/h
+  (12 days = 15,552px). Timed events (◷) pin to their clock time; untimed ones auto-flow from
+  09:00 in board order with 15m gaps, so each day reads as a plausible plan. Overlaps stack
+  into lanes — reservation uses the VISUAL span (short events render at a 46px minimum, so a
+  30m block books ~1h of lane; without this, blocks overlapped). Groups render as fluid
+  organic-radius bubbles wrapping their members with a 結び tag (opens group edit). Sticky
+  per-day chips ride along while scrolling a day (gotcha: overflow:hidden on the band would
+  become the sticky's root and kill it). Day bands tinted by city; blocks open the preview.
+- **Durations:** `duration` is a reserved meta key with a composer field ("How long? ~2h");
+  resolution = own meta → curated per-label map (123 entries in data.js — USJ 9h, Ghibli 3h,
+  Fushimi Inari 2h30 …) → type default (exp 2h / place 1.5h / food 1.25h / shop 1h / transit 1h).
+  Curated values ship as JS fallbacks, not stored rows — no seed regen, user edits win.
+- **Banner is now the header:** view title (Sushi Boat / The Journey / …) sits bottom-left ON
+  the postcard, kicker top-left, 日本の旅 wordmark top-right, lede bottom-right; per-section
+  h2/eyebrow hidden; hidden-boat toggle relocated to board-tools; veil darkened at the foot so
+  the white title reads over any photo.
+
+## Iteration 32 — readable timeline · journey timeline · durations in the DB (2026-07-26)
+
+- **Timeline blocks fully readable:** every block now shows thumb (40px) + full name (2-line
+  wrap) + time at ≥176px label width; the TRUE time span is the colored 4px bar along the block
+  bottom (a 30m stop no longer collapses to an unreadable sliver). Lane booking reserves the
+  label width, so stacking guarantees zero collisions (verified 61/61).
+- **Journey tab gets the horizontal timeline** just above the river, same renderer via a shared
+  `.tl-scroller` (its own preview/group-edit delegation — the plan handler is scoped to #kanban),
+  with a distinct water-gradient background; the plan strip also drops the board's wave pattern +
+  right-edge mask that leaked in via `.section-board .kanban` specificity.
+- **Day chip minimal:** one quiet line ("D1 · Thu, 15 Oct · Tokyo") — was a two-line pill.
+- **Durations now live in the DB seed:** 120 seed rows in data.js AND schema.sql carry
+  `{key:"duration"}` meta (all validated as JSON); boot enrichment merges missing durations
+  into existing local boards; TRIP.durations stays as fallback for the 3 unmatched labels.
+- **Popover follows its anchor on scroll** (positionWishPreview re-runs per scroll frame);
+  its image is an inset frame (the negative-margin banner left a gap). Pin hovercard gets a
+  fixed 250px width — `width:100%` had nothing to resolve against in a shrink-to-fit Leaflet
+  tooltip, which squeezed the photo.
+- Bushes removed from the river valley (replaced with grass tufts).
+
+## Iteration 33 — drag-to-retime · journey = timeline hero · city date nav (2026-07-26)
+
+- **Plan timeline drag:** blocks drag horizontally (6px threshold keeps clicks working), snap to
+  15-min steps, drop writes `time` meta (`transit:depart` for transits) and `day_id` when the
+  block crosses a day boundary. Gotcha: a once-capture click swallower lingered when the browser
+  fired no trailing click and ate the NEXT honest click — replaced with a 350ms time-window guard.
+- **River retired** (~330 lines): Journey = the horizontal timeline as a full-bleed hero, plus a
+  **date navigator** — one pill per day with **fluid city bubbles** behind them. Day→city is
+  inferred from the day's own events' places (transits excluded as arrivals); a day whose events
+  span two cities sits inside both bubbles (verified overlaps: Hakone×Kyoto, Kyoto×Osaka).
+  Pill click smooth-scrolls the strip; strip scroll lights the pill. journeyFocusDay targets the
+  strip now.
+- **Night always shows the hidden events** — showHidden is driven by the lantern (boat stays lit
+  as an indicator); day 165 → night 167 visible.
+- Popover hides when its anchor scrolls off-screen (was floating detached); timeline scrollbars
+  get thin styled thumbs day+night (night default looked foreign).
+
+## Iteration 34 — GCal create · inbox→timeline drop · agenda list · timeline dress-up (2026-07-26)
+
+- **Create like Google Calendar:** click empty timeline → composer opens prefilled (day, time,
+  1h); drag a range → dashed vermillion ghost live-labels the span ("+ 2h 30m") and prefills the
+  duration. Snap 15m. Plan strip only.
+- **Inbox → timeline drop:** the strip is a drop zone; dropping an inbox card sets day AND start
+  time from the cursor hour (transits set depart; groups move whole with no time). Verified:
+  teamLab Borderless → d2 @ 14:00.
+- **List view** (5th density): agenda rows — date + weekday/city + day title left, events as
+  type-spined chips with vermillion times, 結び knot pills for bundles, dashed transit chips,
+  passive faded. Chips open the preview.
+- **Timeline dress-up:** blocks adopt the board card language (3px type spine, Fraunces titles,
+  washi paper, soft shadows, 42px thumbs); day bands get a 3-layer wash — city tint pooling under
+  the header, dusk shading over the small hours at both ends, parity shade between alternate days.
+- Note: the popover's off-screen guard also dismisses previews opened for below-fold anchors —
+  correct behavior; a test tripped on it, not users.
+
+## Iteration 35 — list chrome off · journey viewport-fit · map always active (2026-07-26)
+
+- List view drops the board container (background/border/mask) — agenda floats on the page.
+- Journey strip backdrop: the blue-green wash → quiet warm washi gradient (day) / ink (night);
+  the day bands carry the colour.
+- **Journey never scrolls the page:** `html:has(body[data-view=journey]) { overflow: hidden }`
+  (body-level overflow does NOT stop the document scroller) + JS sizes the strip to
+  `innerHeight − top − 14`; tall lane stacks scroll inside the strip. Verified with real wheel
+  events (programmatic scrollTo bypasses overflow locks — first test draft lied).
+- **Map modal is always in scroll-to-pan active state** — setMapActive(true) at init and on every
+  open; the outside-click/wheel deactivators are gone (there is no page behind a modal to scroll).
+- Sync audit for the round's question: all 27 wish mutations + shopping + trip dates go through
+  the dual-mode stores (zero direct storage writes outside api.js); packing/tastes/night/view
+  prefs are per-device by design.
+
+## Iteration 43 — torii geometry · dates resilience · preview slimmed (2026-07-26)
+
+- Nuki beam was floating mid-header (a red stripe behind the controls) — now anchored to the
+  chat head's bottom boundary via ::after on the head itself.
+- Preview popover drops the Board action (On map · Edit · Chat · Directions remain); dead
+  handler removed.
+- **"Day list not dynamic" root-caused to Live mode:** the missing `settings` table made trip
+  dates fail to load on reload, snapping the day list to defaults. SettingsStore now writes a
+  localStorage mirror FIRST and falls back to it when the cloud read fails — verified against
+  a stubbed supabase with a 42P01 settings error: a 15-day trip persists across reload with 16
+  day options. Once upgrade-settings-auth.sql runs, cloud wins again.
+
+## Iteration 42 — going Live: real Supabase wired · auth e2e · directions (2026-07-26)
+
+- **Real project connected** (config.js keys). Probe found an old seed (167 wishes, no image/
+  duration meta) and missing `settings`/`user_settings` tables. Fixes: enrichment now runs in
+  BOTH modes (cloud rows backfilled by-label, additive+idempotent — executed once from here:
+  103 images + 120 durations now IN the DB, verified via REST), and
+  `supabase/upgrade-settings-auth.sql` creates the two missing tables (user must run it).
+- **Auth flow completed**: AuthStore.onChange follows the session (OAuth return updates the UI
+  live); signed out → only "Sign in with Google"; signed in → only "Sign out" (+ email) in the
+  same spot; save upserts the chat config to the user's private row; DB config wins on load;
+  signed-out falls back to localStorage. E2E-verified against a mocked supabase-js (stubbed
+  CDN): 4/4 scenarios. Real OAuth still needs the Google provider enabled in their dashboard.
+- **Chat head polished** (title, custom pill select with SVG chevron, uniform hover icons);
+  **FAB inline with the dock** on desktop (3px off center), lifted above the full-width dock on
+  mobile; mobile panel spans the width with a one-row head (title hidden).
+- **Directions buttons**: visible Google-Maps directions link on full cards (beside On map) and
+  in the preview popover. All tests hermetic via config.js route-interception — no accidental
+  writes to the live DB.
+
+## Iteration 41 — chat polish · model dropdowns · sign-in groundwork (2026-07-26)
+
+- **Root cause of the unpolish:** display classes (flex/grid) silently override the `hidden`
+  attribute — the chat panel, settings and pills never VISUALLY closed. Fixed globally with
+  `[hidden] { display: none !important; }`; regression-checked the wish modal/transit blocks.
+  Then walked EVERY chat control with computed-style assertions (9/9): FAB toggle, ×, gear
+  toggle, provider switch (base URL row hides), model select, save round-trip, thread +/−,
+  pill add/remove, key-hint links.
+- **Model dropdowns:** standard models per provider (Groq 3, Gemini 4, OpenRouter 4 :free,
+  OpenAI 3, Anthropic 2) + "Custom…" revealing a free-text input; unknown saved models
+  round-trip as Custom. Per-provider "Get a key" links under the key field.
+- **Google sign-in groundwork** (Supabase Auth): `user_settings` table (RLS `auth.uid() =
+  user_id`) in schema.sql; AuthStore (signInWithOAuth google / signOut / load+save settings);
+  chat ⚙ shows a Sign-in row ONLY in supabase mode; on save while signed in the chat config
+  also upserts to the user's private row, and on boot a signed-in user's row wins over
+  localStorage. UNTESTED end-to-end (needs their Supabase project + Google OAuth client —
+  steps documented in COMMANDS.md); local-mode hiding verified.
+- Empty-state ⛩ emoji → inline SVG torii (tofu'd without emoji fonts).
+
+## Iteration 40 — 鳥居 Trip Chat (2026-07-26)
+
+- **AI chat** in a torii-styled panel (kasagi beam overhanging the top, vermillion pillars),
+  opened by a torii FAB above the dock. Threads (new/switch/delete) persist in localStorage
+  (cap 30); works only behind the gate.
+- **Providers** (key stored only in the browser; ⚙ panel): Groq + Gemini + OpenRouter free
+  tiers recommended; OpenAI, Anthropic (browser-access header), Custom/Ollama base URL. Three
+  adapters: OpenAI-compatible chat/completions, Gemini generateContent, Anthropic messages.
+- **Live trip context**: buildTripContext() renders the CURRENT itinerary (days, events with
+  times/durations, bundles, inbox) as markdown into the system prompt on every request, with a
+  style prompt enforcing concise (<120 words) markdown answers.
+- **Event pills**: 💬 on every full card + Chat in the preview popover attach events to the
+  next message (dedup, individually removable ×); the API payload gets a per-event context
+  block (type, city, day, time, duration, location, notes) while the UI shows chips.
+- **Markdown replies rendered rich** via an escape-first mini renderer (headings/bold/italic/
+  lists/quotes/code/links-http-only) — LLM output cannot inject HTML by construction.
+- Graceful states: not-connected hint, error bubbles, typing dots; COMMANDS.md §6 documents keys.
+- Verified with a stubbed provider: pills→payload, md render (h/strong/li/link), thread
+  persistence across reload, new-thread, no-key path; 143 card icons live; no page errors.
+
+## Iteration 39 — droplet glyph · full-bleed banner · tab rooms (2026-07-26)
+
+- Humidity: 湿 → tiny inline-SVG droplet (renders everywhere, self-explanatory).
+- Banner is edge-to-edge on every tab (no margins/radius/side borders); its content keeps the
+  1100px page column.
+- **Each tab wears its own room** — pure-CSS pattern + hue per view, night variants included:
+  Plan = faint planning grid over warm washi; Shop = wide noren stripes in plum/gold;
+  Taste = matcha rice-dot grid; Journey = tall sky wash (no pattern — the strip is the art);
+  FAQ = shippou rings in lavender.
+
+## Iteration 38 — real sun & weather on the timeline (2026-07-26)
+
+- **Residual choppiness solved for real:** the per-day sky divs left subpixel joints at every
+  boundary after day 1 — the sky is now ONE element with a repeating gradient
+  (background-size = day width): zero seams by construction.
+- **Sunrise/sunset markers** (▲ 05:47 amber / ▼ 17:07 indigo) per day at exact positions —
+  computed locally with the NOAA solar approximation for each day's city coords in JST, so they
+  work for any date with no API (verified vs Tokyo mid-Oct almanac, ±2 min).
+- **Hourly weather ribbon** in a 34px lane above the ruler: a continuous temperature polyline
+  (288 points across 12 days) with translucent rain bars per hour. Data: Open-Meteo (keyless)
+  — live forecast within its 16-day horizon, otherwise the same dates last year via the ERA5
+  archive as a typical stand-in; one request per consecutive same-city run (5 total), cached in
+  localStorage (3h forecast / 7d typical). Injection is token-guarded against re-renders and
+  skips silently offline.
+- **Day chips** gain `≈20°/15° · 湿87%` (max/min · mean humidity; ≈ marks typical data, title
+  explains; kanji instead of an emoji droplet that tofu'd on some fonts).
+
+## Iteration 37 — the sky-cycle backdrop (2026-07-26)
+
+- Fourth (and right) take on the timeline backdrop: **each day's 24h is a sky** — midnight
+  indigo → dawn peach (~06:30) → clear midday → golden hour (~17:30) → sunset ember → night.
+  Adjacent midnights meet, so day boundaries emerge from darkness with NO divider — which also
+  kills the choppy shimmer (the old 1.5px dashed border repainted badly at fractional scroll
+  offsets; 61fps now). A slim city-tinted roofline (3px) along each day's top edge keeps the
+  city identity (0.45 opacity at night — full-strength glared). Applies to both Plan and
+  Journey strips since they share the renderer.
+
+## Iteration 36 — journey strip goes seamless (2026-07-26)
+
+- Third take on the journey backdrop: no background at all — the strip is transparent and
+  borderless, floating on the page's own washi; day bands, dusk shading and cards carry all the
+  colour. (Take 1: blue-green wash — clashed; take 2: warm gradient — read as a big beige box.)
+- List view gets 1.25rem horizontal padding.
+
+---
+
 ## Appendix — Interaction map
 
 ```
