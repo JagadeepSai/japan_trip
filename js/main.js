@@ -19,6 +19,7 @@ const state = {
   mapDirty: false, // markers/index missed a change while the map modal was closed
   indexOpen: false,
   boardView: "full", // full | min (compact rows)
+  tableView: { q: "", type: "all", day: "all", city: "all", activeOnly: true, sort: "trip", dir: 1 },
   activePinId: null,
   indexFilter: "all",
   dayFilter: "all", // all | inbox | day id
@@ -2350,6 +2351,164 @@ function renderTimelineBoard(board, vertical = false) {
   decorateTimelineWeather(board);
 }
 
+/* Table mode — every event as a data row: filter, sort, scan, total */
+const TABLE_COLS = [
+  { key: "label", name: "Event" },
+  { key: "type", name: "Type" },
+  { key: "trip", name: "Day" },
+  { key: "time", name: "Time" },
+  { key: "dur", name: "Dur" },
+  { key: "cost", name: "Cost" },
+  { key: "place", name: "Place" },
+  { key: "city", name: "City" },
+  { key: "group", name: "結び" },
+  { key: "status", name: "Status" },
+];
+
+function renderEventsTable(board) {
+  const tv = state.tableView;
+  const groupLabelOf = (w) => {
+    const gid = effectiveGroupId(w);
+    return gid ? state.wishes.find((x) => x.id === gid)?.label || "" : "";
+  };
+  const dayIdx = (w) => (w.day_id && dayById(w.day_id) ? TRIP.days.findIndex((d) => d.id === w.day_id) : Infinity);
+  const sortVal = {
+    label: (w) => w.label.toLowerCase(),
+    type: (w) => w.type || "place",
+    trip: (w) => dayIdx(w) * 100000 + (wishTimeMin(w) ?? 90000) + (w.sort_order ?? 0) / 1000,
+    time: (w) => wishTimeMin(w) ?? 100000,
+    dur: (w) => wishDurationMin(w),
+    cost: (w) => {
+      const c = wishActiveCost(w);
+      return c ? Number(c.yen) || 0 : -1;
+    },
+    place: (w) => (w.location_name || "").toLowerCase(),
+    city: (w) => wishCity(w)?.name || "",
+    group: (w) => groupLabelOf(w).toLowerCase(),
+    status: (w) => (w.active === false ? 1 : 0),
+  };
+
+  const currentRows = () => {
+    const rows = visibleWishes().filter((w) => !isGroup(w) && (!tv.activeOnly || w.active !== false));
+    const q = tv.q.trim().toLowerCase();
+    const filtered = rows.filter((w) => {
+      if (tv.type !== "all" && (w.type || "place") !== tv.type) return false;
+      if (tv.day === "inbox") {
+        if (w.day_id && dayById(w.day_id)) return false;
+      } else if (tv.day !== "all" && w.day_id !== tv.day) return false;
+      if (tv.city !== "all" && wishCity(w)?.id !== tv.city) return false;
+      if (q && ![w.label, w.location_name || "", groupLabelOf(w)].some((t) => t.toLowerCase().includes(q))) return false;
+      return true;
+    });
+    const get = sortVal[tv.sort] || sortVal.trip;
+    return filtered.sort((a, b) => {
+      const va = get(a);
+      const vb = get(b);
+      const cmp = typeof va === "string" ? va.localeCompare(vb) : va - vb;
+      return cmp * tv.dir || a.label.localeCompare(b.label);
+    });
+  };
+
+  const rowHtml = (w) => {
+    const day = w.day_id ? dayById(w.day_id) : null;
+    const passive = w.active === false;
+    const img = wishImage(w);
+    const ac = wishActiveCost(w);
+    const tiers = wishCosts(w);
+    const costTip = tiers.map((c) => `${c.active ? "● " : ""}${c.label} — ${c.yen === 0 ? "free" : formatYen(c.yen)}`).join("\n");
+    const cost = !ac ? "—" : Number(ac.yen) === 0 ? "Free" : formatYen(ac.yen);
+    return `<tr data-min-open="${w.id}" class="${passive ? "is-maybe" : ""} ${isHidden(w) ? "is-secret" : ""}">
+      <td class="et-event"><span class="et-id">${img ? `<img src="${escapeHtml(img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : `<span class="et-noimg" data-type="${escapeHtml(w.type || "place")}"></span>`}<span class="et-name">${escapeHtml(w.label)}</span>${wishInfo(w) ? `<span class="et-badge" title="Has notes">ⓘ</span>` : ""}</span></td>
+      <td><span class="et-type" data-type="${escapeHtml(w.type || "place")}">${escapeHtml(w.type || "place")}</span></td>
+      <td class="et-day">${day ? escapeHtml(dayLabel(day)) : `<em>Inbox</em>`}</td>
+      <td class="et-num">${escapeHtml(wishTime(w) || "—")}</td>
+      <td class="et-num">${escapeHtml(formatDurationMin(wishDurationMin(w)) || "—")}</td>
+      <td class="et-num et-cost" ${costTip ? `title="${escapeHtml(costTip)}"` : ""}>${cost}${ac && ac.label && Number(ac.yen) !== 0 ? `<small>${escapeHtml(ac.label)}</small>` : ""}</td>
+      <td class="et-place">${escapeHtml(w.location_name || "—")}</td>
+      <td>${escapeHtml(wishCity(w)?.name || "—")}</td>
+      <td class="et-group">${groupLabelOf(w) ? `結び ${escapeHtml(groupLabelOf(w))}` : "—"}</td>
+      <td><span class="et-status ${passive ? "is-maybe" : "is-on"}">${passive ? "Maybe" : "On route"}</span></td>
+      <td class="et-act"><button type="button" data-edit-wish="${w.id}" title="Edit">✎</button></td>
+    </tr>`;
+  };
+
+  const headHtml = () =>
+    TABLE_COLS.map(
+      (c) =>
+        `<th data-sort="${c.key}" class="${tv.sort === c.key ? "is-sorted" : ""}" role="button" tabindex="0">${escapeHtml(c.name)}${tv.sort === c.key ? `<span class="et-arrow">${tv.dir === 1 ? "▲" : "▼"}</span>` : ""}</th>`
+    ).join("") + `<th class="et-act"></th>`;
+
+  const sumHtml = (rows) => {
+    const total = rows.reduce((t, w) => t + (Number(wishActiveCost(w)?.yen) || 0), 0);
+    return `${rows.length} event${rows.length === 1 ? "" : "s"} · chosen packages <strong>${formatYen(total)}</strong> <span>/ person</span>`;
+  };
+
+  board.innerHTML = `<div class="etable-wrap">
+    <div class="etable-bar">
+      <input id="etable-q" type="search" placeholder="Search events, places, 結び…" aria-label="Search events" value="${escapeHtml(tv.q)}" />
+      <select id="etable-type" aria-label="Filter by type">
+        ${["all", "place", "experience", "food", "shop", "transit"].map((t) => `<option value="${t}" ${tv.type === t ? "selected" : ""}>${t === "all" ? "All types" : t}</option>`).join("")}
+      </select>
+      <select id="etable-day" aria-label="Filter by day">
+        <option value="all">All days</option>
+        <option value="inbox" ${tv.day === "inbox" ? "selected" : ""}>Inbox</option>
+        ${TRIP.days.map((d) => `<option value="${d.id}" ${tv.day === d.id ? "selected" : ""}>${escapeHtml(dayLabel(d))}</option>`).join("")}
+      </select>
+      <select id="etable-city" aria-label="Filter by city">
+        <option value="all">All cities</option>
+        ${TRIP.cities.map((c) => `<option value="${c.id}" ${tv.city === c.id ? "selected" : ""}>${escapeHtml(c.name)}</option>`).join("")}
+      </select>
+      <button type="button" id="etable-active" class="chip is-xs ${tv.activeOnly ? "is-active" : ""}" aria-pressed="${tv.activeOnly}" title="Only events on the route (maybes hidden)">On-route only</button>
+    </div>
+    <div class="etable-scroll">
+      <table class="etable">
+        <thead><tr>${headHtml()}</tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="etable-sum"></div>
+  </div>`;
+
+  const tbody = board.querySelector("tbody");
+  const thead = board.querySelector("thead tr");
+  const sum = board.querySelector(".etable-sum");
+  const paint = () => {
+    const rows = currentRows();
+    tbody.innerHTML = rows.map(rowHtml).join("") || `<tr class="et-empty"><td colspan="${TABLE_COLS.length + 1}">No events match — loosen a filter.</td></tr>`;
+    thead.innerHTML = headHtml();
+    sum.innerHTML = sumHtml(rows);
+  };
+  paint();
+
+  board.querySelector("#etable-q").addEventListener("input", (e) => {
+    tv.q = e.target.value;
+    paint();
+  });
+  [["#etable-type", "type"], ["#etable-day", "day"], ["#etable-city", "city"]].forEach(([sel, key]) => {
+    board.querySelector(sel).addEventListener("change", (e) => {
+      tv[key] = e.target.value;
+      paint();
+    });
+  });
+  board.querySelector("#etable-active").addEventListener("click", (e) => {
+    tv.activeOnly = !tv.activeOnly;
+    e.target.classList.toggle("is-active", tv.activeOnly);
+    e.target.setAttribute("aria-pressed", String(tv.activeOnly));
+    paint();
+  });
+  thead.parentElement.addEventListener("click", (e) => {
+    const th = e.target.closest("th[data-sort]");
+    if (!th) return;
+    const key = th.dataset.sort;
+    if (tv.sort === key) tv.dir = -tv.dir;
+    else {
+      tv.sort = key;
+      tv.dir = 1;
+    }
+    paint();
+  });
+}
+
 /* List mode — the trip as a plain agenda: date on the left, that day's
    events flowing as chips */
 function renderAgenda(board) {
@@ -2516,7 +2675,7 @@ function renderKanban() {
 
   // Calendar/timeline/list modes keep the inbox compact — full cards would
   // push the actual view thousands of pixels down, especially on mobile
-  const inboxMinimal = minimal || ["cal", "tl", "list"].includes(state.boardView);
+  const inboxMinimal = minimal || ["cal", "tl", "list", "table"].includes(state.boardView);
   const tray = document.getElementById("inbox-tray");
   if (tray) {
     tray.classList.toggle("is-min", inboxMinimal);
@@ -2536,10 +2695,16 @@ function renderKanban() {
   const isCal = state.boardView === "cal";
   const isTl = state.boardView === "tl";
   const isList = state.boardView === "list";
+  const isTable = state.boardView === "table";
   board.classList.toggle("kanban--cal", isCal);
   board.classList.toggle("kanban--tl", isTl);
   board.classList.toggle("kanban--list", isList);
-  document.querySelector(".board-lane-wrap")?.classList.toggle("is-cal", isCal || isTl || isList);
+  board.classList.toggle("kanban--table", isTable);
+  document.querySelector(".board-lane-wrap")?.classList.toggle("is-cal", isCal || isTl || isList || isTable);
+  if (isTable) {
+    renderEventsTable(board);
+    return;
+  }
   if (isCal) {
     renderCalendar(board, minimal);
     return;
@@ -2793,6 +2958,12 @@ function initKanban() {
       openGroupModal(gEdit.dataset.groupEdit);
       return;
     }
+    // checked before [data-min-open]: the table nests its edit button inside a preview row
+    const edit0 = e.target.closest("[data-edit-wish]");
+    if (edit0) {
+      openWishModal({ wishId: edit0.dataset.editWish });
+      return;
+    }
     const minOpen = e.target.closest("[data-min-open]");
     if (minOpen) {
       showWishPreview(minOpen.dataset.minOpen, minOpen);
@@ -2869,7 +3040,7 @@ function initKanban() {
 
   // Card density toggle (full cards vs compact rows)
   const savedView = localStorage.getItem(STORE.boardView);
-  state.boardView = ["full", "min", "cal", "tl", "list"].includes(savedView) ? savedView : "full";
+  state.boardView = ["full", "min", "cal", "tl", "list", "table"].includes(savedView) ? savedView : "full";
   const viewToggle = document.getElementById("board-view-toggle");
   const syncViewChips = () =>
     viewToggle?.querySelectorAll("[data-view]").forEach((b) => b.classList.toggle("is-active", b.dataset.view === state.boardView));

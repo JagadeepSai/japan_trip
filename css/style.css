@@ -6569,3 +6569,103 @@ body.night .jnav-orient { background: #141a24; }
 .trip-cost strong { font-family: var(--font-latin); font-size: 0.84rem; font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 700; }
 .trip-cost-note { font-size: 0.56rem; color: var(--ink-muted); letter-spacing: 0.04em; }
 body.night .trip-cost { background: #141a24; }
+
+/* ============================================================
+   Pass AP — Plan table view (events as a data table)
+   ============================================================ */
+
+.kanban--table { display: block; overflow: visible; min-width: 0; max-width: 100%; }
+.etable-wrap { min-width: 0; }
+.etable-scroll { min-width: 0; max-width: 100%; }
+.etable-wrap { display: grid; gap: 0.6rem; }
+.etable-bar { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.etable-bar input[type="search"] {
+  flex: 1 1 220px;
+  min-width: 160px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.78rem;
+  outline: none;
+}
+.etable-bar input[type="search"]:focus { border-color: var(--vermillion); }
+.etable-bar select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper-2);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.etable-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); }
+.etable { width: 100%; min-width: 980px; border-collapse: collapse; font-size: 0.74rem; }
+.etable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--paper-2);
+  text-align: left;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.etable thead th:hover { color: var(--vermillion); }
+.etable thead th.is-sorted { color: var(--vermillion); }
+.et-arrow { font-size: 0.55em; margin-left: 0.3em; vertical-align: middle; }
+.etable tbody td { padding: 0.45rem 0.65rem; border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); vertical-align: middle; }
+.etable tbody tr { cursor: pointer; transition: background 0.12s ease; }
+.etable tbody tr:hover { background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+.etable tbody tr:last-child td { border-bottom: none; }
+.etable tbody tr.is-maybe { opacity: 0.62; }
+.etable tbody tr.is-secret td { background: rgba(255, 46, 77, 0.04); }
+.et-id { display: inline-flex; align-items: center; gap: 0.5rem; min-width: 0; }
+.et-id img, .et-noimg { width: 26px; height: 26px; border-radius: 6px; object-fit: cover; border: 1px solid var(--line); flex: 0 0 auto; }
+.et-noimg { background: var(--paper-2); position: relative; }
+.et-noimg::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--type-place); opacity: 0.5; }
+.et-noimg[data-type="experience"]::after { background: var(--type-experience); }
+.et-noimg[data-type="food"]::after { background: var(--type-food); }
+.et-noimg[data-type="shop"]::after { background: var(--type-shop); }
+.et-noimg[data-type="transit"]::after { background: var(--type-transit); }
+.et-name { font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; }
+.et-badge { color: var(--ink-muted); font-size: 0.7rem; opacity: 0.7; }
+.et-type { font-size: 0.62rem; letter-spacing: 0.06em; color: var(--ink-muted); border: 1px solid var(--line); border-left: 3px solid var(--type-place); border-radius: var(--r-pill); padding: 0.12rem 0.5rem; text-transform: capitalize; white-space: nowrap; }
+.et-type[data-type="experience"] { border-left-color: var(--type-experience); }
+.et-type[data-type="food"] { border-left-color: var(--type-food); }
+.et-type[data-type="shop"] { border-left-color: var(--type-shop); }
+.et-type[data-type="transit"] { border-left-color: var(--type-transit); }
+.et-day { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.et-day em { color: var(--ink-muted); font-style: italic; }
+.et-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.et-cost small { display: block; font-size: 0.58rem; color: var(--ink-muted); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.et-place, .et-group { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-muted); }
+.et-status { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+.et-status.is-on { color: var(--indigo); }
+.et-status.is-on::before { content: "●"; color: #5c9a6f; margin-right: 0.3em; font-size: 0.8em; }
+.et-status.is-maybe { color: var(--ink-muted); }
+.et-status.is-maybe::before { content: "◌"; margin-right: 0.3em; }
+.et-act { width: 34px; text-align: right; }
+.et-act button { border: none; background: none; color: var(--ink-muted); font-size: 0.85rem; cursor: pointer; padding: 0.15rem 0.3rem; border-radius: 6px; }
+.et-act button:hover { color: var(--vermillion); background: var(--paper-2); }
+.et-empty td { text-align: center; color: var(--ink-muted); padding: 2rem 0 !important; }
+.etable-sum { font-size: 0.68rem; color: var(--ink-muted); text-align: right; font-variant-numeric: tabular-nums; padding-right: 0.2rem; }
+.etable-sum strong { color: var(--ink); font-family: var(--font-latin); }
+
+body.night .etable-scroll, body.night .etable-bar input[type="search"] { background: #10151d; }
+body.night .etable thead th, body.night .etable-bar select { background: #141a24; }
+body.night .etable tbody tr:hover { background: rgba(147, 167, 221, 0.07); }
+
+@media (max-width: 700px) {
+  .etable-bar select { flex: 1 1 40%; }
+}
