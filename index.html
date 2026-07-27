@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Shippori+Mincho:wght@500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="css/style.css?v=20260844a" />
+  <link rel="stylesheet" href="css/style.css?v=20260845a" />
   <script>
     // Gate bootstrap: unlocks instantly for browsers that already know the
     // password, before any styles or app code run
@@ -133,6 +133,7 @@
             <button type="button" class="chip is-xs" data-view="tl">Timeline</button>
             <button type="button" class="chip is-xs" data-view="list">List</button>
           </div>
+          <div class="trip-cost" id="trip-cost" hidden title="Chosen package for every scheduled event, per person"></div>
           <div class="trip-dates" id="trip-dates" title="Trip dates — shared with everyone">
             <input type="date" id="trip-start" aria-label="Trip start date" />
             <span aria-hidden="true">→</span>
@@ -406,6 +407,15 @@
           </div>
           <p class="composer-hint soft">Name it like “Tokyo → Hakone”; pin the departure station to join the day’s red thread.</p>
         </div>
+        <details class="meta-block composer-details" id="cost-block">
+          <summary>
+            <span>Cost · 円</span>
+            <span class="composer-details-hint" id="cost-hint">optional</span>
+          </summary>
+          <div id="cost-rows" class="cost-rows"></div>
+          <button type="button" class="btn-text" id="cost-add">+ Cost option</button>
+          <p class="composer-hint soft">Tiers or packages, per person — pick one as the chosen plan; it shows on hover and sums into the trip total.</p>
+        </details>
         <details class="meta-block composer-details">
           <summary>
             <span>Links & notes</span>
@@ -556,10 +566,10 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js?v=20260844a"></script>
-  <script src="js/data.js?v=20260844a"></script>
-  <script src="js/api.js?v=20260844a"></script>
-  <script src="js/chat.js?v=20260844a"></script>
-  <script src="js/main.js?v=20260844a"></script>
+  <script src="js/config.js?v=20260845a"></script>
+  <script src="js/data.js?v=20260845a"></script>
+  <script src="js/api.js?v=20260845a"></script>
+  <script src="js/chat.js?v=20260845a"></script>
+  <script src="js/main.js?v=20260845a"></script>
 </body>
 </html>

@@ -6529,3 +6529,43 @@ body.night .jnav-orient { background: #141a24; }
 @media (max-width: 700px) {
   .jnav-orient { width: 26px; height: 26px; margin-bottom: 4px; }
 }
+
+/* ============================================================
+   Pass AO — event costs (tiers in yen, one chosen plan)
+   ============================================================ */
+
+.cost-rows { display: grid; gap: 0.4rem; margin-bottom: 0.4rem; }
+.cost-row { display: grid; grid-template-columns: auto 1fr 122px 26px; align-items: center; gap: 0.45rem; }
+.cost-row input[type="radio"] { accent-color: var(--vermillion); margin: 0; width: 15px; height: 15px; cursor: pointer; }
+.cost-row input[type="text"],
+.cost-row input[type="number"] {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.78rem;
+  outline: none;
+}
+.cost-row input:focus { border-color: var(--vermillion); }
+.cost-yen-wrap { position: relative; }
+.cost-yen-sign { position: absolute; left: 0.55rem; top: 50%; transform: translateY(-50%); color: var(--ink-muted); font-size: 0.72rem; pointer-events: none; }
+.cost-row .cost-yen { padding-left: 1.7rem; font-variant-numeric: tabular-nums; -moz-appearance: textfield; appearance: textfield; }
+.cost-row .cost-yen::-webkit-outer-spin-button,
+.cost-row .cost-yen::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.cost-remove { border: none; background: none; color: var(--ink-muted); font-size: 1.05rem; line-height: 1; cursor: pointer; padding: 0.1rem; }
+.cost-remove:hover { color: var(--vermillion); }
+#cost-hint { font-variant-numeric: tabular-nums; }
+
+/* the chosen cost rides quietly on hover cards + previews */
+.hc-cost { display: block; color: var(--ink-muted); font-size: 0.6rem; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; opacity: 0.85; }
+#wish-preview .wish-preview-cost, .wish-preview-cost { margin: 0.1rem 0 0; color: var(--ink-muted); font-size: 0.66rem !important; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
+
+/* trip total — Plan header */
+.trip-cost { display: inline-flex; align-items: baseline; gap: 0.4rem; padding: 0.34rem 0.8rem; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--paper-2); white-space: nowrap; }
+.trip-cost-kicker { font-size: 0.58rem; letter-spacing: 0.16em; color: var(--vermillion); font-weight: 700; }
+.trip-cost strong { font-family: var(--font-latin); font-size: 0.84rem; font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 700; }
+.trip-cost-note { font-size: 0.56rem; color: var(--ink-muted); letter-spacing: 0.04em; }
+body.night .trip-cost { background: #141a24; }

@@ -199,7 +199,7 @@ const TRANSIT_KEYS = { mode: "transit:mode", depart: "transit:depart", duration:
 // Meta keys the app owns (never shown in the Links & notes editor)
 function isReservedMetaKey(key) {
   const k = String(key || "").toLowerCase();
-  return k === "group" || k === "time" || k === "info" || k === "image" || k === "duration" || k.startsWith("transit:");
+  return k === "group" || k === "time" || k === "info" || k === "image" || k === "duration" || k === "costs" || k.startsWith("transit:");
 }
 
 function metaValue(metaLike, key) {
@@ -257,6 +257,31 @@ function wishDurationMin(w) {
 
 function wishImage(w) {
   return metaValue(w.meta, "image");
+}
+
+/* Costs — tiers/packages in yen; exactly one is the chosen ("active") plan */
+function wishCosts(w) {
+  try {
+    const arr = JSON.parse(metaValue(w.meta, "costs") || "[]");
+    return Array.isArray(arr) ? arr.filter((c) => c && c.label != null && c.yen != null) : [];
+  } catch {
+    return [];
+  }
+}
+
+function wishActiveCost(w) {
+  const costs = wishCosts(w);
+  return costs.find((c) => c.active) || costs[0] || null;
+}
+
+function formatYen(n) {
+  return `¥${Math.round(Number(n) || 0).toLocaleString("en-US")}`;
+}
+
+function costLine(w) {
+  const ac = wishActiveCost(w);
+  if (!ac) return "";
+  return Number(ac.yen) === 0 ? "Free" : `${formatYen(ac.yen)}${ac.label ? " · " + ac.label : ""}`;
 }
 
 function wishTransit(metaLike) {
@@ -1199,6 +1224,53 @@ function readMetaRows() {
     .filter((m) => m.key);
 }
 
+function addCostRow(label = "", yen = "", active = false) {
+  const wrap = document.getElementById("cost-rows");
+  if (!wrap) return;
+  const row = document.createElement("div");
+  row.className = "cost-row";
+  row.innerHTML = `
+    <input type="radio" name="cost-active" title="The package you chose" aria-label="Chosen cost" />
+    <input type="text" class="cost-label" placeholder="Label — Adult / package…" maxlength="60" />
+    <span class="cost-yen-wrap"><span class="cost-yen-sign">¥</span><input type="number" class="cost-yen" min="0" step="1" inputmode="numeric" placeholder="0" aria-label="Yen" /></span>
+    <button type="button" class="cost-remove" aria-label="Remove cost option">×</button>`;
+  row.querySelector(".cost-label").value = label;
+  row.querySelector(".cost-yen").value = yen === "" ? "" : String(yen);
+  row.querySelector("input[type=radio]").checked = active;
+  wrap.appendChild(row);
+}
+
+function readCostRows() {
+  const costs = [...document.querySelectorAll("#cost-rows .cost-row")]
+    .map((row) => {
+      const raw = row.querySelector(".cost-yen").value.trim();
+      return {
+        label: row.querySelector(".cost-label").value.trim(),
+        yen: raw === "" ? NaN : Math.max(0, Math.round(Number(raw))),
+        active: row.querySelector("input[type=radio]").checked,
+      };
+    })
+    .filter((c) => c.label || Number.isFinite(c.yen));
+  if (costs.length && !costs.some((c) => c.active)) costs[0].active = true;
+  return costs.map((c) => ({ label: c.label, yen: Number.isFinite(c.yen) ? c.yen : 0, active: !!c.active }));
+}
+
+function clearCostRows() {
+  const wrap = document.getElementById("cost-rows");
+  if (wrap) wrap.innerHTML = "";
+  const block = document.getElementById("cost-block");
+  if (block) block.open = false;
+  updateCostHint();
+}
+
+function updateCostHint() {
+  const hint = document.getElementById("cost-hint");
+  if (!hint) return;
+  const rows = readCostRows();
+  const act = rows.find((c) => c.active);
+  hint.textContent = act ? (act.yen === 0 ? "Free" : `${formatYen(act.yen)}${act.label ? " · " + act.label : ""}`) : "optional";
+}
+
 function clearMetaRows() {
   document.getElementById("meta-rows").innerHTML = "";
 }
@@ -1311,6 +1383,7 @@ function resetWishForm() {
   if (dur) dur.value = "";
   document.getElementById("wish-info").value = "";
   document.getElementById("wish-image").value = "";
+  clearCostRows();
   clearMetaRows();
   updateItemsBlock();
 }
@@ -1366,6 +1439,11 @@ function openWishModal(opts = {}) {
     if (durInput) durInput.value = metaValue(wish.meta, "duration") || "";
     document.getElementById("wish-info").value = wishInfo(wish) || "";
     document.getElementById("wish-image").value = wishImage(wish) || "";
+    const costs = wishCosts(wish);
+    costs.forEach((c, i) => addCostRow(c.label, c.yen, c.active ? true : !costs.some((x) => x.active) && i === 0));
+    const costBlock = document.getElementById("cost-block");
+    if (costBlock) costBlock.open = costs.length > 0;
+    updateCostHint();
     title.textContent = "Edit sushi";
     submit.textContent = "Save changes";
   } else {
@@ -1399,6 +1477,20 @@ function renderDayOptions() {
 
 function initWishForm() {
   renderDayOptions();
+
+  document.getElementById("cost-add")?.addEventListener("click", () => {
+    addCostRow("", "", !readCostRows().some((c) => c.active));
+    document.getElementById("cost-rows")?.lastElementChild?.querySelector(".cost-label")?.focus();
+  });
+  document.getElementById("cost-rows")?.addEventListener("click", (e) => {
+    const rm = e.target.closest(".cost-remove");
+    if (rm) {
+      rm.closest(".cost-row").remove();
+      updateCostHint();
+    }
+  });
+  document.getElementById("cost-rows")?.addEventListener("input", updateCostHint);
+  document.getElementById("cost-rows")?.addEventListener("change", updateCostHint);
 
   document.getElementById("open-wish-modal")?.addEventListener("click", () => openWishModal());
   document.getElementById("wish-modal-close")?.addEventListener("click", closeWishModal);
@@ -1492,6 +1584,8 @@ function initWishForm() {
     if (infoVal) meta.push({ key: "info", value: infoVal });
     const imageVal = document.getElementById("wish-image").value.trim();
     if (imageVal && isHttpUrl(imageVal)) meta.push({ key: "image", value: imageVal });
+    const costs = readCostRows();
+    if (costs.length) meta.push({ key: "costs", value: JSON.stringify(costs) });
     const payload = {
       label,
       type,
@@ -1554,9 +1648,29 @@ async function refreshWishes() {
   renderTastes();
   renderShopIdeas();
   renderTripPulse();
+  renderTripCost();
   renderShopProgress();
   renderJourney();
   renderFaq();
+}
+
+// Per-person total of the chosen cost across every scheduled, on-route event
+function tripCostTotal() {
+  return state.wishes.reduce((sum, w) => {
+    if (w.type === "group" || w.active === false || isHidden(w)) return sum;
+    if (!w.day_id || !dayById(w.day_id)) return sum;
+    const ac = wishActiveCost(w);
+    return sum + (ac ? Number(ac.yen) || 0 : 0);
+  }, 0);
+}
+
+function renderTripCost() {
+  const el = document.getElementById("trip-cost");
+  if (!el) return;
+  const total = tripCostTotal();
+  el.hidden = !total;
+  if (total)
+    el.innerHTML = `<span class="trip-cost-kicker">旅費</span><strong>${formatYen(total)}</strong><span class="trip-cost-note">/ person</span>`;
 }
 
 function wishesForDay(dayId) {
@@ -3215,6 +3329,7 @@ function hoverCardHtml(entry) {
       <strong>${escapeHtml(entry.label)}</strong>
       ${entry.location_name ? `<small>${escapeHtml(entry.location_name)}</small>` : ""}
       ${tLine ? `<small class="hc-transit">${escapeHtml(tLine)}</small>` : ""}
+      ${costLine(entry) ? `<small class="hc-cost">${escapeHtml(costLine(entry))}</small>` : ""}
       ${maybe ? `<span class="hc-maybe">maybe · not on the route</span>` : ""}
     </div>`;
 }
@@ -3696,6 +3811,7 @@ function showWishPreview(wishId, anchorEl) {
     <strong>${escapeHtml(wish.label)}</strong>
     <p>${escapeHtml(wish.location_name || "No place yet")}</p>
     ${pvTime ? `<p class="wish-preview-time">${escapeHtml(pvTime)}</p>` : ""}
+    ${costLine(wish) ? `<p class="wish-preview-cost">${escapeHtml(costLine(wish))}</p>` : ""}
     ${pvInfo ? `<div class="wish-preview-info">${escapeHtml(pvInfo).split(/\n+/).map((para) => `<p>${para}</p>`).join("")}</div>` : ""}
     <div class="wish-preview-actions">
       ${mapped ? `<button type="button" class="chip-link ghost" data-preview-map="${wish.id}">On map</button>` : ""}
