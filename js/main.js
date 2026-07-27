@@ -19,7 +19,7 @@ const state = {
   mapDirty: false, // markers/index missed a change while the map modal was closed
   indexOpen: false,
   boardView: "full", // full | min (compact rows)
-  tableView: { q: "", type: "all", day: "all", city: "all", activeOnly: true, sort: "trip", dir: 1 },
+  tableView: { q: "", type: "all", day: "all", city: "all", scope: "board", sort: "trip", dir: 1 },
   activePinId: null,
   indexFilter: "all",
   dayFilter: "all", // all | inbox | day id
@@ -2388,8 +2388,11 @@ function renderEventsTable(board) {
     status: (w) => (w.active === false ? 1 : 0),
   };
 
+  const onBoardWish = (w) => !!(w.day_id && dayById(w.day_id));
   const currentRows = () => {
-    const rows = visibleWishes().filter((w) => !isGroup(w) && (!tv.activeOnly || w.active !== false));
+    const rows = visibleWishes().filter(
+      (w) => !isGroup(w) && (tv.scope === "all" || (tv.scope === "inbox" ? !onBoardWish(w) : onBoardWish(w)))
+    );
     const q = tv.q.trim().toLowerCase();
     const filtered = rows.filter((w) => {
       if (tv.type !== "all" && (w.type || "place") !== tv.type) return false;
@@ -2458,7 +2461,9 @@ function renderEventsTable(board) {
         <option value="all">All cities</option>
         ${TRIP.cities.map((c) => `<option value="${c.id}" ${tv.city === c.id ? "selected" : ""}>${escapeHtml(c.name)}</option>`).join("")}
       </select>
-      <button type="button" id="etable-active" class="chip is-xs ${tv.activeOnly ? "is-active" : ""}" aria-pressed="${tv.activeOnly}" title="Only events on the route (maybes hidden)">On-route only</button>
+      <div class="etable-scope" role="group" aria-label="Board or inbox">
+        ${[["board", "On board"], ["inbox", "Inbox"], ["all", "All"]].map(([v, n]) => `<button type="button" class="chip is-xs ${tv.scope === v ? "is-active" : ""}" data-scope="${v}">${n}</button>`).join("")}
+      </div>
     </div>
     <div class="etable-scroll">
       <table class="etable">
@@ -2490,10 +2495,11 @@ function renderEventsTable(board) {
       paint();
     });
   });
-  board.querySelector("#etable-active").addEventListener("click", (e) => {
-    tv.activeOnly = !tv.activeOnly;
-    e.target.classList.toggle("is-active", tv.activeOnly);
-    e.target.setAttribute("aria-pressed", String(tv.activeOnly));
+  board.querySelector(".etable-scope").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-scope]");
+    if (!btn || tv.scope === btn.dataset.scope) return;
+    tv.scope = btn.dataset.scope;
+    board.querySelectorAll(".etable-scope .chip").forEach((c) => c.classList.toggle("is-active", c.dataset.scope === tv.scope));
     paint();
   });
   thead.parentElement.addEventListener("click", (e) => {
@@ -3042,15 +3048,34 @@ function initKanban() {
   const savedView = localStorage.getItem(STORE.boardView);
   state.boardView = ["full", "min", "cal", "tl", "list", "table"].includes(savedView) ? savedView : "full";
   const viewToggle = document.getElementById("board-view-toggle");
-  const syncViewChips = () =>
-    viewToggle?.querySelectorAll("[data-view]").forEach((b) => b.classList.toggle("is-active", b.dataset.view === state.boardView));
-  viewToggle?.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-view]");
-    if (!btn || btn.dataset.view === state.boardView) return;
-    state.boardView = btn.dataset.view;
-    localStorage.setItem(STORE.boardView, state.boardView);
+  const densityToggle = document.getElementById("board-density-toggle");
+  const onBoard = () => ["full", "min"].includes(state.boardView);
+  if (onBoard()) state.boardDensity = state.boardView;
+  const syncViewChips = () => {
+    viewToggle
+      ?.querySelectorAll("[data-view]")
+      .forEach((b) => b.classList.toggle("is-active", b.dataset.view === (onBoard() ? "board" : state.boardView)));
+    if (densityToggle) {
+      densityToggle.hidden = !onBoard();
+      densityToggle.querySelectorAll("[data-density]").forEach((b) => b.classList.toggle("is-active", b.dataset.density === state.boardView));
+    }
+  };
+  const setBoardView = (v) => {
+    state.boardView = v;
+    if (onBoard()) state.boardDensity = v;
+    localStorage.setItem(STORE.boardView, v);
     syncViewChips();
     renderKanban();
+  };
+  viewToggle?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-view]");
+    if (!btn) return;
+    const target = btn.dataset.view === "board" ? state.boardDensity || "full" : btn.dataset.view;
+    if (target !== state.boardView) setBoardView(target);
+  });
+  densityToggle?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-density]");
+    if (btn && btn.dataset.density !== state.boardView) setBoardView(btn.dataset.density);
   });
   syncViewChips();
 

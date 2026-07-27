@@ -1106,3 +1106,10 @@ Tips CTA ──► Board | Map | Shop | Days(drawer) | Packing
 **Wiring:** new "Table" chip in the board density toggle (`state.boardView === "table"`, persisted via jp-board-view whitelist), renderEventsTable with shell+paint split so typing in filters never rebuilds the inputs.
 **Bug found & fixed:** the board click delegation checked `[data-min-open]` before `[data-edit-wish]` — the table nests its edit button inside a preview row, so ✎ opened the preview; edit check hoisted (no other view nests them).
 **Verified:** 9/9 — default active filter, all-toggle (80 maybes), search, composed type+day filters, cost sort (¥30,000 ryokan top), summary "78 events · ¥152,080 / person", preview+edit actions, mobile internal scroll (page overflow identical to baseline — pre-existing hero bleed, not the table). `?v=20260846a`.
+
+## Iteration 54 — Table scope filter + Board chip with density sub-toggle (2026-07-27)
+**Ask (clarifying iter 53):** the table's filter should be Inbox-vs-On-board (replacing "On-route only", default = on board); collapse the Cards/Compact view chips into one "Board" chip with a card/compact toggle inside it.
+**Done:**
+- Table filter bar: segmented **On board / Inbox / All** scope (default On board = scheduled events only). On-route chip removed; maybes now visible in scope with their ◌ Maybe status column. Verified 68 board + 90 inbox = 158 all.
+- View toggle: **Board · Calendar · Timeline · List · Table**; when Board is active a smaller **Cards / Compact** density sub-toggle appears beside it (hidden in other views). Board remembers its last density (`state.boardDensity`; persisted through the same jp-board-view key — "full"/"min" restore Board mode directly).
+**Verified:** 5/5 — default Board+Cards chips, density switch stays in Board and persists "min", sub-toggle hides in Table and Board restores compact, scope counts partition exactly, summary follows scope. `?v=20260847a`.
