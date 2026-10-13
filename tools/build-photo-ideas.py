@@ -1245,10 +1245,7 @@ def build_place(place):
     for i, frame in enumerate(place["frames"]):
         for variant, item in enumerate(assigned[i]):
             add(materialize(frame, item, variant), item)
-    for item in rest:
-        add(extra_frame(place, item, len(shots)), item)
-        if len(shots) >= 32:
-            break
+    # Unmatched Commons files are near-duplicates. They are not extra shots.
 
     # Authored frames that got no keyword hit still need a picture if any file remains unused.
     unused = [item for item in pool if item["title"] not in {s.get("_title") for s in []}]
@@ -1271,6 +1268,7 @@ def build_place(place):
 
 
 def main():
+    raise SystemExit("photos/ideas.json is the shot list. This Commons downloader is retired.")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     places = []
     for place_def in PLACES:

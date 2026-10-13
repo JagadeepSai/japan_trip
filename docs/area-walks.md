@@ -89,14 +89,15 @@ Checked items are on a day. Unchecked items are extras.
 | | Thing | What it's like | Slotted |
 |---|---|---|---|
 | [x] | [Nishiki](https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto) + [Gion](https://www.google.com/maps/search/?api=1&query=Gion+Kyoto) / [Yasaka](https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto) | Covered food market + geisha lanes | Day 7 evening |
-| [x] | [Arashiyama bamboo](https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove) + [Tenryu-ji](https://www.google.com/maps/search/?api=1&query=Tenryu-ji) | Grove only empty at 08:00 | Day 8 morning |
-| [x] | [Kiyomizu](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) · [Ninen/Sannen](https://www.google.com/maps/search/?api=1&query=Sannenzaka+Kyoto) · [Kodai-ji](https://www.google.com/maps/search/?api=1&query=Kodai-ji+Kyoto) | East-side temple spine | Day 9 |
+| [x] | [Arashiyama bamboo](https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove) | Grove is empty early | Day 9 from 07:15, before the train |
+| [x] | [Sagano Romantic Train](https://www.sagano-kanko.co.jp/en/train-info/) + JR back + bikes | Train closed Wed 21 Oct. Runs Thu. | Day 9 |
+| [x] | [Kiyomizu](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) · [Ninen/Sannen](https://www.google.com/maps/search/?api=1&query=Sannenzaka+Kyoto) · [Kodai-ji](https://www.google.com/maps/search/?api=1&query=Kodai-ji+Kyoto) | East-side temple spine | Day 8 morning |
 | [x] | [Fushimi Inari](https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha) | Red torii climb | Day 10 dawn |
 | [x] | [**Nara Park**](https://www.google.com/maps/search/?api=1&query=Nara+Park) + deer + [**Tōdai-ji**](https://www.google.com/maps/search/?api=1&query=Todai-ji) | Bowing deer, Great Buddha | Day 10 after Inari |
 | [x] | [Kuromon](https://www.google.com/maps/search/?api=1&query=Kuromon+Ichiba+Osaka) + [Dotonbori](https://www.google.com/maps/search/?api=1&query=Dotonbori) | Osaka kitchen + neon canal | Day 11 |
-| [ ] | [Tōji 21st market](https://www.google.com/maps/search/?api=1&query=Toji+Temple+flea+market) | Cash vintage kimono, closes 16:00 | Day 8 before teamLab if you skip the river |
+| [ ] | [Tōji 21st market](https://www.google.com/maps/search/?api=1&query=Toji+Temple+flea+market) | Cash vintage kimono, closes 16:00 | Day 8, 14:30–15:10, then teamLab |
 | [x] | [**teamLab Biovortex Kyoto**](https://www.google.com/maps/search/?api=1&query=teamLab+Biovortex+Kyoto) | Timed digital art, 10 min from Hachijo exit | **Day 8 afternoon** — book a slot |
-| [ ] | [Kurama Fire Festival](https://www.google.com/maps/search/?api=1&query=Kurama+Fire+Festival) | 22 Oct night | Day 9 fork — leave east by 13:00 |
+| [ ] | [Kurama Fire Festival](https://www.google.com/maps/search/?api=1&query=Kurama+Fire+Festival) | 22 Oct night | Day 9 fork — morning train, then Demachiyanagi. Skip the ride and the river |
 | [x] | [Shinsekai](https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka) + [Tsutenkaku](https://www.google.com/maps/search/?api=1&query=Tsutenkaku) | Retro neon, kushikatsu alleys | Day 12 — 10 min south of [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba) |
 | [ ] | [Osaka Castle](https://www.google.com/maps/search/?api=1&query=Osaka+Castle) / [Umeda Sky](https://www.google.com/maps/search/?api=1&query=Umeda+Sky+Building) | Keep + park, or floating observatory | Day 12 afternoon if you skip [USJ](https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan). Don’t do both plus Shinsekai |
 | [ ] | [USJ](https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan) | Super Nintendo World. Full day, timed entry | Day 12 **or** nothing else that day |
@@ -139,11 +140,11 @@ Floors, siblings, souvenirs: [`stores.md`](stores.md).
 | 2 Thu 15 | [Asakusa](https://www.google.com/maps/search/?api=1&query=Senso-ji+Asakusa) → [Ueno](https://www.google.com/maps/search/?api=1&query=Ueno+Park) → [Shinjuku](https://www.google.com/maps/search/?api=1&query=Shinjuku+Station) · [Golden Gai](https://www.google.com/maps/search/?api=1&query=Golden+Gai+Shinjuku) after dinner | [Met Gov](https://www.google.com/maps/search/?api=1&query=Tokyo+Metropolitan+Government+Building+South+Observatory) **17:06** | Skip Gyoen, still do the deck |
 | 3 Fri 16 | [Sky](https://www.google.com/maps/search/?api=1&query=Shibuya+Sky) morning → lunch → [Shibuya](https://www.google.com/maps/search/?api=1&query=Shibuya+Station) shops → [Ginza](https://www.google.com/maps/search/?api=1&query=Ginza) → [Tower](https://www.google.com/maps/search/?api=1&query=Tokyo+Tower) → night | Sky morning slot + Tower dusk | MAGNET if you skip shops |
 | 4 Sat 17 | [Mt. Takao](https://www.google.com/maps/search/?api=1&query=Mount+Takao) **or** [Kawaguchiko / Chureito](https://www.google.com/maps/search/?api=1&query=Chureito+Pagoda) | Takao cable ~dusk · Fuji bus **06:45** | Onsen · no club |
-| 5 Sun 18 | Palace run → [Akiba](https://www.google.com/maps/search/?api=1&query=Akihabara) · [Nakano](https://www.google.com/maps/search/?api=1&query=Nakano+Broadway) · Yoshiwara | Run **06:00** · Hakone tomorrow 07:30 | Back at the hotel by **00:30** |
-| 6 Mon 19 | [Hakone](https://www.google.com/maps/search/?api=1&query=Hakone) | [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) dinner 19:00 | Loop as written |
+| 5 Sun 18 | Palace run → [Akiba](https://www.google.com/maps/search/?api=1&query=Akihabara) · [Nakano](https://www.google.com/maps/search/?api=1&query=Nakano+Broadway) · Yoshiwara | Run **06:00** · out **06:45** tomorrow | Back at the hotel by **00:30** |
+| 6 Mon 19 | [Hakone](https://www.google.com/maps/search/?api=1&query=Hakone) | Yumoto **08:00–08:30** · [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) 19:00 | Kodama 07:27 |
 | 7 Tue 20 | → Kyoto | **13:30 shinkansen** | [Nishiki](https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto) + [Gion](https://www.google.com/maps/search/?api=1&query=Gion+Kyoto) wander |
-| 8 Wed 21 | [Arashiyama](https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove) · [**teamLab Kyoto**](https://www.google.com/maps/search/?api=1&query=teamLab+Biovortex+Kyoto) | Bamboo **08:00** + booked slot | River / monkeys instead of Tōji |
-| 9 Thu 22 | [Higashiyama](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) | [Kiyomizu](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) 06:00–18:00 | Extra temples **or** [Kurama](https://www.google.com/maps/search/?api=1&query=Kurama+Fire+Festival) fire |
+| 8 Wed 21 | [Higashiyama](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) · [**teamLab Kyoto**](https://www.google.com/maps/search/?api=1&query=teamLab+Biovortex+Kyoto) | [Kiyomizu](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) **08:00** · teamLab **16:00** | Tō-ji is the 40 min stop |
+| 9 Thu 22 | [Sagano train](https://www.google.com/maps/search/?api=1&query=Torokko+Saga+Station) · [bamboo](https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove) | Grove **07:15** · train **09:02** or earlier if the board has one | Sunset **17:14** · bamboo light-up **18:00** |
 | 10 Fri 23 | [Fushimi](https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha) → [Nara deer park](https://www.google.com/maps/search/?api=1&query=Nara+Park) | [Inari](https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha) 07:00 | [Tofuku](https://www.google.com/maps/search/?api=1&query=Tofuku-ji) + [Sanjusangen](https://www.google.com/maps/search/?api=1&query=Sanjusangen-do) if you skip Nara |
 | 11 Sat 24 | [Namba](https://www.google.com/maps/search/?api=1&query=Namba+Station) / Dotonbori | [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba) 15:00 | Shinsekai instead of Amerikamura |
 | 12 Sun 25 | Full Osaka day | Sleep at [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba) | Shinsekai + one more **or** [USJ](https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan) |
@@ -174,6 +175,10 @@ If you skip shoes and still have 40 min, [Tokyo Station](https://www.google.com/
 | 3 | [**Ghibli Donguri Republic**](https://www.google.com/maps/search/?api=1&query=Donguri+Kyowakoku+Tokyo+Station) | Character Street B1 | Totoro / soot-sprite plush. No museum ticket. | Other Donguri shops |
 | 4 | [Sanrio](https://www.google.com/maps/search/?api=1&query=Sanrio+Tokyo+Station+Character+Street) / other | Character Street B1 | Skip unless someone asks. | Donki / Loft cheap version |
 
+**Optional evening · 20:30–21:30 · Tokyo Station**
+
+After dinner, if you still want a walk. [Marunouchi façade](https://www.google.com/maps/search/?api=1&query=Tokyo+Station+Marunouchi) · [KITTE rooftop](https://www.google.com/maps/search/?api=1&query=KITTE+Marunouchi+rooftop+garden) · the lit streets around the station. [Character Street](https://www.google.com/maps/search/?api=1&query=Tokyo+Character+Street) if it was missed before dinner. About an hour. Hotel is 15 min back.
+
 **Also in this area — not on the clock**
 
 - [**Pokémon Cafe**](https://www.google.com/maps/search/?api=1&query=Pokemon+Cafe+Nihonbashi) (Nihonbashi) — reservation
@@ -185,7 +190,7 @@ If you skip shoes and still have 40 min, [Tokyo Station](https://www.google.com/
 
 ## Day 2 — Thu 15 Oct — Asakusa · Kappabashi · Ueno · Shinjuku sunset
 
-Leave Ueno by **13:30** so you are in the Met Gov South lift by **16:20**. Sunset **17:06**.
+Leave the hotel about **06:35**. Sensō-ji and Kappabashi have an extra 40 minutes. Leave Ueno by **14:15**, do the garden until last entry, and be in the Met Gov South lift by **16:20**. Sunset **17:06**.
 
 [Morning](https://www.google.com/maps/dir/?api=1&origin=35.71107,139.79655&destination=35.7148,139.7717&travelmode=walking&waypoints=35.71215,139.79665|35.71477,139.79666|35.7128,139.7954|35.71085,139.7964|35.7139,139.7886|35.7095,139.7745)
 
@@ -195,15 +200,15 @@ Leave Ueno by **13:30** so you are in the Met Gov South lift by **16:20**. Sunse
 
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
-| 08:00–08:15 | [**Kaminarimon**](https://www.google.com/maps/search/?api=1&query=Kaminarimon+Asakusa) | always | 2 min | Giant red lantern gate. Photo, then walk through. |
-| 08:15–08:40 | [**Nakamise**](https://www.google.com/maps/search/?api=1&query=Nakamise-dori+Asakusa) | stalls ~09:00–18:00 | 4 min | Souvenir lane *to* the temple. Ningyo-yaki, senbei, cheap fans. |
-| 08:40–09:20 | [**Sensō-ji**](https://www.google.com/maps/search/?api=1&query=Senso-ji+Asakusa) | grounds always · hall 06:00–17:00 | 4 min | Tokyo’s oldest temple. Incense, main hall, pagoda. Empty if you’re early. |
-| 09:20–09:35 | [Kagetsudō](https://www.google.com/maps/search/?api=1&query=Kagetsudo+Asakusa) + [Tokiwado](https://www.google.com/maps/search/?api=1&query=Tokiwado+Asakusa) | sells out | 3 min | Melon bread and puffed-rice crackers by the gate. Buy and walk. |
-| 09:35–09:50 | [**Shin-Nakamise**](https://www.google.com/maps/search/?api=1&query=Shin-Nakamise+Asakusa) | ~10:00–20:00 | 4 min | Covered arcade beside Nakamise. Same souvenirs, roof. |
-| 09:50–10:20 | [**Asakusa Menchi**](https://www.google.com/maps/search/?api=1&query=Asakusa+Menchi) | ~10:00–18:00, sells out | back to the gate, then west | Menchi-katsu at Kaminarimon. Opens around 10:00, so it comes after the temple. This is the lunch. |
-| 10:30–11:20 | [**Kappabashi**](https://www.google.com/maps/search/?api=1&query=Kappabashi+Dougu+Street) | shops ~10:00–17:00 | 15–20 min | Chef-supply street. Named shops below — one or two is enough. |
-| 11:30–12:30 | [**Ameyoko**](https://www.google.com/maps/search/?api=1&query=Ameya-Yokocho+Ueno) | ~10:00–19:00 | 8 min | Market under the JR tracks. Second bite if Menchi was not enough. Onitsuka Tiger Parco_ya Ueno is next door if Day 1 shoes slipped. |
-| 12:30–13:15 | [**Ueno Park**](https://www.google.com/maps/search/?api=1&query=Ueno+Park) | always | **JR ~20 min to Shinjuku** | Park and pond, then the train to Shinjuku. |
+| 07:00–07:15 | [**Kaminarimon**](https://www.google.com/maps/search/?api=1&query=Kaminarimon+Asakusa) | always | 2 min | Giant red lantern gate. Photo, then walk through. |
+| 07:15–07:40 | [**Nakamise**](https://www.google.com/maps/search/?api=1&query=Nakamise-dori+Asakusa) | stalls ~09:00–18:00 | 4 min | Souvenir lane *to* the temple. Stalls are still shut. Ningyo-yaki after the temple if you want them. |
+| 07:40–09:00 | [**Sensō-ji**](https://www.google.com/maps/search/?api=1&query=Senso-ji+Asakusa) | grounds always · hall 06:00–17:00 | 4 min | Tokyo’s oldest temple. **80 min** on the grounds, slow. Empty at this hour. |
+| 09:00–09:15 | [Kagetsudō](https://www.google.com/maps/search/?api=1&query=Kagetsudo+Asakusa) + [Tokiwado](https://www.google.com/maps/search/?api=1&query=Tokiwado+Asakusa) | sells out | 3 min | Melon bread and puffed-rice crackers by the gate. Buy and walk. |
+| 09:15–09:35 | [**Shin-Nakamise**](https://www.google.com/maps/search/?api=1&query=Shin-Nakamise+Asakusa) | ~10:00–20:00 | walk back to the gate | Covered arcade beside Nakamise. Same souvenirs, roof. |
+| 10:00–10:30 | [**Asakusa Menchi**](https://www.google.com/maps/search/?api=1&query=Asakusa+Menchi) | ~10:00–18:00, sells out | west | Menchi-katsu at Kaminarimon. Opens around 10:00. This is the lunch. |
+| 10:45–12:25 | [**Kappabashi**](https://www.google.com/maps/search/?api=1&query=Kappabashi+Dougu+Street) | shops ~10:00–17:00 | 15–20 min | Chef-supply street. **About 1 h 40 min** to compare two knife shops and look around. |
+| 12:45–13:30 | [**Ameyoko**](https://www.google.com/maps/search/?api=1&query=Ameya-Yokocho+Ueno) | ~10:00–19:00 | 8 min | Market under the JR tracks. A walk-and-snack is about **40–60 min**. Second bite if Menchi was not enough. Onitsuka Tiger Parco_ya Ueno is next door if Day 1 shoes slipped. |
+| 13:40–14:15 | [**Ueno Park**](https://www.google.com/maps/search/?api=1&query=Ueno+Park) | always | **JR ~20 min to Shinjuku** | Park and pond, about **30–45 min**, then the train. A museum inside the park is a separate 2 h and is not this stop. |
 
 Kappabashi shop-to-shop (same 400 m, skip freely):
 
@@ -222,12 +227,12 @@ Kappabashi shop-to-shop (same 400 m, skip freely):
 
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
-| 13:45–15:15 | [**Shinjuku Gyoen**](https://www.google.com/maps/search/?api=1&query=Shinjuku+Gyoen) (optional) | 09:00–16:30, last 16:00 · closed Mon | 15 min walk | Garden, ¥500. Drop it if Ueno ran long — the deck matters more. |
-| 14:00–15:00 | [**or mont-bell Shinjuku South**](https://www.google.com/maps/search/?api=1&query=mont-bell+Shinjuku+South+Exit) (1F) | 10:00–21:00 | 12 min to Met Gov | Same outdoor gear, one floor. Skip if you’ll do the **Shibuya flagship** tomorrow (opposite Hands). |
-| **16:20–17:45** | [**Tokyo Metropolitan Government Building · South 45F**](https://www.google.com/maps/search/?api=1&query=Tokyo+Metropolitan+Government+Building+South+Observatory) | 09:30–22:00 · **free** · South closed 1st/3rd Tue (not today) | — | Arrive **before 16:20**. Queue can eat sunset. Fuji + city if clear. Stay through dark. |
-| 17:45–18:15 | [Godzilla Head](https://www.google.com/maps/search/?api=1&query=Godzilla+Head+Shinjuku) / [3D Cat](https://www.google.com/maps/search/?api=1&query=Shinjuku+3D+cat+billboard) / [Hanazono](https://www.google.com/maps/search/?api=1&query=Hanazono+Shrine+Shinjuku) | always | 6–8 min each | Neon walk between the deck and dinner. Optional. |
+| 14:50–16:00 | [**Shinjuku Gyoen**](https://www.google.com/maps/search/?api=1&query=Shinjuku+Gyoen) (optional) | 09:00–16:30, last 16:00 · closed Mon | 15 min walk | Garden, ¥500. Until last entry, then the deck. |
+| 14:50–15:40 | [**or mont-bell Shinjuku South**](https://www.google.com/maps/search/?api=1&query=mont-bell+Shinjuku+South+Exit) (1F) | 10:00–21:00 | 12 min to Met Gov | Same outdoor gear, one floor. Skip if you’ll do the **Shibuya flagship** tomorrow (opposite Hands). |
+| **16:20–18:15** | [**Tokyo Metropolitan Government Building · South 45F**](https://www.google.com/maps/search/?api=1&query=Tokyo+Metropolitan+Government+Building+South+Observatory) | 09:30–22:00 · **free** · South closed 1st/3rd Tue (not today) | — | Arrive **before 16:20**. Queue can eat sunset. Fuji + city if clear. Stay through dark, about **30 min** after sunset. |
+| 18:15–18:30 | [Godzilla Head](https://www.google.com/maps/search/?api=1&query=Godzilla+Head+Shinjuku) / [3D Cat](https://www.google.com/maps/search/?api=1&query=Shinjuku+3D+cat+billboard) / [Hanazono](https://www.google.com/maps/search/?api=1&query=Hanazono+Shrine+Shinjuku) | always | 6–8 min each | Neon walk between the deck and dinner. Optional. |
 
-### Dinner window · 18:30–20:00 · Shinjuku
+### Dinner window · 18:45–20:15 · Shinjuku
 
 [Fuunji](https://www.google.com/maps/search/?api=1&query=Fuunji+Shinjuku) (evening sitting 17:00–21:00) · [Tsukemen Gonokami](https://www.google.com/maps/search/?api=1&query=Tsukemen+Gonokami+Seisakusho+Shinjuku) · [Konjiki Hototogisu](https://www.google.com/maps/search/?api=1&query=Soba+House+Konjiki+Hototogisu) · [Omoide Yokocho](https://www.google.com/maps/search/?api=1&query=Omoide+Yokocho+Shinjuku) · 🥩 yakiniku · Isetan depachika · 🌱 · ICHIRAN East last · combini. Eat before the bars.
 
@@ -235,8 +240,12 @@ Kappabashi shop-to-shop (same 400 m, skip freely):
 
 | Time | Stop | Hours | What it's like |
 |---|---|---|---|
-| 20:15–22:00 | [**Golden Gai**](https://www.google.com/maps/search/?api=1&query=Golden+Gai+Shinjuku) | bars from ~19:00 · cover ¥500–1,500 | Six alleys of tiny bars. One or two doors. Next to Kabukicho. |
+| 20:30–22:45 | [**Golden Gai**](https://www.google.com/maps/search/?api=1&query=Golden+Gai+Shinjuku) | bars from ~19:00 · cover ¥500–1,500 | Six alleys of tiny bars. **About 2 h 15 min** for one or two doors. Next to Kabukicho. |
 | if you want a club | [**WARP**](https://www.google.com/maps/search/?api=1&query=WARP+Shinjuku+club) or [**ATOM**](https://www.google.com/maps/search/?api=1&query=ATOM+Tokyo+Shinjuku) | check the night | Same neighbourhood. Price is on the door. |
+
+**Optional · Kabukicho walk**
+
+Same block as Golden Gai. Neon, the [Godzilla Head](https://www.google.com/maps/search/?api=1&query=Godzilla+Head+Shinjuku) lit at night, and the [Kabukicho Tower](https://www.google.com/maps/search/?api=1&query=Kabukicho+Tower) exterior. The evening stays in this neighbourhood.
 
 **Also in this area — not on the clock**
 
@@ -277,7 +286,7 @@ Leave the hotel ~09:00. **Pokémon DX** is Day 1 or a spare hour, not this night
 
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
-| **10:00–11:15** | [**Shibuya Sky**](https://www.google.com/maps/search/?api=1&query=Shibuya+Sky) (book a **morning** slot) | 10:00–22:30, last 21:20 | 6 min | Rooftop glass over the scramble. Pick any open slot **before 12:00** if you can. |
+| **10:00–11:15** | [**Shibuya Sky**](https://www.google.com/maps/search/?api=1&query=Shibuya+Sky) (book a **morning** slot) | 10:00–22:30, last 21:20 | 6 min | Rooftop glass over the scramble. The deck itself is about **45–60 min** once you are up. Slot before 12:00. |
 | 11:20–11:40 | [Scramble](https://www.google.com/maps/search/?api=1&query=Shibuya+Scramble+Crossing) + [Hachiko](https://www.google.com/maps/search/?api=1&query=Hachiko+statue+Shibuya) + [**MAGNET 7F**](https://www.google.com/maps/search/?api=1&query=MAGNET+by+Shibuya+109) | always | 5 min | The crossing + a free balcony over it. |
 
 ### Lunch window · 12:00–13:00 · Shibuya
@@ -314,17 +323,21 @@ These three are not in the Shibuya list. MUJI only if UNIQLO was fast.
 
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
-| **16:20–17:50** | [**Tokyo Tower**](https://www.google.com/maps/search/?api=1&query=Tokyo+Tower) main deck | ~09:00–22:30 · ¥1,500 | 15 min home or Yurakucho | Red Eiffel. Best lit after dark. Sunset ~17:05. Arrive **16:20**. |
+| **16:20–18:20** | [**Tokyo Tower**](https://www.google.com/maps/search/?api=1&query=Tokyo+Tower) main deck | ~09:00–22:30 · ¥1,500 | 15 min home or Yurakucho | Red Eiffel. **2 h** on the main deck, including the time after sunset (~17:05). Arrive **16:20**. |
 
 ### After Tower
 
 | Time | Stop | What it's like |
 |---|---|---|
-| 18:00–18:20 | [**Zōjō-ji**](https://www.google.com/maps/search/?api=1&query=Zojoji+Tokyo) | Next to the tower. Temple gate lit at night. Free. |
-| **18:30–20:00** | **Dinner · Ginza / Yurakucho** | Mitsukoshi / Matsuya depachika · CoCo 🌱 · Saizeriya · Tenya · MOS · gyudon · Ramen Street · combini |
-| **20:30–23:00** | [**Roppongi Hills**](https://www.google.com/maps/search/?api=1&query=Roppongi+Hills) → [**Tokyo Midtown**](https://www.google.com/maps/search/?api=1&query=Tokyo+Midtown) | One train from the tower (Kamiyacho / Akabanebashi). Drink inside the buildings, where the price is on the menu |
+| 18:25–18:45 | [**Zōjō-ji**](https://www.google.com/maps/search/?api=1&query=Zojoji+Tokyo) | Next to the tower. Temple gate lit at night. Free. |
+| **19:00–20:30** | **Dinner · Ginza / Yurakucho** | Mitsukoshi / Matsuya depachika · CoCo 🌱 · Saizeriya · Tenya · MOS · gyudon · Ramen Street · combini |
+| **21:00–23:30** | [**Roppongi Hills**](https://www.google.com/maps/search/?api=1&query=Roppongi+Hills) → [**Tokyo Midtown**](https://www.google.com/maps/search/?api=1&query=Tokyo+Midtown) | **2 h 30 min.** One train from the tower (Kamiyacho / Akabanebashi). Drink inside the buildings, where the price is on the menu |
 
 Ignore anyone who walks up to you on Roppongi crossing. A club is fine only if the cover is printed at the door. Street offers are not clubs. Shibuya is one train if Roppongi is all recruiters. Home after. Hakone is not tomorrow.
+
+**Optional night · pick one**
+
+The clock is Roppongi Hills, then Tokyo Midtown. [Azabudai Hills](https://www.google.com/maps/search/?api=1&query=Azabudai+Hills) is the walk from the tower instead: the complex, and the tower from that side. Hotel after dinner if the day was enough.
 
 **Also in this area — not on the clock**
 
@@ -353,10 +366,10 @@ Hike day, unless you take the Kawaguchiko timetable below.
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
 | 06:45 | Hotel → [Shinjuku Keio](https://www.google.com/maps/search/?api=1&query=Shinjuku+Station+Keio+Line) (~25 min) | — | 50 min train | Keio line from Shinjuku, not JR |
-| 08:00–14:30 | [**Trail 1 → Yakuo-in → summit 599 m**](https://www.google.com/maps/search/?api=1&query=Yakuoin+Temple+Mount+Takao) | cable from ~08:00 | cable/lift down optional | Paved-then-forest hike. Temple mid-way. Fuji if clear |
-| 14:30–16:00 | [**Takaosan Onsen Gokurakuyu**](https://www.google.com/maps/search/?api=1&query=Keio+Takaosan+Onsen+Gokurakuyu) | ~10:00–23:00 | this is the soak | Public bath at the station. Tattoos: check the door |
-| 16:00–17:30 | [Keio back](https://www.google.com/maps/search/?api=1&query=Shinjuku+Station) | — | — | Train to Shinjuku |
-| 18:30–19:30 | **Optional massage** — [Refre (Tokyo Station)](https://www.google.com/maps/search/?api=1&query=Refre+Tokyo+Station) or a Nihombashi salon | many 12:00–22:00 | 10 min home | Optional |
+| 08:00–15:10 | [**Trail 1 → Yakuo-in → summit 599 m**](https://www.google.com/maps/search/?api=1&query=Yakuoin+Temple+Mount+Takao) | cable from ~08:00 | cable/lift down optional | Trail 1 up and down is about **3–4 h**, plus **40 min** to sit, eat, and look at Fuji if it is out. |
+| 15:10–16:40 | [**Takaosan Onsen Gokurakuyu**](https://www.google.com/maps/search/?api=1&query=Keio+Takaosan+Onsen+Gokurakuyu) | ~10:00–23:00 | this is the soak | Public bath at the station. 90 min is the soak. Tattoos: check the door |
+| 16:40–18:10 | [Keio back](https://www.google.com/maps/search/?api=1&query=Shinjuku+Station) | — | — | Train to Shinjuku |
+| 18:30–19:30 | **Optional massage** — [Refre (Tokyo Station)](https://www.google.com/maps/search/?api=1&query=Refre+Tokyo+Station) or a Nihombashi salon | many 12:00–22:00 | 10 min home | Only if you came down the mountain early. Skip it after a 15:10 descent |
 | **19:30–20:30** | [**Dinner window · Nihonbashi**](https://www.google.com/maps/search/?api=1&query=Nihonbashi+Tokyo) | hotel shortlist | early night | Chains / Ramen Street / combini |
 
 ### Lunch window · on the mountain ~11:00–12:00
@@ -366,6 +379,18 @@ Summit / trail stalls (soba, dango, Tengu-yaki) · packed onigiri from 7-Eleven 
 ### Dinner window · Nihonbashi
 
 Tenya · Yayoiken · CoCo 🌱 · Ramen Street · 🥩 Yoshinoya / Sukiya / Matsuya gyudon · combini.
+
+**Optional evening · after the 20:30 dinner · pick one**
+
+This is the Takao night. The Fuji bus lands later, so that version ends at the hotel.
+
+| Pick | Time | What it's like |
+|---|---|---|
+| [**Akihabara**](https://www.google.com/maps/search/?api=1&query=Akihabara) | **20:30–22:30** | Neon, [GiGO](https://www.google.com/maps/search/?api=1&query=GiGO+Akihabara), [Taito](https://www.google.com/maps/search/?api=1&query=Taito+Station+Akihabara). [Radio Kaikan](https://www.google.com/maps/search/?api=1&query=Radio+Kaikan+Akihabara) if the doors are still open. 10 min from the hotel. |
+| [Tokyo Station](https://www.google.com/maps/search/?api=1&query=Tokyo+Station+Marunouchi) / Marunouchi | after dinner | Façade, [KITTE](https://www.google.com/maps/search/?api=1&query=KITTE+Marunouchi), then Nihonbashi home |
+| Nihonbashi | after dinner | [COREDO Muromachi](https://www.google.com/maps/search/?api=1&query=COREDO+Muromachi), [Nihonbashi Bridge](https://www.google.com/maps/search/?api=1&query=Nihonbashi+Bridge) |
+
+The mountain day can end at dinner.
 
 ### Skip the hike · Sat 17 alts
 
@@ -391,11 +416,11 @@ Same-day bus. Book **¥2,000–2,200** online. Pagoda is free. **398 steps.**
 | 05:50 | Hotel → [Shinjuku Expressway Bus Terminal](https://www.google.com/maps/search/?api=1&query=Shinjuku+Expressway+Bus+Terminal) | ~30 min. In the queue by 06:20 |
 | **06:45–08:30** | [**First bus → Kawaguchiko**](https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Station) | 06:55 and 07:05 are the backups |
 | 08:40–09:10 | Fujikyu to [**Shimoyoshida**](https://www.google.com/maps/search/?api=1&query=Shimoyoshida+Station) + walk | One stop, then ~10 min to the stairs |
-| **09:10–10:30** | [**Chureito**](https://www.google.com/maps/search/?api=1&query=Chureito+Pagoda) | Go up if the peak is out. Tour buses arrive after this |
-| 10:30–12:30 | [**Lake Kawaguchi**](https://www.google.com/maps/search/?api=1&query=Lake+Kawaguchi) · [Oishi Park](https://www.google.com/maps/search/?api=1&query=Oishi+Park+Kawaguchiko) | Shore walk. [**Kachi Kachi ropeway**](https://www.google.com/maps/search/?api=1&query=Kachi+Kachi+Ropeway+Kawaguchiko) (~¥1,000) if Fuji is still out |
-| **12:30–13:30** | **Lunch window** | Hōtō · lakeside stalls · combini |
-| 14:00–16:00 | Lake, or [**Oshino Hakkai**](https://www.google.com/maps/search/?api=1&query=Oshino+Hakkai), or back up **only if Fuji is clear** | Eight spring ponds are one bus hop |
-| ~16:30 or ~18:20 | [Kawaguchiko](https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Station) → Shinjuku bus | Home for a Nihonbashi dinner |
+| **09:10–11:00** | [**Chureito**](https://www.google.com/maps/search/?api=1&query=Chureito+Pagoda) | **About 1 h 50 min.** 398 steps, the photo, and time to wait for a clear gap. Tour buses arrive after 10:30 |
+| 11:15–13:45 | [**Lake Kawaguchi**](https://www.google.com/maps/search/?api=1&query=Lake+Kawaguchi) · [Oishi Park](https://www.google.com/maps/search/?api=1&query=Oishi+Park+Kawaguchiko) | **2 h 30 min** on the shore. [**Kachi Kachi ropeway**](https://www.google.com/maps/search/?api=1&query=Kachi+Kachi+Ropeway+Kawaguchiko) (~¥1,000) if Fuji is still out |
+| **13:45–14:45** | **Lunch window** | Hōtō · lakeside stalls · combini |
+| 15:00–17:00 | Lake, or [**Oshino Hakkai**](https://www.google.com/maps/search/?api=1&query=Oshino+Hakkai), or back up **only if Fuji is clear** | Eight spring ponds are one bus hop |
+| ~18:20 | [Kawaguchiko](https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Station) → Shinjuku bus | The 16:30 bus is the one if you left the pagoda by 10:30. This clock uses **18:20** |
 
 The **07:15** bus stops at [**Chuo-do Shimo-Yoshida**](https://www.google.com/maps/search/?api=1&query=Chuo-do+Shimo-Yoshida+bus+stop) (~08:50) and walks straight to the stairs.
 
@@ -410,7 +435,7 @@ The **07:15** bus stops at [**Chuo-do Shimo-Yoshida**](https://www.google.com/ma
 
 ## Day 5 — Sun 18 Oct — palace run · Akiba · Nakano · Yoshiwara
 
-Palace run at **06:00**. [**Akiba**](https://www.google.com/maps/search/?api=1&query=Akihabara) late morning, 10 min from the hotel. [**Nakano Broadway**](https://www.google.com/maps/search/?api=1&query=Nakano+Broadway) afternoon. No Golden Gai tonight. Hakone is **07:30** tomorrow, so be back at the hotel by **00:30**.
+Palace run at **06:00**. [**Akiba**](https://www.google.com/maps/search/?api=1&query=Akihabara) late morning, 10 min from the hotel. [**Nakano Broadway**](https://www.google.com/maps/search/?api=1&query=Nakano+Broadway) afternoon. No Golden Gai tonight. Hakone departure is **06:45** tomorrow, so be back at the hotel by **00:30**.
 
 [Akiba](https://www.google.com/maps/dir/?api=1&origin=35.69868,139.77305&destination=35.7004,139.7712&travelmode=walking&waypoints=35.69848,139.77172|35.69985,139.77128|35.70018,139.77105)
 
@@ -431,9 +456,9 @@ Shop-to-shop. Floors and reviews: [`stores.md`](stores.md). Leave the used-figur
 
 | Time | Stop | Hours | What it's like |
 |---|---|---|---|
-| **10:30–11:30** | [**Maidreamin Idol Street**](https://www.google.com/maps/search/?api=1&query=Maidreamin+Akihabara+Idol+Street) | Sun **10:30–23:00** | Maid cafe. 4F, 3 min from the station. ¥880 per hour plus one order. Not a soapland |
-| 11:30–13:00 | Shops below | from ~10:00 / 11:00 | |
-| **13:00–14:00** | [**Muscle Kitchen**](https://www.google.com/maps/search/?api=1&query=Muscle+Kitchen+Akihabara) | Sun **13:00–22:00** · closed Tue/Wed | Muscle-themed cafe, Suehirocho, 4F. Protein plates. Staff are muscular. This is a restaurant, not a soapland |
+| **10:30–12:00** | [**Maidreamin Idol Street**](https://www.google.com/maps/search/?api=1&query=Maidreamin+Akihabara+Idol+Street) | Sun **10:30–23:00** | Maid cafe. **90 min.** 4F, 3 min from the station. ¥880 per hour plus one order, so this is closer to two hours of charges. Not a soapland |
+| 12:00–13:15 | Shops below | from ~10:00 / 11:00 | A look. The long browse is Nakano |
+| **13:15–14:15** | [**Muscle Kitchen**](https://www.google.com/maps/search/?api=1&query=Muscle+Kitchen+Akihabara) | Sun **13:00–22:00** · closed Tue/Wed | Muscle-themed cafe, Suehirocho, 4F. Protein plates. Staff are muscular. This is a restaurant, not a soapland |
 
 **Shops**
 
@@ -447,13 +472,13 @@ Shop-to-shop. Floors and reviews: [`stores.md`](stores.md). Leave the used-figur
 
 **See instead of shops:** arcades ([Taito](https://www.google.com/maps/search/?api=1&query=Taito+Station+Akihabara) / [GiGO](https://www.google.com/maps/search/?api=1&query=GiGO+Akihabara)) · Yodobashi terrace · walk Kanda.
 
-### Lunch · 13:00–14:00 · Muscle Kitchen
+### Lunch · 13:15–14:15 · Muscle Kitchen
 
 That is the lunch. CoCo 🌱 / gyudon / combini if the cafe is full. Then **JR Chuo-Sobu to Nakano ~20 min**.
 
-### Nakano Broadway · 14:30–17:00
+### Nakano Broadway · 14:45–17:30
 
-Floors ~12:00–20:00.
+Floors ~12:00–20:00. **About 2 h 45 min.** That is the long browse, before dinner near the hotel.
 
 | # | What | Get | Sibling / skip |
 |---|---|---|---|
@@ -461,15 +486,17 @@ Floors ~12:00–20:00.
 | 2 | [Watch / vinyl / vintage shops](https://www.google.com/maps/search/?api=1&query=Nakano+Broadway) | Used Seiko if Bic didn’t land one. Inspect crown + date. | Bic / Donki = new |
 | 3 | Gachapon / small makers | Small souvenirs, ¥200–500 | [Trader](https://www.google.com/maps/search/?api=1&query=Trader+Akihabara) / [Surugaya](https://www.google.com/maps/search/?api=1&query=Surugaya+Akihabara) |
 
-### Dinner window · 17:30–18:45 · hotel / Nihonbashi
+### Dinner window · 17:45–18:45 · hotel / Nihonbashi
 
 Eat near the hotel, not in Shinjuku. Ramen Street · [Nemuro Hanamaru](https://www.google.com/maps/search/?api=1&query=Nemuro+Hanamaru+KITTE) · CoCo 🌱 · gyudon · combini. Then a taxi to Yoshiwara.
 
 ### End of day · Yoshiwara · 19:30–23:00 · 18+ only
 
-[**Yoshiwara**](https://www.google.com/maps/search/?api=1&query=Yoshiwara+Omon+Taito) (Senzoku, Taito) is the licensed soapland district. About 20 min by taxi from the hotel, or Hibiya line to Minowa and a short taxi. Most shops stop taking guests around midnight. Hakone is 07:30, so leave in time to be in the hotel by **00:30**.
+[**Yoshiwara**](https://www.google.com/maps/search/?api=1&query=Yoshiwara+Omon+Taito) (Senzoku, Taito) is the licensed soapland district. About 20 min by taxi from the hotel, or Hibiya line to Minowa and a short taxi. Most shops stop taking guests around midnight. The Hakone train is 07:27, so leave in time to be in the hotel by **00:30**.
 
 This is a licensed bathhouse with a sexual service. Adults only. Bring your passport.
+
+**Evening** — Yoshiwara, then the hotel by **00:30**. Hakone leaves at **06:45**. No second stop.
 
 **How to do it without getting cheated**
 
@@ -516,22 +543,33 @@ Shinjuku shops (Map Camera, Isetan floors, Donki Shinjuku, Bic, Hands, Loft) are
 
 ## Day 6 — Mon 19 Oct — Hakone
 
+<div class="map-embed">
+<iframe src="https://www.google.com/maps/d/embed?mid=1vZ4rah5ka8edEoFeRQCDUSHo2C8VS3Y&amp;ehbc=2E312F" width="640" height="480" loading="lazy" title="Hakone map"></iframe>
+</div>
+
 [Loop](https://www.google.com/maps/dir/?api=1&origin=35.6812,139.7671&destination=35.229167,139.097633&travelmode=transit&waypoints=35.245,139.053|35.2445,139.0195|35.202,139.0246|35.2048,139.0256)
 
-[Tokyo Station](https://www.google.com/maps/search/?api=1&query=Tokyo+Station) shinkansen (not Shinjuku Romancecar). Freepass at [Odawara](https://www.google.com/maps/search/?api=1&query=Odawara+Station). **In at [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) by 18:30.**
+Be in [Hakone-Yumoto](https://www.google.com/maps/search/?api=1&query=Hakone-Yumoto+Station) by **08:00–08:30** and start. That is Kodama **805**, Tokyo **07:27** → Odawara **08:00** (33 min), then the Tozan train (~15 min). Leave the hotel **06:45**. Bags in a Yumoto locker. Suitcases stay out of the loop. Freepass at Odawara or Yumoto. [Odakyu’s Hakone day-trip page](https://odakyu-global.com/blog/2075/) has freepass prices (from Odawara, 2-day adult ¥6,000) and their shrine-first loop. **In at [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) by 18:30.**
+
+Traveler reports: the riding is about 3 hours, and the day with stops is **6–7 hours**. The bus back from the lake is the part that runs long.
 
 | Time | Stop | Hours | What it's like |
 |---|---|---|---|
-| 07:30 | Out of Livemax → [Tokyo Station](https://www.google.com/maps/search/?api=1&query=Tokyo+Station) | — | Bags on the shinkansen, not Romancecar |
-| 10:00–11:45 | [Open-Air Museum](https://www.google.com/maps/search/?api=1&query=Hakone+Open+Air+Museum) | 09:00–17:00 | Outdoor sculptures on a hillside. Easy walk. |
-| 12:00–13:30 | [Ropeway](https://www.google.com/maps/search/?api=1&query=Hakone+Ropeway) + [Owakudani](https://www.google.com/maps/search/?api=1&query=Owakudani) | ropeway ~09:00–16:30 | Steam, sulphur, black eggs. Wind can stop the ropeway. |
-| 14:30–15:15 | [Lake Ashi boat](https://www.google.com/maps/search/?api=1&query=Hakone+Sightseeing+Cruise) | ~10:00–16:30 | Sightseeing boat. Fuji if the sky is clear. |
-| 15:30–16:00 | [Hakone Shrine torii](https://www.google.com/maps/search/?api=1&query=Hakone+Shrine) | grounds ~07:00–17:00 | Red gate in the water. Photo, then leave for [Yumoto](https://www.google.com/maps/search/?api=1&query=Hakone-Yumoto+Station). |
-| 18:30 | [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) | in by 19:00 | In by 19:00. A late arrival loses the dinner sitting. |
+| 06:45 | Out of Livemax → [Tokyo Station](https://www.google.com/maps/search/?api=1&query=Tokyo+Station) | — | At the shinkansen gate by 07:10. Not the Romancecar |
+| **07:27–08:00** | Kodama 805 → [Odawara](https://www.google.com/maps/search/?api=1&query=Odawara+Station) | 33 min | Backup is 06:57 → 07:30 if 07:27 is gone. 07:57 arrives Odawara 08:30 and you start late |
+| **08:15–08:30** | [Hakone-Yumoto](https://www.google.com/maps/search/?api=1&query=Hakone-Yumoto+Station) | — | Lockers, then the Tozan up. This is the start |
+| **09:05–12:00** | [Open-Air Museum](https://www.google.com/maps/search/?api=1&query=Hakone+Open+Air+Museum) | 09:00–17:00, last 16:30 | Chokoku-no-Mori, one stop before Gora. **About 3 h** on the hillside, slow. Picasso pavilion is inside |
+| **12:20–13:25** | [Ropeway](https://www.google.com/maps/search/?api=1&query=Hakone+Ropeway) + [Owakudani](https://www.google.com/maps/search/?api=1&query=Owakudani) | ropeway ~09:00–16:45 | On the ground **45–60 min**: steam, black eggs, one cafe. The ride time is fixed. Wind can stop the ropeway |
+| **13:45–14:25** | [Lake Ashi boat](https://www.google.com/maps/search/?api=1&query=Hakone+Sightseeing+Cruise) | boats ~09:30–16:30 | The crossing is **30–40 min**. Be at Togendai in time to board |
+| **14:40–16:10** | [Hakone Shrine torii](https://www.google.com/maps/search/?api=1&query=Hakone+Shrine) | grounds ~07:00–17:00 | **About 90 min.** The line for the water gate runs about 20 min when it is busy. 10–15 min walk from the pier |
+| 16:15–17:45 | Bus → [Yumoto](https://www.google.com/maps/search/?api=1&query=Hakone-Yumoto+Station) | ride ~40 min | With the wait and Route 1 traffic this leg is **60–90 min**. Leave the lake by 16:10 |
+| 18:00–18:30 | Lockers, then [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) | in by 19:00 | In by 19:00. A late arrival loses the dinner sitting |
+
+Leave the museum at 12:00. Eggs at Owakudani are the lunch. Staying past 12:00 misses the boat.
 
 **Lunch · Gora / Owakudani** — [Tamura Ginkatsu-tei](https://www.google.com/maps/search/?api=1&query=Tamura+Ginkatsu-tei+Hakone) (tofu) · [Gyoza Center](https://www.google.com/maps/search/?api=1&query=Gyoza+Center+Hakone) · ropeway snacks · 7-Eleven from the hotel.
 
-**Dinner** — [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) kaiseki only. Default may include 🥩. Tattoos: no shared baths.
+**Dinner** — [Senkei](https://www.google.com/maps/search/?api=1&query=Senkei+Hakone+Yumoto) kaiseki only. Default may include 🥩. Tattoos: no shared baths. The night is the meal and the bath.
 
 **Also in this area — not on the clock**
 
@@ -554,10 +592,14 @@ Shinjuku shops (Map Camera, Isetan floors, Donki Shinjuku, Bic, Hands, Loft) are
 | 12:00 | [Yumoto](https://www.google.com/maps/search/?api=1&query=Hakone-Yumoto+Station) → [Odawara](https://www.google.com/maps/search/?api=1&query=Odawara+Station) | 15–25 min | Tozan / bus |
 | **13:30–15:35** | [Shinkansen](https://www.google.com/maps/search/?api=1&query=Odawara+Station) | booked | **Lunch = ekiben** on the train |
 | 16:00 | [Guesthouse Sign](https://www.google.com/maps/search/?api=1&query=Guesthouse+Sign+Kyoto) | 16:00–21:00 | 2 min to Nishiki |
-| 16:15–17:30 | [**Nishiki**](https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto) | stalls ~10:00–18:00 | Covered “kitchen” lane. Eat at the stall, don’t walk-and-eat. Souvenirs: Itoh Kyuemon KitKats, tea, yuba packs. |
-| 17:30–18:30 | [**Yasaka**](https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto) + [**Gion**](https://www.google.com/maps/search/?api=1&query=Gion+Kyoto) | shrine always | Lantern shrine, then Hanamikoji lanes. Look, don’t chase geisha. |
+| 16:15–17:30 | [**Nishiki**](https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto) | stalls ~10:00–18:00 | Covered “kitchen” lane. People use **60–90 min**. Stalls start closing around 17:00, so this arrival is the tail of the day. Eat at the stall. |
+| 17:30–19:15 | [**Yasaka**](https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto) + [**Gion**](https://www.google.com/maps/search/?api=1&query=Gion+Kyoto) | shrine always | **About 1 h 45 min.** Lantern shrine, then Hanamikoji lanes. Look, don’t chase geisha. |
 
 **Dinner window · 19:00–20:30 · Pontocho** (3 min home) — izakaya fish/pork · 🥩 [Katsugyu](https://www.google.com/maps/search/?api=1&query=Gyukatsu+Kyoto+Katsugyu) (Shijo) · Isetan / combini · 🌱 tofu set.
+
+**Optional evening · 20:30–22:00**
+
+You are already on [Pontocho](https://www.google.com/maps/search/?api=1&query=Pontocho+Kyoto). Continue to [Kiyamachi](https://www.google.com/maps/search/?api=1&query=Kiyamachi+Kyoto), the [Takase River](https://www.google.com/maps/search/?api=1&query=Takase+River+Kyoto), and a short stretch of the [Kamo](https://www.google.com/maps/search/?api=1&query=Kamo+River+Kyoto). Walk home. About 90 min.
 
 Nishiki stalls to actually buy from (not a mall):
 
@@ -569,74 +611,85 @@ Nishiki stalls to actually buy from (not a mall):
 
 **Also in this area — not on the clock**
 
-- [**Kiyomizu-dera**](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) tonight (it’s on Day 9)
+- [**Kiyomizu-dera**](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) tomorrow morning (Day 8, 08:00)
 - [**Pontocho**](https://www.google.com/maps/search/?api=1&query=Pontocho+Kyoto) · **Kiyamachi** — dinner window, not a sight pin
 - **Samurai & Ninja Museum** (Nakagyo)
 - **Kyoto Yokai** at Uzumasa — check if it’s on while you’re here
 
 ---
 
-## Day 8 — Wed 21 Oct — Arashiyama · teamLab Biovortex
-
-[Core](https://www.google.com/maps/dir/?api=1&origin=35.017,135.6716&destination=35.0158,135.6739&travelmode=walking)
-
-Be at the bamboo at **08:00**, before it fills. **Book teamLab Biovortex** ([Kyoto Station](https://www.google.com/maps/search/?api=1&query=Kyoto+Station) / Hachijo, last entry 19:30). Tōji market **closes 16:00** — do it on the way back if you want a kimono, then teamLab.
-
-| Time | Stop | Hours | Next | What it's like |
-|---|---|---|---|---|
-| 08:00–08:25 | [**Arashiyama Bamboo Grove**](https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove) | always | 5 min | A path through tall bamboo. Dead after 08:30. Photos, 15–20 min. |
-| 08:30–09:15 | [**Tenryu-ji**](https://www.google.com/maps/search/?api=1&query=Tenryu-ji) | 08:30–17:00 · ¥500 garden | — | Zen garden next to the grove. Worth more than the grove itself. |
-| 09:30–10:30 | Snack / early lunch | tofu / soba / combini | JR ~15 min to Kyoto St | Don’t wait for a fancy sit-down. |
-| 11:30–15:30 | [**Tō-ji Kōbō-ichi**](https://www.google.com/maps/search/?api=1&query=Toji+Temple+flea+market) (21st) *or* See west | **dawn–16:00** | then teamLab | Vintage kimono / haori ¥1–5k cash. Check stains in daylight. Skip for river / monkeys. |
-| **16:00–18:30** | [**teamLab Biovortex Kyoto**](https://www.google.com/maps/search/?api=1&query=teamLab+Biovortex+Kyoto) | 09:00–21:00, last 19:30 | 10 min Hachijo | Booked digital art. The Kyoto teamLab. |
-
-**See west instead of Tōji** (still do teamLab after): [Togetsukyo](https://www.google.com/maps/search/?api=1&query=Togetsukyo+Bridge) / river · [Iwatayama Monkey Park](https://www.google.com/maps/search/?api=1&query=Iwatayama+Monkey+Park) (¥800 cash, 09:00–16:00) · [Sagano](https://www.google.com/maps/search/?api=1&query=Sagano+Romantic+Train) lanes.
-
-**Ippodo Tea** (09:00–18:00) if you have 20 min at the station before the teamLab slot.
-
-**Dinner · Pontocho** — same as Day 7. Porta / Isetan if you’re still at [Kyoto Station](https://www.google.com/maps/search/?api=1&query=Kyoto+Station).
-
-**Also in this area — not on the clock**
-
-- [**Sagano sightseeing train / cycling**](https://www.google.com/maps/search/?api=1&query=Sagano+Romantic+Train)
-- [**Kinkaku-ji**](https://www.google.com/maps/search/?api=1&query=Kinkaku-ji)
-- [**Arashiyama monkey park**](https://www.google.com/maps/search/?api=1&query=Iwatayama+Monkey+Park) and [**Togetsukyo**](https://www.google.com/maps/search/?api=1&query=Togetsukyo+Bridge) are the see-west option above, not a second morning
-- [**Ippodo**](https://www.google.com/maps/search/?api=1&query=Ippodo+Tea+Kyoto+Teramachi) is the 20-min station stop above
-- [**2nd STREET**](https://www.google.com/maps/search/?api=1&query=2nd+STREET+Kyoto) / [**Ragtag**](https://www.google.com/maps/search/?api=1&query=Ragtag+Kyoto) / [**Teramachi**](https://www.google.com/maps/search/?api=1&query=Teramachi+Kyoto) vintage if you skip Tōji
-- [**mont-bell Kawaramachi**](https://www.google.com/maps/search/?api=1&query=mont-bell+Kyoto+Kawaramachi) if Tokyo mont-bell was skipped
-
----
-
-## Day 9 — Thu 22 Oct — Higashiyama
+## Day 8 — Wed 21 Oct — Higashiyama · Tō-ji · teamLab
 
 [Core](https://www.google.com/maps/dir/?api=1&origin=34.99486,135.785&destination=35.0006,135.7811&travelmode=walking&waypoints=34.99655,135.7825|34.99745,135.78145)
 
+Kiyomizu at **08:00**. **Book teamLab Biovortex** ([Kyoto Station](https://www.google.com/maps/search/?api=1&query=Kyoto+Station) / Hachijo, last entry 19:30). Tō-ji market is the 21st only and winds down by **16:00**. Forty minutes on the way to teamLab.
+
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
-| 08:00–09:15 | [**Kiyomizu-dera**](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) | 06:00–18:00 | 6 min | Wooden terrace over the city. Early = no crowd. |
-| 09:20–10:20 | [**Ninenzaka → Sannenzaka**](https://www.google.com/maps/search/?api=1&query=Sannenzaka+Kyoto) | always | 8 min | Stone lanes, shops, photos. Slow walk downhill. |
-| 10:30–11:45 | [**Kodai-ji**](https://www.google.com/maps/search/?api=1&query=Kodai-ji+Kyoto) | 09:00–17:30 | — | Garden + a small bamboo grove *in town* (the Arashiyama alternative). |
-| **12:00–13:15** | **Lunch window** | — | then fork | 5–10 min walk. |
+| 08:00–09:50 | [**Kiyomizu-dera**](https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera) | 06:00–18:00 | 6 min | Wooden terrace over the city. **About 1 h 50 min** on the temple. |
+| 10:00–11:20 | [**Ninenzaka → Sannenzaka**](https://www.google.com/maps/search/?api=1&query=Sannenzaka+Kyoto) | always | 8 min | Stone lanes, shops, photos. **About 1 h 20 min** downhill. |
+| 11:30–12:45 | [**Kodai-ji**](https://www.google.com/maps/search/?api=1&query=Kodai-ji+Kyoto) | 09:00–17:30 | — | Garden and a small bamboo grove inside the temple. 75 min covers the garden. |
+| **12:45–14:00** | **Lunch window** | — | ~30 min to Tō-ji | 5–10 min walk, then the ride south. |
+| **14:30–15:10** | [**Tō-ji Kōbō-ichi**](https://www.google.com/maps/search/?api=1&query=Toji+Temple+flea+market) (21st) | **dawn–16:00** | ~15 min to Hachijo | About **1,000 stalls**, free to walk the grounds, cash. A full circuit is about 2 hours. This stop is **40 min**: the pagoda and one row. Dealers pack from mid-afternoon, so the best kimono is already gone. Open it in daylight. Check stains, smell, and holes. ¥1–5k. |
+| **16:00–19:00** | [**teamLab Biovortex Kyoto**](https://www.google.com/maps/search/?api=1&query=teamLab+Biovortex+Kyoto) | 09:00–21:00, last 19:30 | 10 min Hachijo | **3 h.** One pass is about 2 h. The last hour is for a slow second look. You can stay after entry. |
 
 **Lunch** — [Okutan](https://www.google.com/maps/search/?api=1&query=Okutan+tofu+Kyoto) tofu 🌱 · slope noodle shops · 🥩 [Katsugyu](https://www.google.com/maps/search/?api=1&query=Gyukatsu+Kyoto+Katsugyu) if you dropped to Shijo · combini on Gojo.
 
-**Fork**
+Leave Tō-ji by **15:10**. teamLab is the Hachijo side of Kyoto Station.
 
-| Track | What it's like |
-|---|---|
-| **More temples** | [Ishibe-koji](https://www.google.com/maps/search/?api=1&query=Ishibe+Koji+Kyoto) (pretty alley) · [Yasaka](https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto) · [Chion-in](https://www.google.com/maps/search/?api=1&query=Chion-in) · [Heian](https://www.google.com/maps/search/?api=1&query=Heian+Shrine) · [Eikando](https://www.google.com/maps/search/?api=1&query=Eikando+Kyoto) (check maple light-up) |
-| [**Kurama Fire Festival**](https://www.google.com/maps/search/?api=1&query=Kurama+Fire+Festival) | Leave east by **13:00**. Eizan from [Demachiyanagi](https://www.google.com/maps/search/?api=1&query=Demachiyanagi+Station). Torches ~18:00. Eat in [Kibune](https://www.google.com/maps/search/?api=1&query=Kibune+Kyoto) at 15:00. |
-| **Shop 20 min** | Gion-dori incense / ceramics. Then stop. |
+**Dinner · Pontocho** — same as Day 7. Porta / Isetan if you’re still at [Kyoto Station](https://www.google.com/maps/search/?api=1&query=Kyoto+Station).
 
-**Dinner** — Gion / Pontocho / 🥩 [Katsugyu](https://www.google.com/maps/search/?api=1&query=Gyukatsu+Kyoto+Katsugyu) / combini. Kurama people: [Kibune](https://www.google.com/maps/search/?api=1&query=Kibune+Kyoto) at 15:00 + hostel snack.
+**Optional evening · after teamLab**
+
+teamLab is on the Hachijo side, so the walk is the station itself: the building, the grand staircase, the Skyway, the lights, Porta, and [Kyoto Tower](https://www.google.com/maps/search/?api=1&query=Kyoto+Tower) from outside. [Pontocho](https://www.google.com/maps/search/?api=1&query=Pontocho+Kyoto) and [Kiyamachi](https://www.google.com/maps/search/?api=1&query=Kiyamachi+Kyoto) are the other night, if dinner is there.
 
 **Also in this area — not on the clock**
 
+- [**Ishibe-koji**](https://www.google.com/maps/search/?api=1&query=Ishibe+Koji+Kyoto) · [**Yasaka**](https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto) · [**Chion-in**](https://www.google.com/maps/search/?api=1&query=Chion-in) · [**Heian**](https://www.google.com/maps/search/?api=1&query=Heian+Shrine) · [**Eikando**](https://www.google.com/maps/search/?api=1&query=Eikando+Kyoto)
 - [**Nijo Castle**](https://www.google.com/maps/search/?api=1&query=Nijo+Castle) · [**Ginkaku-ji**](https://www.google.com/maps/search/?api=1&query=Ginkaku-ji) · [**Philosopher’s Path**](https://www.google.com/maps/search/?api=1&query=Philosopher%27s+Path+Kyoto) · [**Ohara**](https://www.google.com/maps/search/?api=1&query=Ohara+Kyoto)
-- [**Jidai Matsuri**](https://www.google.com/maps/search/?api=1&query=Jidai+Matsuri+Kyoto) — daytime parade, same day as Kurama fire. Not on the clock.
-- [**Gion Corner**](https://www.google.com/maps/search/?api=1&query=Gion+Corner+Kyoto) show · kimono rental
-- [**Kinkaku-ji**](https://www.google.com/maps/search/?api=1&query=Kinkaku-ji) if you didn’t do it on Day 8
+- [**Gion Corner**](https://www.google.com/maps/search/?api=1&query=Gion+Corner+Kyoto) show · kimono rental · Gion-dori incense
+- [**Ippodo**](https://www.google.com/maps/search/?api=1&query=Ippodo+Tea+Kyoto+Teramachi) (09:00–18:00)
+- [**2nd STREET**](https://www.google.com/maps/search/?api=1&query=2nd+STREET+Kyoto) / [**Ragtag**](https://www.google.com/maps/search/?api=1&query=Ragtag+Kyoto) / [**Teramachi**](https://www.google.com/maps/search/?api=1&query=Teramachi+Kyoto) vintage if you skip Tōji
+- [**mont-bell Kawaramachi**](https://www.google.com/maps/search/?api=1&query=mont-bell+Kyoto+Kawaramachi) if Tokyo mont-bell was skipped
 - [**Sanjusangen-do**](https://www.google.com/maps/search/?api=1&query=Sanjusangen-do) is the Day 10 skip-Nara backup
+
+---
+
+## Day 9 — Thu 22 Oct — Sagano train · bamboo · bikes
+
+[Core](https://www.google.com/maps/dir/?api=1&origin=35.017,135.6716&destination=35.0158,135.6739&travelmode=walking)
+
+The [Sagano Romantic Train](https://www.sagano-kanko.co.jp/en/train-info/) runs today. It is closed on Wednesdays, including 21 Oct. Start the grove at **07:15**. The first train on the timetable is **09:02** from [Torokko Saga](https://www.google.com/maps/search/?api=1&query=Torokko+Saga+Station). Be at the station by **08:00**. If the board shows an earlier train, take that one. Come back on the JR from [Umahori](https://www.google.com/maps/search/?api=1&query=Umahori+Station), about **¥200**. Sunset on the Katsura is **17:14**, then the bamboo light-up at **18:00**.
+
+| Time | Stop | Hours | Next | What it's like |
+|---|---|---|---|---|
+| **07:15–07:40** | [**Arashiyama Bamboo Grove**](https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove) | always | 10 min walk to Torokko Saga | A path through tall bamboo. This is the empty hour. Photos, 15–20 min. |
+| **09:02–09:25** | [**Sagano Romantic Train**](https://www.google.com/maps/search/?api=1&query=Torokko+Saga+Station) | hourly **09:02–16:02** | 5 min walk to Umahori | Listed first train. Take an earlier one if it is on the board. Torokko Saga → Torokko Kameoka, about **25 min**, along the gorge. Adult **¥880**, child **¥440**. Car 5 (“Rich”) is open at the sides with a glass roof. Rain gets you wet. Umbrellas are banned in Car 5. Bikes are banned on the train. Same-day tickets at the station are limited. The same train turns back at **09:30** for another **¥880** if a seat is open. |
+| **09:35–10:00** | [**JR Umahori → Saga-Arashiyama**](https://www.google.com/maps/search/?api=1&query=Umahori+Station) | about **¥200** · train ~7 min | rent bikes | 5 min walk from Torokko Kameoka. Trains about every 15 min. Back at the grove station. |
+| **10:15–12:45** | **Bikes** | rentals about **¥1,000–2,000** | lunch | Riverside path, the bridge, lanes north of the river. Park outside the grove. E-bike if you climb into Okusaga. Rent at JR Saga-Arashiyama, Randen, or Hankyu. Kyoto asks for bicycle insurance. |
+| **12:45–14:15** | **Lunch window** | — | — | Near [Togetsukyo](https://www.google.com/maps/search/?api=1&query=Togetsukyo+Bridge). Sit down. Tofu, soba, or a combini. |
+| 14:15–16:00 | Open | — | the river | Stay by the water or walk the lanes. Return the bikes in this window. |
+| **16:20–17:45** | [**Katsura river · Togetsukyo**](https://www.google.com/maps/search/?api=1&query=Togetsukyo+Bridge) | sunset **17:14** | walk north | East bank, just downstream of the bridge. The bridge and the hills sit over the water. The sun drops behind those hills, west-southwest. Stay for the afterlight. |
+| 17:45–18:00 | Walk to the grove | — | light-up | North from the bridge. About 15 min. Don’t rush. |
+| **18:00–19:15** | [**Arashiyama Tsukidoro**](https://arashiyama-tsukitouro.jp/) | **18:00–21:00**, last entry 20:40 · 30 Sep–8 Nov | 10 min to Randen | Bamboo path lit for the night. Paid area is bamboo lanterns and mist. Advance ticket **¥2,000**. Same-day **¥1,500** cash from 17:50 at the booth by Daidokoro-zaka. Last year the dates sold out. 22 Oct is inside the run. Heavy rain cancels it. 12 and under free. |
+| 19:15–19:35 | [**Kimono Forest**](https://www.google.com/maps/search/?api=1&query=Kimono+Forest+Randen+Arashiyama) | lit from sunset to **21:00** · free | dinner | About 600 pillars in Kyo-yuzen cloth, inside [Randen Arashiyama](https://www.google.com/maps/search/?api=1&query=Randen+Arashiyama+Station). No ticket. |
+| **19:35–20:45** | **Dinner · Arashiyama** | — | then the train | Tofu or soba near the bridge, or a meal at the station square. Eat here before you leave. |
+| **20:45** | Back to Kyoto | — | — | From Randen toward Shijo, or a 10 min walk to JR Saga-Arashiyama and about 15 min to Kyoto Station. Stay for a drink if you want. |
+
+**Dinner** is the 19:35 sitting in Arashiyama. If the light-up is cancelled, eat near the bridge and still do Kimono Forest.
+
+**Optional · after you are back · 21:30–22:30**
+
+[Pontocho](https://www.google.com/maps/search/?api=1&query=Pontocho+Kyoto), [Kiyamachi](https://www.google.com/maps/search/?api=1&query=Kiyamachi+Kyoto), and the [Takase River](https://www.google.com/maps/search/?api=1&query=Takase+River+Kyoto), only if you still want a walk. The Arashiyama night ends with dinner and the train back.
+
+**Also in this area — not on the clock**
+
+- [**Tenryu-ji**](https://www.google.com/maps/search/?api=1&query=Tenryu-ji) garden (¥500, 08:30–17:00) after the bikes, if you still want it
+- [**Iwatayama Monkey Park**](https://www.google.com/maps/search/?api=1&query=Iwatayama+Monkey+Park) — ¥800 cash, 09:00–16:00, steep climb, about **2 h**
+- [**Kinkaku-ji**](https://www.google.com/maps/search/?api=1&query=Kinkaku-ji)
+- [**Jidai Matsuri**](https://www.google.com/maps/search/?api=1&query=Jidai+Matsuri+Kyoto) — daytime parade
+- [**Hozugawa boat**](https://www.google.com/maps/search/?api=1&query=Hozugawa+River+Boat+Ride+Kameoka) — about 2 hours back to Arashiyama, **¥6,000** a person. Off the clock.
+- [**Kurama Fire Festival**](https://www.google.com/maps/search/?api=1&query=Kurama+Fire+Festival) — this night, if you skip the ride, the river, and the light-up. After the train, stay on the JR toward Kyoto, then Eizan from [Demachiyanagi](https://www.google.com/maps/search/?api=1&query=Demachiyanagi+Station). Eat in [Kibune](https://www.google.com/maps/search/?api=1&query=Kibune+Kyoto) at **15:00**. Torches around **18:00**
 
 ---
 
@@ -650,17 +703,24 @@ Inari at dawn, then **JR or Kintetsu to Nara (~45 min from [Kyoto Station](https
 
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
-| 07:00–09:15 | [**Fushimi Inari**](https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha) | grounds always | 20 min to Kyoto St | Thousands of red torii up the mountain. Do the climb. Empty at 07:00. |
-| 09:30 | [Kyoto Station](https://www.google.com/maps/search/?api=1&query=Kyoto+Station) → [Nara](https://www.google.com/maps/search/?api=1&query=Kintetsu+Nara+Station) | ~45 min | — | JR Nara or Kintetsu Nara (Kintetsu drops closer to the park). |
-| 10:30–11:30 | [**Nara Park · deer**](https://www.google.com/maps/search/?api=1&query=Nara+Park) | always | 8 min | Sika deer bow for shika-senbei (¥200). Don’t tease. They bite bags. |
-| 11:30–13:00 | [**Tōdai-ji Great Buddha**](https://www.google.com/maps/search/?api=1&query=Todai-ji) | 08:00–16:30 / 17:00 | 10 min | Huge wooden hall, 15 m bronze Buddha. The Nara reason besides deer. |
-| **13:00–14:00** | [**Lunch window · Nara**](https://www.google.com/maps/search/?api=1&query=Naramachi) | — | 10 min | [Nakatanido](https://www.google.com/maps/search/?api=1&query=Nakatanidou+Nara) yomogi mochi (watch them pound) · park-side noodles · combini. |
-| 14:00–15:00 | [**Kasuga Taisha**](https://www.google.com/maps/search/?api=1&query=Kasuga+Taisha) (optional) | 06:30–17:00 | — | Lantern shrine in the woods. Optional. |
-| 15:30 | [Nara](https://www.google.com/maps/search/?api=1&query=Kintetsu+Nara+Station) → [Kyoto](https://www.google.com/maps/search/?api=1&query=Kyoto+Station) | ~45 min | — | Pack tonight. |
+| 07:00–09:55 | [**Fushimi Inari**](https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha) | grounds always | 20 min to Kyoto St | **About 3 h** for the summit and back, with stops. Side trails are longer and miss the Nara train. Empty at 07:00. |
+| 10:15 | [Kyoto Station](https://www.google.com/maps/search/?api=1&query=Kyoto+Station) → [Nara](https://www.google.com/maps/search/?api=1&query=Kintetsu+Nara+Station) | ~45 min | — | JR Nara or Kintetsu Nara (Kintetsu drops closer to the park). |
+| 11:00–12:15 | [**Nara Park · deer**](https://www.google.com/maps/search/?api=1&query=Nara+Park) | always | 8 min | **About 75 min** in the park. Sika deer bow for shika-senbei (¥200). Don’t tease. They bite bags. |
+| 12:15–14:00 | [**Tōdai-ji Great Buddha**](https://www.google.com/maps/search/?api=1&query=Todai-ji) | 08:00–16:30 / 17:00 | 10 min | Huge wooden hall, 15 m bronze Buddha. **About 1 h 45 min** inside and around the hall. |
+| **14:00–15:00** | [**Lunch window · Nara**](https://www.google.com/maps/search/?api=1&query=Naramachi) | — | 10 min | [Nakatanido](https://www.google.com/maps/search/?api=1&query=Nakatanidou+Nara) yomogi mochi (watch them pound) · park-side noodles · combini. |
+| 15:00–16:15 | [**Kasuga Taisha**](https://www.google.com/maps/search/?api=1&query=Kasuga+Taisha) (optional) | 06:30–17:00 | — | Lantern shrine in the woods. **About 75 min.** |
+| 16:30 | [Nara](https://www.google.com/maps/search/?api=1&query=Kintetsu+Nara+Station) → [Kyoto](https://www.google.com/maps/search/?api=1&query=Kyoto+Station) | ~45 min | — | Pack tonight. |
 
 **Skip-Nara backup:** Tofuku-ji (09:00–16:00) → lunch → Sanjusangen-do (1,001 Kannon) → Kamo River.
 
-**Dinner · hostel** — Nishiki leftovers · Pontocho · 🥩 [Katsugyu](https://www.google.com/maps/search/?api=1&query=Gyukatsu+Kyoto+Katsugyu) · combini.
+**Evening · back from Nara ~17:15**
+
+| Track | What it's like |
+|---|---|
+| **Gion · 18:00–21:30** | [Yasaka](https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto), [Hanamikoji](https://www.google.com/maps/search/?api=1&query=Hanamikoji+Kyoto), [Shirakawa](https://www.google.com/maps/search/?api=1&query=Shirakawa+Gion+Kyoto), the [Kamo](https://www.google.com/maps/search/?api=1&query=Kamo+River+Kyoto), then [Pontocho](https://www.google.com/maps/search/?api=1&query=Pontocho+Kyoto) / [Kiyamachi](https://www.google.com/maps/search/?api=1&query=Kiyamachi+Kyoto). Dinner is on this walk. |
+| [**Gion Corner**](https://www.google.com/maps/search/?api=1&query=Gion+Corner+Kyoto) | The show, if you want a performance instead of the long walk. Check that night’s time. |
+
+Nishiki leftovers · 🥩 [Katsugyu](https://www.google.com/maps/search/?api=1&query=Gyukatsu+Kyoto+Katsugyu) · combini, if you skip both.
 
 Nara souvenirs if anyone wants them: shika-senbei box (don’t), deer keychains at the park stalls, Tōdai-ji goshuin.
 
@@ -680,10 +740,10 @@ Kyoto out **10:30–11:00**. [NICO](https://www.google.com/maps/search/?api=1&qu
 
 | Time | Stop | Hours | Next | What it's like |
 |---|---|---|---|---|
-| ~11:30 | Kyoto → [Namba](https://www.google.com/maps/search/?api=1&query=Namba+Station) | 30–45 min | — | Bags in a locker if check-in isn’t open |
+| ~11:30 | Kyoto → [Namba](https://www.google.com/maps/search/?api=1&query=Namba+Station) | 30–45 min | — | Bags in a locker until check-in |
+| 12:15–13:45 | [**Kuromon**](https://www.google.com/maps/search/?api=1&query=Kuromon+Ichiba+Osaka) = lunch window | most 09:00–17:00 | 12 min | Covered market while the stalls are still cooking. **90 min** is the long meal. After 15:00 the grills thin out. |
 | 15:00 | [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba) check-in | 15:00–22:00 | 12 min | Hotel is south of Dotonbori |
-| 15:15–16:45 | [**Kuromon**](https://www.google.com/maps/search/?api=1&query=Kuromon+Ichiba+Osaka) = lunch window | most 09:00–17:00 | 10 min | Covered market. Grill-to-order. Winding down by 16:30. |
-| 17:00–21:00 | [**Dotonbori**](https://www.google.com/maps/search/?api=1&query=Dotonbori) | always | 18 min home | Neon, [Glico](https://www.google.com/maps/search/?api=1&query=Glico+sign+Dotonbori), canal. Eat here. |
+| 16:00–21:30 | [**Dotonbori**](https://www.google.com/maps/search/?api=1&query=Dotonbori) | always | 18 min home | Neon, [Glico](https://www.google.com/maps/search/?api=1&query=Glico+sign+Dotonbori), canal. **About 5 h 30 min** for the walk, one meal, and a slow lap. |
 
 **Kuromon — what to get (eat now)**
 
@@ -712,6 +772,10 @@ Kyoto out **10:30–11:00**. [NICO](https://www.google.com/maps/search/?api=1&qu
 **Shop** — Amerikamura / [Triangle Park](https://www.google.com/maps/search/?api=1&query=Triangle+Park+Amerikamura) streetwear, 15 min NW of Dotonbori. Optional.
 
 **Dinner** is the Dotonbori list above. Combini on [Ebisubashi](https://www.google.com/maps/search/?api=1&query=Ebisubashi).
+
+**If you are not going to a club · 21:30–23:00**
+
+[Hozenji](https://www.google.com/maps/search/?api=1&query=Hozenji+Yokocho+Osaka), the lantern lane, then [Shinsaibashi](https://www.google.com/maps/search/?api=1&query=Shinsaibashi). Quieter than another lap of the Glico crowd. Club or this walk.
 
 ### Night · one club · from 22:00
 
@@ -747,21 +811,25 @@ Early night. Flight tomorrow morning.
 
 | Time | Stop | Hours | From [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba) | What it's like |
 |---|---|---|---|---|
-| 09:30–12:00 | [**Shinsekai**](https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka) + [**Tsutenkaku**](https://www.google.com/maps/search/?api=1&query=Tsutenkaku) | always · tower paid | **10 min walk** | Retro neon, kushikatsu alleys, billboard tower. **Skip if you did it last night.** |
-| **12:00–13:15** | [**Lunch window · Shinsekai**](https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka) | — | — | [**Daruma**](https://www.google.com/maps/search/?api=1&query=Daruma+kushikatsu+Shinsekai) (pork + 🥩) · [Janjan-yokocho](https://www.google.com/maps/search/?api=1&query=Janjan+Yokocho+Shinsekai) snacks · 🌱 · combini |
-| 13:30–16:30 | **One** afternoon pick | see below | then home | — |
+| 09:30–12:40 | [**Shinsekai**](https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka) + [**Tsutenkaku**](https://www.google.com/maps/search/?api=1&query=Tsutenkaku) | always · tower paid | **10 min walk** | Retro neon, kushikatsu alleys, billboard tower. **About 3 h.** Skip if you did it last night. |
+| **12:40–13:50** | [**Lunch window · Shinsekai**](https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka) | — | — | [**Daruma**](https://www.google.com/maps/search/?api=1&query=Daruma+kushikatsu+Shinsekai) (pork + 🥩) · [Janjan-yokocho](https://www.google.com/maps/search/?api=1&query=Janjan+Yokocho+Shinsekai) snacks · 🌱 · combini |
+| 14:00–17:00 | **One** afternoon pick | see below | then home | **3 h.** One place, slow. |
 | **18:00–19:30** | [**Dinner window · Namba**](https://www.google.com/maps/search/?api=1&query=Namba+Station) | — | 10–15 min | Dotonbori leftovers · 🌱 [Paprika](https://www.google.com/maps/search/?api=1&query=Paprika+vegan+restaurant+Osaka+Namba) · CoCo · Saizeriya · combini. Pack tonight. |
 
 Afternoon pick (one):
 
 | Pick | Hours | Transit | What it's like |
 |---|---|---|---|
-| [**Osaka Castle**](https://www.google.com/maps/search/?api=1&query=Osaka+Castle) | 09:00–17:00 | ~25 min | Keep + park. JO-TERRACE lunch if you swap this to morning. |
+| [**Osaka Castle**](https://www.google.com/maps/search/?api=1&query=Osaka+Castle) | 09:00–17:00 | ~25 min | Keep and park are about **1.5–2.5 h**. JO-TERRACE lunch if you swap this to morning. |
 | [**Umeda Sky**](https://www.google.com/maps/search/?api=1&query=Umeda+Sky+Building) | 09:30–22:30 | ~25 min | Floating observatory. Hankyu depachika if you want a last basement. |
 | [**Amerikamura**](https://www.google.com/maps/search/?api=1&query=Amerikamura+Osaka) / [**Shinsaibashi**](https://www.google.com/maps/search/?api=1&query=Shinsaibashi) | shops ~11:00–20:00 | ~15 min | Streetwear. [**Nintendo OSAKA**](https://www.google.com/maps/search/?api=1&query=Nintendo+OSAKA) if PARCO 6F was a miss. |
 | Sleep / soak | — | — | Massage near [Namba](https://www.google.com/maps/search/?api=1&query=Namba+Station). Fine. |
 
-**Fork B — [USJ](https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan).** Book Super Nintendo World. Leave [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba) ~08:00. Whole day. Dinner back in [Namba](https://www.google.com/maps/search/?api=1&query=Namba+Station).
+**Optional · city fork · 19:30–21:00**
+
+[Dotonbori](https://www.google.com/maps/search/?api=1&query=Dotonbori) canal, [Ebisubashi](https://www.google.com/maps/search/?api=1&query=Ebisubashi), [Hozenji](https://www.google.com/maps/search/?api=1&query=Hozenji+Yokocho+Osaka), [Namba Parks](https://www.google.com/maps/search/?api=1&query=Namba+Parks). Flight is Monday morning.
+
+**Fork B — [USJ](https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan).** Book Super Nintendo World. Leave [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba) ~08:00. Whole day. Dinner back in [Namba](https://www.google.com/maps/search/?api=1&query=Namba+Station), then the hotel.
 
 **Also in this area — not on the clock**
 
@@ -776,7 +844,7 @@ Castle, Umeda Sky, Amerikamura, and [USJ](https://www.google.com/maps/search/?ap
 
 ## Day 13 — Mon 26 Oct — [KIX](https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport) morning
 
-Checkout [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba). No sightseeing.
+Checkout [NICO](https://www.google.com/maps/search/?api=1&query=NICO+Hotel+Osaka+Namba). No sightseeing. No evening.
 
 | | Rule |
 |---|---|

@@ -17,6 +17,13 @@
   let cache = {};
   let onScroll = null;
 
+  function ordinal(n) {
+    const v = n % 100;
+    if (v >= 11 && v <= 13) return n + "th";
+    const suffix = { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th";
+    return n + suffix;
+  }
+
   function slug(text) {
     return text
       .toLowerCase()
@@ -120,8 +127,8 @@
       if (!heading) return;
       const a = document.createElement("a");
       a.href = "#" + section.id;
-      const day = heading.textContent.match(/^Day\s+(\d+)\s+—\s+(\w+)/);
-      if (day) a.textContent = day[1] + " " + day[2];
+      const day = heading.textContent.match(/^Day\s+\d+\s+—\s+(\w+)\s+(\d+)\s+(\w+)/);
+      if (day) a.textContent = ordinal(Number(day[2])) + " " + day[3] + " (" + day[1] + ")";
       else if (section.id === "overview") a.textContent = "Start";
       else a.textContent = heading.textContent.split(/[—(]/)[0].trim();
       rail.appendChild(a);

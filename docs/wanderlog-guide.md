@@ -87,10 +87,11 @@ Tokyo Metropolitan Government Building
 **Schedule / notes**
 | Time | Place | Note |
 |---|---|---|
-| 08:00 | Kaminarimon / Nakamise / Sensō-ji | Empty if early |
-| 10:20 | Kappabashi | Knives + plastic food |
-| 11:30 | Ameyoko + lunch | Leave Ueno by 13:30 |
-| 16:20 | Met Gov South 45F | Sunset 17:06 · free |
+| 07:00 | Kaminarimon / Nakamise / Sensō-ji | Sensō-ji until 09:00 |
+| 10:45 | Kappabashi | Until 12:25 · knives + plastic food |
+| 12:45 | Ameyoko | Then Ueno. Leave the park by 14:15 |
+| 16:20 | Met Gov South 45F | Sunset 17:06 · stay until 18:15 |
+| 20:30 | Golden Gai | Until 22:45 |
 
 ---
 
@@ -120,8 +121,8 @@ Tokyo Tower
 | 12:00 | Lunch · Shibuya | Then shops |
 | 13:00 | PARCO / Hands / Donki | Nintendo and Pokémon are Shibuya-only. Skip Uniqlo and Bic here |
 | 15:25 | UNIQLO Ginza | Flagship once · then Itoya and Bic Yurakucho |
-| 16:20 | Tokyo Tower | Main deck · dusk |
-| 20:30 | Roppongi Hills → Midtown | Drink inside. Ignore street touts |
+| 16:20 | Tokyo Tower | Main deck until 18:20 |
+| 21:00 | Roppongi Hills → Midtown | Until 23:30. Drink inside. Ignore street touts |
 
 ---
 
@@ -143,10 +144,11 @@ Lake Kawaguchi
 | Time | Place | Note |
 |---|---|---|
 | 06:45 | Hotel → Shinjuku Keio | Keio line, not JR |
-| 08:00 | Trail 1 | Yakuo-in · summit 599 m |
-| 14:30 | Takaosan Onsen | Soak at the station |
+| 08:00 | Trail 1 | Down about 15:10 · then onsen |
+| 15:10 | Takaosan Onsen | Soak at the station |
 | 19:30 | Dinner · Nihonbashi | Early night |
-| — | **Alt** Chureito + Kawaguchiko | First bus 06:45 · pagoda ~09:10 · lake · bus back ~18:20 |
+| 20:30 | Optional · Akiba | Until 22:30 · or Marunouchi · or Nihonbashi walk |
+| — | **Alt** Chureito + Kawaguchiko | Pagoda 09:10–11:00 · lake until 13:45 · bus back ~18:20 |
 
 ---
 
@@ -170,15 +172,15 @@ Yoshiwara
 | Time | Place | Note |
 |---|---|---|
 | 06:00 | Imperial Palace outer loop | ~5 km · then shower |
-| 10:30 | Maidreamin Idol Street | Maid cafe · ¥880/hour + one order |
-| 13:00 | Muscle Kitchen | Lunch · muscle-staff cafe |
-| 14:30 | Nakano Broadway | Mandarake HQ |
-| 19:30 | Yoshiwara | 18+ · hotel by 00:30 · Hakone 07:30 |
+| 10:30 | Maidreamin Idol Street | Until 12:00 · ¥880/hour + one order |
+| 13:15 | Muscle Kitchen | Lunch · muscle-staff cafe |
+| 14:45 | Nakano Broadway | Until 17:30 · Mandarake HQ |
+| 19:30 | Yoshiwara | 18+ · hotel by 00:30 · out 06:45 |
 
 ---
 
 ### Day 6 — Mon 19 Oct · Hakone
-**Headline:** Loop · Senkei by 19:00
+**Headline:** Yumoto 08:00–08:30 · Senkei by 19:00
 
 **Paste list**
 ```
@@ -194,11 +196,15 @@ Senkei
 **Schedule / notes**
 | Time | Place | Note |
 |---|---|---|
-| 07:30 | Tokyo Station | Shinkansen, not Romancecar |
-| 10:00 | Open-Air Museum | Outdoor sculptures |
-| 12:00 | Ropeway + Owakudani | Wind can stop the ropeway |
-| 14:30 | Lake Ashi + shrine | Then Yumoto |
-| 18:30 | Senkei | In by 19:00 |
+| 06:45 | Hotel | Tokyo Station by 07:10 |
+| 07:27 | Kodama 805 | Odawara 08:00, then Tozan |
+| 08:15 | Hakone-Yumoto | Lockers, start the loop |
+| 09:05 | Open-Air Museum | Until 12:00 |
+| 12:20 | Ropeway + Owakudani | 45–60 min on the ground |
+| 13:45 | Lake Ashi boat | 30–40 min crossing |
+| 14:40 | Hakone Shrine | Until 16:10 |
+| 16:15 | Bus to Yumoto | Allow 60–90 min |
+| 18:00 | Senkei | In by 19:00 |
 
 ---
 
@@ -221,33 +227,13 @@ Pontocho Alley
 | 12:00 | Yumoto → Odawara | Checkout 11:00 |
 | 13:30 | Odawara → Kyoto | Booked · arrive ~15:35 |
 | 16:15 | Nishiki | Stalls to ~18:00 |
-| 17:30 | Yasaka + Gion | Then Pontocho dinner |
+| 17:30 | Yasaka + Gion | Until 19:15 · then Pontocho dinner |
+| 20:30 | Optional · Kiyamachi | Takase River · Kamo · until 22:00 |
 
 ---
 
-### Day 8 — Wed 21 Oct · Arashiyama · teamLab Biovortex
-**Headline:** Bamboo 08:00 · teamLab afternoon
-
-**Paste list**
-```
-Arashiyama Bamboo Grove
-Tenryu-ji
-To-ji Temple
-teamLab Biovortex Kyoto
-```
-
-**Schedule / notes**
-| Time | Place | Note |
-|---|---|---|
-| 08:00 | Bamboo Grove | Empty before 08:30 |
-| 08:30 | Tenryu-ji | Garden next to the grove |
-| 11:30 | Tōji *or* river / monkeys | Market closes 16:00 |
-| 16:00 | teamLab Biovortex | Book a slot · Hachijo |
-
----
-
-### Day 9 — Thu 22 Oct · Higashiyama
-**Headline:** Kiyomizu · Ninen/Sannen · Kodai-ji
+### Day 8 — Wed 21 Oct · Higashiyama · Tō-ji · teamLab
+**Headline:** Kiyomizu 08:00 · Tō-ji 14:30 · teamLab 16:00
 
 **Paste list**
 ```
@@ -255,17 +241,50 @@ Kiyomizu-dera
 Ninenzaka
 Sannenzaka
 Kodai-ji
-Yasaka Shrine
-Pontocho Alley
+To-ji Temple
+teamLab Biovortex Kyoto
 ```
 
 **Schedule / notes**
 | Time | Place | Note |
 |---|---|---|
-| 08:00 | Kiyomizu-dera | Early = no crowd |
-| 09:20 | Ninen / Sannen-zaka | Stone lanes downhill |
-| 10:30 | Kodai-ji | Garden + small bamboo |
-| — | Fork | More temples **or** Kurama fire (leave east by 13:00) |
+| 08:00 | Kiyomizu-dera | Until 09:50 |
+| 10:00 | Ninen / Sannen-zaka | Until 11:20 |
+| 11:30 | Kodai-ji | Garden · until 12:45 |
+| 12:45 | Lunch | Then ~30 min to Tō-ji |
+| 14:30 | Tō-ji Kōbō-ichi | 40 min · market closes 16:00 |
+| 16:00 | teamLab Biovortex | Until 19:00 · Hachijo |
+| — | Optional · Kyoto Station | Staircase · Skyway · Tower exterior · or Pontocho |
+
+---
+
+### Day 9 — Thu 22 Oct · Sagano train · bamboo · bikes
+**Headline:** Grove 07:15 · train 09:02 · sunset 17:14 · bamboo light-up 18:00
+
+**Paste list**
+```
+Arashiyama Bamboo Grove
+Torokko Saga Station
+Umahori Station
+Togetsukyo Bridge
+Arashiyama Tsukidoro
+Kimono Forest
+```
+
+**Schedule / notes**
+| Time | Place | Note |
+|---|---|---|
+| 07:15 | Bamboo Grove | Until 07:40 · station by 08:00 |
+| 09:02 | Sagano Romantic Train | To Kameoka 09:25 · ¥880 · Car 5 open |
+| 09:35 | JR Umahori → Saga-Arashiyama | 5 min walk · ~7 min · about ¥200 |
+| 10:15 | Bikes | Until 12:45 · park outside the grove |
+| 12:45 | Lunch | Until 14:15 · near Togetsukyo |
+| 16:20 | Katsura · Togetsukyo | Sunset 17:14 · until 17:45 |
+| 17:45 | Walk to the grove | Don’t rush |
+| 18:00 | Arashiyama Tsukidoro | Until 19:15 · ¥2,000 advance · same-day ¥1,500 cash |
+| 19:15 | Kimono Forest | Randen station · free · lit until 21:00 |
+| 19:35 | Dinner · Arashiyama | Until 20:45 |
+| 20:45 | Back to Kyoto | Randen toward Shijo, or JR Saga-Arashiyama |
 
 ---
 
@@ -283,10 +302,11 @@ Kasuga Taisha
 **Schedule / notes**
 | Time | Place | Note |
 |---|---|---|
-| 07:00 | Fushimi Inari | Do the climb |
-| 09:30 | Kyoto → Nara | ~45 min |
-| 10:30 | Nara Park + Tōdai-ji | Deer + Great Buddha |
-| 15:30 | Nara → Kyoto | Pack tonight |
+| 07:00 | Fushimi Inari | Summit and back by 09:55 |
+| 10:15 | Kyoto → Nara | ~45 min |
+| 11:00 | Nara Park + Tōdai-ji | Deer, then the hall until 14:00 |
+| 16:30 | Nara → Kyoto | Back ~17:15 |
+| 18:00 | Optional · Gion | Yasaka · Hanamikoji · Kamo · Pontocho until 21:30 |
 
 ---
 
@@ -305,9 +325,9 @@ club JOULE Osaka
 **Schedule / notes**
 | Time | Place | Note |
 |---|---|---|
-| 10:30 | Kyoto → Namba | NICO in at 15:00 |
-| 15:15 | Kuromon | Lunch window · stalls wind down 16:30 |
-| 17:00 | Dotonbori | Neon + dinner |
+| 10:30 | Kyoto → Namba | Locker until NICO at 15:00 |
+| 12:15 | Kuromon | Lunch while the stalls are open · until 13:45 |
+| 16:00 | Dotonbori | Until 21:30 · neon + dinner |
 | 22:00 | One club | JOULE, PURE, or Triangle. Out by ~01:30 |
 
 ---
@@ -328,8 +348,8 @@ Universal Studios Japan
 **Schedule / notes**
 | Time | Place | Note |
 |---|---|---|
-| 09:30 | Shinsekai + Tsutenkaku | 10 min from NICO |
-| 13:30 | One afternoon pick | Castle **or** Umeda **or** Amerikamura |
+| 09:30 | Shinsekai + Tsutenkaku | Until 12:40 · 10 min from NICO |
+| 14:00 | One afternoon pick | Until 17:00 · Castle **or** Umeda **or** Amerikamura |
 | — | USJ fork | Whole day if booked |
 | 18:00 | Dinner · Namba | Pack tonight |
 

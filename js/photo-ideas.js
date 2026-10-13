@@ -1,5 +1,5 @@
 (function () {
-  const DATA = "photos/ideas.json?v=2";
+  const DATA = "photos/ideas.json?v=6";
   let dataPromise = null;
   let dialog = null;
 
@@ -60,18 +60,19 @@
 
   function shotHtml(place, shot) {
     const steps = (shot.how || []).map((line) => `<li>${esc(line)}</li>`).join("");
-    const credit = shot.credit
-      ? `<p class="photo-credit"><a href="${esc(shot.source)}" target="_blank" rel="noopener">${esc(shot.credit)}</a> · ${esc(shot.license || "Wikimedia Commons")}</p>`
-      : `<p class="photo-credit"><a href="${esc(shot.source)}" target="_blank" rel="noopener">Wikimedia Commons</a></p>`;
+    const who = shot.person ? " · Person" : "";
     return `<article class="shot">
-      <p class="shot-kicker">${esc(place.name)}</p>
+      <p class="shot-kicker">${esc(place.name)}${who}</p>
       <h2>${esc(shot.look)}</h2>
-      <img src="${esc(shot.image)}" alt="">
       <section><h3>Angle</h3><p>${esc(shot.angle)}</p></section>
       <section><h3>Light</h3><p>${esc(shot.light)}</p></section>
       <section><h3>How</h3><ol>${steps}</ol></section>
-      ${credit}
     </article>`;
+  }
+
+  function cardInner(shot) {
+    const who = shot.person ? `<em class="who">Person</em>` : "";
+    return `${who}<strong>${esc(shot.look)}</strong><span>${esc(shot.stand || "")}</span>`;
   }
 
   function openShot(place, shot, back) {
@@ -86,7 +87,7 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className = "photo-card";
-    button.innerHTML = `<img src="${esc(shot.image)}" alt="" loading="lazy"><span>${esc(shot.look)}</span>`;
+    button.innerHTML = cardInner(shot);
     button.addEventListener("click", () => openShot(place, shot, place.name));
     return button;
   }
@@ -132,7 +133,7 @@
         summary.textContent = `Photo ideas · ${place.name} · ${place.shots.length}`;
         const note = document.createElement("p");
         note.className = "photo-note";
-        note.textContent = "Reference photos of the place. Open one for the angle, the light, and how to take it.";
+        note.textContent = "Open a frame for where to stand, the light at the hour you are there, and how to take it. Person means someone from your group is the subject.";
         const grid = document.createElement("div");
         grid.className = "photo-grid";
         details.append(summary, note, grid);
@@ -172,7 +173,7 @@
             const link = document.createElement("a");
             link.className = "photo-card";
             link.href = `#${place.id}/${shot.id}`;
-            link.innerHTML = `<img src="${esc(shot.image)}" alt="" loading="lazy"><span>${esc(shot.look)}</span>`;
+            link.innerHTML = cardInner(shot);
             grid.appendChild(link);
           });
           return;
@@ -192,8 +193,8 @@
         const cards = group.places.map((place) => {
           const cover = place.shots[0];
           return `<a class="place-card" href="#${esc(place.id)}">
-            <img src="${esc(cover.image)}" alt="" loading="lazy">
-            <span><b>${esc(place.name)}</b><small>${place.shots.length} frames</small></span>
+            <b>${esc(place.name)}</b>
+            <small>${place.shots.length} frames · ${esc(cover.look)}</small>
           </a>`;
         }).join("");
         return `<section class="place-group"><h2>${esc(group.day)}</h2><div class="place-list">${cards}</div></section>`;

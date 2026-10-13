@@ -307,7 +307,7 @@ You already do both the same day. Use them for different things.
 | Knife / ceramic | Only if Kappabashi was skipped | [Doguyasuji](https://www.google.com/maps/search/?api=1&query=Doguyasuji+Osaka) later. Compare the Kappabashi price |
 | Street snacks | Eat there | Walking while eating is the thing shops will stop you for |
 
-### Tōji 21st (Day 8, closes 16:00)
+### Tōji 21st (Day 8, 14:30–15:10, closes 16:00)
 
 **Get:** vintage kimono or haori, about ¥1,000–5,000, cash. Open it in daylight. Check stains, smell, and holes.  
 **Siblings:** [2nd STREET](https://www.google.com/maps/search/?api=1&query=2nd+STREET) and Ragtag any day, fixed prices. Shimokitazawa for clothes, not for kimono. Teramachi vintage if this market is skipped.
@@ -349,5 +349,5 @@ Buy it the day you are already there. Do not cross the city for a second branch.
 | Used camera | Map Camera Day 2, or Fujiya Day 5 | Kitamura · Donki cameras | The other of those two |
 | Anime / figures | Day 5 Akiba new, Nakano used | Do not buy the same figure in both | Nakano if you only want used |
 | Tea | Ippodo, Kyoto | Nishiki snacks are extra, not a second tin | Nishiki KitKat only |
-| Vintage kimono | Day 8 Tōji, closes 16:00, cash | [2nd STREET](https://www.google.com/maps/search/?api=1&query=2nd+STREET) · Ragtag | Teramachi / Shimokitazawa |
+| Vintage kimono | Day 8 Tō-ji, 40 min at 14:30, cash | [2nd STREET](https://www.google.com/maps/search/?api=1&query=2nd+STREET) · Ragtag | Teramachi / Shimokitazawa |
 | Tokyo flea / thrift | Day 4 Old New (17–18) · Day 5 Hanazono Sunday · Shimokita any day | Tōji · [2nd STREET](https://www.google.com/maps/search/?api=1&query=2nd+STREET) | Nakano Central Park flea is 24–25 Oct, while you are in Osaka |

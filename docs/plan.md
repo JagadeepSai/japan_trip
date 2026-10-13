@@ -15,10 +15,10 @@ Flights are booked. Every timed anchor below is loaded into the app (Plan → Ti
 | 3 | Fri Oct 16 | Tokyo | **Shibuya Sky morning** · shops after lunch · Ginza · Tokyo Tower · Roppongi |
 | 4 | Sat Oct 17 | Tokyo | Takao · onsen — **or Chureito** (06:45 bus, pagoda ~09:10) |
 | 5 | Sun Oct 18 | Tokyo | **Palace run 06:00** · Akiba (maid cafe, Muscle Kitchen) · Nakano · Yoshiwara |
-| 6 | Mon Oct 19 | Hakone | Loop · Senkei by 19:00 |
+| 6 | Mon Oct 19 | Hakone | Yumoto 08:00–08:30 · loop · Senkei by 19:00 |
 | 7 | Tue Oct 20 | → Kyoto | **13:30 shinkansen** · Nishiki · Gion |
-| 8 | Wed Oct 21 | Kyoto | Arashiyama 08:00 · **teamLab Biovortex** |
-| 9 | Thu Oct 22 | Kyoto | Higashiyama · more temples **or** Kurama fire |
+| 8 | Wed Oct 21 | Kyoto | Kiyomizu 08:00 · Tō-ji · **teamLab Biovortex** |
+| 9 | Thu Oct 22 | Kyoto | Grove 07:15 · Sagano train 09:02 · sunset 17:14 · bamboo light-up 18:00 |
 | 10 | Fri Oct 23 | Kyoto | Fushimi dawn · **Nara deer park + Tōdai-ji** |
 | 11 | Sat Oct 24 | Osaka | Kuromon · Dotonbori · **one club** (JOULE / PURE / Triangle) |
 | 12 | Sun Oct 25 | Osaka | Full day · Shinsekai + one more **or** USJ · NICO night 2 |
@@ -29,13 +29,14 @@ Flights are booked. Every timed anchor below is loaded into the app (Plan → Ti
 Live day plan: [`docs/area-walks.md`](area-walks.md). Shop floors: [`docs/stores.md`](stores.md).
 
 - **D1** land **16:05** · shoes optional (out by 19:45)
-- **D2** Met Gov South **16:20** for sunset **17:06** · leave Ueno by **13:30**
+- **D2** Met Gov South **16:20** for sunset **17:06** · leave Ueno by **14:15**
 - **D3** **Shibuya Sky morning slot** · Tokyo Tower dusk · Roppongi after
 - **D4** Takao, or Chureito on the **06:45** bus (pagoda ~09:10). Friday night stays in Tokyo
-- **D5** Palace run **06:00** · Yoshiwara ends so you are back by **00:30** · Hakone 07:30 next morning
-- **D6** Senkei **by 19:00** or dinner dies
+- **D5** Palace run **06:00** · Yoshiwara ends so you are back by **00:30** · out **06:45** for Kodama 07:27
+- **D6** Yumoto **08:00–08:30** · Senkei **by 19:00** or the dinner sitting is lost
 - **D7** Odawara → Kyoto **13:30** booked
-- **D8** bamboo **08:00** · teamLab Biovortex afternoon
+- **D8** Kiyomizu **08:00** · Tō-ji **14:30** · teamLab **16:00**
+- **D9** grove **07:15** · Sagano train **09:02** (earlier if the board has one) · Katsura sunset **17:14** · Tsukidoro **18:00**
 - **D10** Fushimi **07:00** then Nara
 - **D13** KIX **morning 26 Oct** · leave Namba ~3.5 h before dep
 

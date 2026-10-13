@@ -303,6 +303,21 @@ code {
   td:first-child { white-space: normal; }
 }
 
+.map-embed {
+  margin: 0.5rem 0 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ebe4d8;
+}
+
+.map-embed iframe {
+  display: block;
+  width: 100%;
+  height: min(70vh, 480px);
+  border: 0;
+}
+
 .photos {
   margin: 0.35rem 0 1rem;
   border: 1px solid var(--line);
@@ -335,9 +350,9 @@ code {
 }
 
 .photo-card {
+  position: relative;
   display: block;
-  padding: 0;
-  border: 0;
+  padding: 0.7rem 0.75rem 0.8rem;
   background: var(--card);
   color: inherit;
   font: inherit;
@@ -349,20 +364,33 @@ code {
   border: 1px solid var(--line);
 }
 
-.photo-card img {
+.photo-card .who {
+  display: inline-block;
+  margin: 0 0 0.4rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  background: #1c1915;
+  color: #f6f1e8;
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.photo-card strong {
   display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  background: #ebe4d8;
+  font-size: 0.95rem;
+  line-height: 1.3;
 }
 
 .photo-card span {
   display: block;
-  padding: 0.4rem 0.5rem 0.5rem;
-  font-size: 0.86rem;
-  font-weight: 650;
-  line-height: 1.3;
+  padding: 0.28rem 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 400;
+  line-height: 1.35;
 }
 
 .photo-dialog {
@@ -438,28 +466,17 @@ code {
 }
 
 .place-card {
-  display: grid;
-  grid-template-columns: 108px 1fr;
-  gap: 0.7rem;
-  align-items: center;
+  display: block;
+  padding: 0.75rem 0.9rem;
   text-decoration: none;
   color: inherit;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
-  overflow: hidden;
 }
 
-.place-card img {
-  width: 108px;
-  height: 108px;
-  object-fit: cover;
-  display: block;
-}
-
-.place-card span { display: block; padding-right: 0.7rem; }
 .place-card b { display: block; font-size: 1.05rem; }
-.place-card small { color: var(--muted); font-size: 0.85rem; }
+.place-card small { display: block; margin-top: 0.15rem; color: var(--muted); font-size: 0.85rem; }
 
 .nav-photos {
   text-decoration: none;
