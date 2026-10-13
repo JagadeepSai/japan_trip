@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Japan 2026 · Itinerary</title>
+  <meta name="description" content="Day-by-day Japan trip, 14–26 Oct 2026." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%A9%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,560;7..72,680&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/itinerary.css?v=4" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <p class="kicker">14–26 Oct 2026 · Tokyo → Hakone → Kyoto → Osaka</p>
+      <h1>Japan trip</h1>
+    </div>
+    <div class="tools">
+      <div class="tabs" role="tablist">
+        <button type="button" id="tab-plan" role="tab" aria-selected="true">Itinerary</button>
+        <button type="button" id="tab-stores" role="tab" aria-selected="false">Stores</button>
+      </div>
+      <a class="nav-photos" href="photos.html">Photos</a>
+      <label class="search">
+        <span class="sr">Search</span>
+        <input id="q" type="search" placeholder="Search stops" autocomplete="off" />
+      </label>
+    </div>
+    <nav id="rail" class="rail" aria-label="Sections"></nav>
+  </header>
+  <main id="doc"></main>
+  <p id="status" class="status" hidden></p>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script src="js/photo-ideas.js?v=2"></script>
+  <script src="js/itinerary-view.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+<name>Japan 2026 · Area walks</name>
+<description>Hotel-anchored walking routes. Pin notes include stay time (the gap) and the walk to the next stop.</description>
+
+    <Style id="style-hotel-tokyo">
+      <IconStyle>
+        <color>ff271811</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff271811</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-hotel-hakone">
+      <IconStyle>
+        <color>ff271811</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff271811</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-hotel-kyoto">
+      <IconStyle>
+        <color>ff271811</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff271811</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-hotel-osaka">
+      <IconStyle>
+        <color>ff271811</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff271811</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d1-arrival">
+      <IconStyle>
+        <color>ff3a7c0e</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff3a7c0e</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d2-asakusa">
+      <IconStyle>
+        <color>ff265cc4</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff265cc4</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d2-shinjuku">
+      <IconStyle>
+        <color>ff265cc4</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff265cc4</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d1-shoes">
+      <IconStyle>
+        <color>ff12349a</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff12349a</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d3-shibuya-morning">
+      <IconStyle>
+        <color>ff4d179d</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff4d179d</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d3-ginza-tower">
+      <IconStyle>
+        <color>ff7a48d4</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff7a48d4</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d4-takao">
+      <IconStyle>
+        <color>ff3a6b2f</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff3a6b2f</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d5-akiba">
+      <IconStyle>
+        <color>ff2e5c1a</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff2e5c1a</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d6-hakone">
+      <IconStyle>
+        <color>ff0953b4</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff0953b4</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d7-kyoto-eve">
+      <IconStyle>
+        <color>ffed3a7c</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ffed3a7c</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d8-arashiyama">
+      <IconStyle>
+        <color>ff6e760f</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff6e760f</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d9-higashiyama">
+      <IconStyle>
+        <color>ff39129f</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff39129f</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d10-fushimi-nara">
+      <IconStyle>
+        <color>ff1c1cb9</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff1c1cb9</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d11-osaka">
+      <IconStyle>
+        <color>ffd84e1d</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ffd84e1d</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d12-osaka">
+      <IconStyle>
+        <color>ffd84e1d</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ffd84e1d</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Style id="style-d13-kix">
+      <IconStyle>
+        <color>ff554133</color>
+        <scale>1.1</scale>
+        <Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>ff554133</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+<Folder><name>Hotels</name>
+<Placemark>
+        <name>Hotel LiVEMAX Nihonbashi-Koamicho</name>
+        <styleUrl>#style-hotel-tokyo</styleUrl>
+        <description>10-7 Nihonbashi-Koamicho, Chuo-ku, Tokyo 103-0016
+2026-10-14 15:00 → 2026-10-19 10:00
+</description>
+        <Point><coordinates>139.780836,35.68258,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Senkei</name>
+        <styleUrl>#style-hotel-hakone</styleUrl>
+        <description>Yumoto 592, Hakone 250-0311
+2026-10-19 15:00 → 2026-10-20 11:00
+</description>
+        <Point><coordinates>139.097633,35.229167,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Guesthouse Sign</name>
+        <styleUrl>#style-hotel-kyoto</styleUrl>
+        <description>568 Nakanomachi, Shimogyo, Kyoto 600-8032
+2026-10-20 16:00 → 2026-10-24 11:00
+</description>
+        <Point><coordinates>135.766767,35.00235,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>NICO Hotel Osaka Namba</name>
+        <styleUrl>#style-hotel-osaka</styleUrl>
+        <description>1-2-6 Shimodera, Osaka 556-0001
+2026-10-24 15:00 → 2026-10-26 morning
+</description>
+        <Point><coordinates>135.5107,34.661533,0</coordinates></Point>
+      </Placemark>
+</Folder>
+<Folder><name>10-14 · Nihonbashi arrive</name>
+<Placemark>
+        <name>1. Hotel LiVEMAX</name>
+        <styleUrl>#style-d1-arrival</styleUrl>
+        <description>Hours: check-in 15:00
+Stay 1h 30m
+End of this walk.
+</description>
+        <Point><coordinates>139.780836,35.68258,0</coordinates></Point>
+      </Placemark>
+</Folder>
+<Folder><name>10-15 · Asakusa · Kappabashi · Ueno</name>
+<Placemark>
+        <name>1. Kaminarimon</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Stay 15 min
+Then 2 min walk to next.
+Giant red lantern gate. Photo, then walk through.</description>
+        <Point><coordinates>139.79655,35.71107,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Nakamise</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Stay 20 min
+Then 4 min walk to next.
+Souvenir lane to the temple. Ningyo-yaki, senbei, cheap fans.</description>
+        <Point><coordinates>139.79665,35.71215,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Sensō-ji</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Hours: hall 06:00–17:00
+Stay 35 min
+Then 4 min walk to next.
+Tokyo’s oldest temple. Incense, main hall, pagoda.</description>
+        <Point><coordinates>139.79666,35.71477,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>4. Shin-Nakamise</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Hours: ~10:00–20:00
+Stay 15 min
+Then 8 min walk to next.
+Covered shopping arcade beside Nakamise — not a second temple.</description>
+        <Point><coordinates>139.7954,35.7128,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>5. Asakusa Menchi</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Hours: ~10:00–18:00
+Stay 25 min
+Then 10 min walk to next.
+Menchi-katsu at Kaminarimon. The Asakusa lunch. Opens around 10:00.</description>
+        <Point><coordinates>139.7964,35.71085,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>6. Kappabashi</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Hours: 10:00–17:00
+Stay 40 min
+Then 18 min walk to next.
+Chef-supply street: knives, plastic food, ceramics.</description>
+        <Point><coordinates>139.7886,35.7139,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>7. Ameyoko</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Hours: ~10:00–19:00
+Stay 40 min
+Then 8 min walk to next.
+Open-air market under the JR tracks. Lunch window here.</description>
+        <Point><coordinates>139.7745,35.7095,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>8. Ueno Park</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <description>Stay 40 min
+End of this walk.
+Park + pond next to Ameyoko. Sit, don’t museum-sprint.</description>
+        <Point><coordinates>139.7717,35.7148,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Asakusa · Kappabashi · Ueno</name>
+        <styleUrl>#style-d2-asakusa</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.79655,35.71107,0 139.79665,35.71215,0 139.79666,35.71477,0 139.7954,35.7128,0 139.7964,35.71085,0 139.7886,35.7139,0 139.7745,35.7095,0 139.7717,35.7148,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-15 · Shinjuku sunset</name>
+<Placemark>
+        <name>1. Shinjuku Gyoen (optional)</name>
+        <styleUrl>#style-d2-shinjuku</styleUrl>
+        <description>Hours: 09:00–16:30 last 16:00
+Stay 40 min
+Then 15 min walk to next.
+Drop if Ueno ran long. Deck matters more.</description>
+        <Point><coordinates>139.71,35.6852,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Tokyo Metropolitan Government Building South 45F</name>
+        <styleUrl>#style-d2-shinjuku</styleUrl>
+        <description>Hours: 09:30–22:00
+Stay 1h 20m
+End of this walk.
+Arrive 16:20. Sunset 17:06. Free.</description>
+        <Point><coordinates>139.69172,35.68962,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Shinjuku sunset</name>
+        <styleUrl>#style-d2-shinjuku</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.71,35.6852,0 139.69172,35.68962,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-14 · Ochanomizu shoes (optional)</name>
+<Placemark>
+        <name>1. Super Sports Xebio Ochanomizu</name>
+        <styleUrl>#style-d1-shoes</styleUrl>
+        <description>Hours: ~10:00–20:00
+Stay 35 min
+Then 5 min walk to next.
+</description>
+        <Point><coordinates>139.7652,35.6994,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Step Sports Tokyo</name>
+        <styleUrl>#style-d1-shoes</styleUrl>
+        <description>Stay 35 min
+End of this walk.
+</description>
+        <Point><coordinates>139.7668,35.6989,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Ochanomizu shoes (optional)</name>
+        <styleUrl>#style-d1-shoes</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.7652,35.6994,0 139.7668,35.6989,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-16 · Shibuya Sky morning + shops</name>
+<Placemark>
+        <name>1. Shibuya Sky</name>
+        <styleUrl>#style-d3-shibuya-morning</styleUrl>
+        <description>Hours: book morning slot · 10:00–22:30
+Stay 1h 10m
+Then 6 min walk to next.
+Evening sold out. Book before 12:00 if you can. 14F entrance.</description>
+        <Point><coordinates>139.70255,35.65803,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Scramble + MAGNET 7F</name>
+        <styleUrl>#style-d3-shibuya-morning</styleUrl>
+        <description>Stay 20 min
+Then 6 min walk to next.
+Free balcony after Sky, not instead.</description>
+        <Point><coordinates>139.70055,35.65905,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. PARCO Shibuya (Pokémon / Nintendo)</name>
+        <styleUrl>#style-d3-shibuya-morning</styleUrl>
+        <description>Hours: 11:00–21:00
+Stay 35 min
+Then 4 min walk to next.
+</description>
+        <Point><coordinates>139.6984,35.6618,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>4. Tokyu Hands Udagawacho</name>
+        <styleUrl>#style-d3-shibuya-morning</styleUrl>
+        <description>Hours: 10:00–21:00
+Stay 25 min
+Then 1 min walk to next.
+</description>
+        <Point><coordinates>139.6989,35.6608,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>5. mont-bell Shibuya</name>
+        <styleUrl>#style-d3-shibuya-morning</styleUrl>
+        <description>Hours: 10:30–21:00
+Stay 30 min
+Then 4 min walk to next.
+</description>
+        <Point><coordinates>139.6985,35.6606,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>6. MEGA Don Quijote Shibuya</name>
+        <styleUrl>#style-d3-shibuya-morning</styleUrl>
+        <description>Hours: 24h
+Stay 40 min
+End of this walk.
+</description>
+        <Point><coordinates>139.6982,35.6605,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Shibuya Sky morning + shops</name>
+        <styleUrl>#style-d3-shibuya-morning</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.70255,35.65803,0 139.70055,35.65905,0 139.6984,35.6618,0 139.6989,35.6608,0 139.6985,35.6606,0 139.6982,35.6605,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-16 · Ginza shops · Tokyo Tower dusk</name>
+<Placemark>
+        <name>1. UNIQLO Ginza</name>
+        <styleUrl>#style-d3-ginza-tower</styleUrl>
+        <description>Hours: ~11:00–21:00
+Stay 45 min
+Then 4 min walk to next.
+Heattech once.</description>
+        <Point><coordinates>139.7646,35.6714,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. MUJI Ginza</name>
+        <styleUrl>#style-d3-ginza-tower</styleUrl>
+        <description>Stay 20 min
+Then 3 min walk to next.
+</description>
+        <Point><coordinates>139.7655,35.6728,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Itoya Ginza</name>
+        <styleUrl>#style-d3-ginza-tower</styleUrl>
+        <description>Stay 20 min
+Then 6 min walk to next.
+Goshuin-cho + pen.</description>
+        <Point><coordinates>139.7658,35.6722,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>4. Bic Camera Yurakucho</name>
+        <styleUrl>#style-d3-ginza-tower</styleUrl>
+        <description>Stay 20 min
+Then 15 min walk to next.
+Cheap Seiko. Short if late for Tower.</description>
+        <Point><coordinates>139.7633,35.6752,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>5. Tokyo Tower</name>
+        <styleUrl>#style-d3-ginza-tower</styleUrl>
+        <description>Hours: ~09:00–22:30
+Stay 1h 10m
+End of this walk.
+Dusk. Arrive 16:20.</description>
+        <Point><coordinates>139.74543,35.65858,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Ginza shops · Tokyo Tower dusk</name>
+        <styleUrl>#style-d3-ginza-tower</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.7646,35.6714,0 139.7655,35.6728,0 139.7658,35.6722,0 139.7633,35.6752,0 139.74543,35.65858,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-17 · Mt. Takao</name>
+<Placemark>
+        <name>1. Keio Shinjuku</name>
+        <styleUrl>#style-d4-takao</styleUrl>
+        <description>Stay —
+Then 55 min train to next.
+</description>
+        <Point><coordinates>139.6994,35.6906,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Yakuo-in + summit</name>
+        <styleUrl>#style-d4-takao</styleUrl>
+        <description>Stay 4h
+Then 20 min walk to next.
+</description>
+        <Point><coordinates>139.2437,35.6254,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Takaosan Onsen Gokurakuyu</name>
+        <styleUrl>#style-d4-takao</styleUrl>
+        <description>Hours: ~10:00–23:00
+Stay 1h 10m
+End of this walk.
+</description>
+        <Point><coordinates>139.2705,35.642,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Mt. Takao</name>
+        <styleUrl>#style-d4-takao</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.6994,35.6906,0 139.2437,35.6254,0 139.2705,35.642,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-18 · Akihabara evening</name>
+<Placemark>
+        <name>1. Yodobashi Akiba</name>
+        <styleUrl>#style-d5-akiba</styleUrl>
+        <description>Hours: 09:30–22:00
+Stay 25 min
+Then 3 min walk to next.
+</description>
+        <Point><coordinates>139.77305,35.69868,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Radio Kaikan</name>
+        <styleUrl>#style-d5-akiba</styleUrl>
+        <description>Stay 25 min
+Then 3 min walk to next.
+</description>
+        <Point><coordinates>139.77172,35.69848,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Animate</name>
+        <styleUrl>#style-d5-akiba</styleUrl>
+        <description>Stay 20 min
+Then 2 min walk to next.
+</description>
+        <Point><coordinates>139.77128,35.69985,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>4. Mandarake Complex</name>
+        <styleUrl>#style-d5-akiba</styleUrl>
+        <description>Stay 25 min
+Then 2 min walk to next.
+</description>
+        <Point><coordinates>139.77105,35.70018,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>5. Trader</name>
+        <styleUrl>#style-d5-akiba</styleUrl>
+        <description>Stay 20 min
+Then 2 min walk to next.
+</description>
+        <Point><coordinates>139.7712,35.7004,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>6. Taito Station / GiGO</name>
+        <styleUrl>#style-d5-akiba</styleUrl>
+        <description>Stay 30 min
+End of this walk.
+</description>
+        <Point><coordinates>139.77148,35.69975,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Akihabara evening</name>
+        <styleUrl>#style-d5-akiba</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.77305,35.69868,0 139.77172,35.69848,0 139.77128,35.69985,0 139.77105,35.70018,0 139.7712,35.7004,0 139.77148,35.69975,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-19 · Hakone loop</name>
+<Placemark>
+        <name>1. Tokyo Station</name>
+        <styleUrl>#style-d6-hakone</styleUrl>
+        <description>Stay —
+Then 50 min train to next.
+</description>
+        <Point><coordinates>139.7671,35.6812,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Hakone Open-Air Museum</name>
+        <styleUrl>#style-d6-hakone</styleUrl>
+        <description>Hours: 09:00–17:00
+Stay 1h 30m
+Then 40 min ropeway to next.
+</description>
+        <Point><coordinates>139.053,35.245,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Owakudani</name>
+        <styleUrl>#style-d6-hakone</styleUrl>
+        <description>Stay 50 min
+Then 25 min ropeway to next.
+</description>
+        <Point><coordinates>139.0195,35.2445,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>4. Lake Ashi</name>
+        <styleUrl>#style-d6-hakone</styleUrl>
+        <description>Stay 40 min
+Then 10 min walk to next.
+</description>
+        <Point><coordinates>139.0246,35.202,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>5. Hakone Shrine torii</name>
+        <styleUrl>#style-d6-hakone</styleUrl>
+        <description>Stay 30 min
+Then 35 min bus to next.
+</description>
+        <Point><coordinates>139.0256,35.2048,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>6. Senkei</name>
+        <styleUrl>#style-d6-hakone</styleUrl>
+        <description>Hours: in by 19:00
+Stay —
+End of this walk.
+</description>
+        <Point><coordinates>139.097633,35.229167,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Hakone loop</name>
+        <styleUrl>#style-d6-hakone</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>139.7671,35.6812,0 139.053,35.245,0 139.0195,35.2445,0 139.0246,35.202,0 139.0256,35.2048,0 139.097633,35.229167,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-20 · Kyoto arrival walk</name>
+<Placemark>
+        <name>1. Guesthouse Sign</name>
+        <styleUrl>#style-d7-kyoto-eve</styleUrl>
+        <description>Hours: check-in 16:00
+Stay 20 min
+Then 3 min walk to next.
+</description>
+        <Point><coordinates>135.766767,35.00235,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Nishiki Market</name>
+        <styleUrl>#style-d7-kyoto-eve</styleUrl>
+        <description>Hours: stalls ~10:00–18:00
+Stay 40 min
+Then 12 min walk to next.
+</description>
+        <Point><coordinates>135.7649,35.005,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Yasaka Shrine + Gion</name>
+        <styleUrl>#style-d7-kyoto-eve</styleUrl>
+        <description>Stay 40 min
+End of this walk.
+</description>
+        <Point><coordinates>135.77855,35.00365,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Kyoto arrival walk</name>
+        <styleUrl>#style-d7-kyoto-eve</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>135.766767,35.00235,0 135.7649,35.005,0 135.77855,35.00365,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-21 · Arashiyama core</name>
+<Placemark>
+        <name>1. Arashiyama Bamboo Grove</name>
+        <styleUrl>#style-d8-arashiyama</styleUrl>
+        <description>Hours: go 08:00
+Stay 25 min
+Then 5 min walk to next.
+</description>
+        <Point><coordinates>135.6716,35.017,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Tenryu-ji</name>
+        <styleUrl>#style-d8-arashiyama</styleUrl>
+        <description>Hours: 08:30–17:00
+Stay 40 min
+End of this walk.
+</description>
+        <Point><coordinates>135.6739,35.0158,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Arashiyama core</name>
+        <styleUrl>#style-d8-arashiyama</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>135.6716,35.017,0 135.6739,35.0158,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-22 · Higashiyama core</name>
+<Placemark>
+        <name>1. Kiyomizu-dera</name>
+        <styleUrl>#style-d9-higashiyama</styleUrl>
+        <description>Hours: 06:00–18:00
+Stay 55 min
+Then 6 min walk to next.
+</description>
+        <Point><coordinates>135.785,34.99486,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Ninenzaka</name>
+        <styleUrl>#style-d9-higashiyama</styleUrl>
+        <description>Stay 15 min
+Then 4 min walk to next.
+</description>
+        <Point><coordinates>135.7825,34.99655,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Sannenzaka</name>
+        <styleUrl>#style-d9-higashiyama</styleUrl>
+        <description>Stay 15 min
+Then 8 min walk to next.
+</description>
+        <Point><coordinates>135.78145,34.99745,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>4. Kodai-ji</name>
+        <styleUrl>#style-d9-higashiyama</styleUrl>
+        <description>Hours: 09:00–17:30
+Stay 50 min
+End of this walk.
+</description>
+        <Point><coordinates>135.7811,35.0006,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Higashiyama core</name>
+        <styleUrl>#style-d9-higashiyama</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>135.785,34.99486,0 135.7825,34.99655,0 135.78145,34.99745,0 135.7811,35.0006,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-23 · Fushimi · Nara deer park</name>
+<Placemark>
+        <name>1. Fushimi Inari Taisha</name>
+        <styleUrl>#style-d10-fushimi-nara</styleUrl>
+        <description>Stay 2h 10m
+Then 55 min train to next.
+Red torii climb at 07:00.</description>
+        <Point><coordinates>135.77267,34.96714,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Nara Park deer</name>
+        <styleUrl>#style-d10-fushimi-nara</styleUrl>
+        <description>Stay 50 min
+Then 8 min walk to next.
+Deer bow for senbei. They bite bags.</description>
+        <Point><coordinates>135.843,34.6851,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Tōdai-ji Great Buddha</name>
+        <styleUrl>#style-d10-fushimi-nara</styleUrl>
+        <description>Hours: 08:00–16:30
+Stay 1h 10m
+Then 10 min walk to next.
+15 m bronze Buddha in a huge wooden hall.</description>
+        <Point><coordinates>135.8398,34.6889,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>4. Kasuga Taisha</name>
+        <styleUrl>#style-d10-fushimi-nara</styleUrl>
+        <description>Hours: 06:30–17:00
+Stay 40 min
+End of this walk.
+Lantern shrine. Optional.</description>
+        <Point><coordinates>135.8398,34.6814,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Fushimi · Nara deer park</name>
+        <styleUrl>#style-d10-fushimi-nara</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>135.77267,34.96714,0 135.843,34.6851,0 135.8398,34.6889,0 135.8398,34.6814,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-24 · Osaka south core</name>
+<Placemark>
+        <name>1. NICO Hotel</name>
+        <styleUrl>#style-d11-osaka</styleUrl>
+        <description>Hours: check-in 15:00
+Stay 15 min
+Then 12 min walk to next.
+</description>
+        <Point><coordinates>135.5107,34.661533,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Kuromon Ichiba</name>
+        <styleUrl>#style-d11-osaka</styleUrl>
+        <description>Hours: most 09:00–17:00
+Stay 1h
+Then 12 min walk to next.
+</description>
+        <Point><coordinates>135.5065,34.66555,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>3. Dotonbori + Glico</name>
+        <styleUrl>#style-d11-osaka</styleUrl>
+        <description>Stay 1h 10m
+End of this walk.
+</description>
+        <Point><coordinates>135.5013,34.6687,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Osaka south core</name>
+        <styleUrl>#style-d11-osaka</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>135.5107,34.661533,0 135.5065,34.66555,0 135.5013,34.6687,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-25 · Shinsekai · full Osaka day</name>
+<Placemark>
+        <name>1. NICO Hotel</name>
+        <styleUrl>#style-d12-osaka</styleUrl>
+        <description>Stay —
+Then 12 min walk to next.
+</description>
+        <Point><coordinates>135.5107,34.661533,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. Shinsekai + Tsutenkaku</name>
+        <styleUrl>#style-d12-osaka</styleUrl>
+        <description>Stay 2h
+End of this walk.
+Retro neon and kushikatsu alleys. 10 min south of NICO.</description>
+        <Point><coordinates>135.5063,34.65245,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Shinsekai · full Osaka day</name>
+        <styleUrl>#style-d12-osaka</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>135.5107,34.661533,0 135.5063,34.65245,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+<Folder><name>10-26 · Namba → KIX morning</name>
+<Placemark>
+        <name>1. NICO Hotel</name>
+        <styleUrl>#style-d13-kix</styleUrl>
+        <description>Hours: checkout morning
+Stay —
+Then 50 min train to next.
+</description>
+        <Point><coordinates>135.5107,34.661533,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>2. KIX</name>
+        <styleUrl>#style-d13-kix</styleUrl>
+        <description>Hours: leave Namba ~3.5h before dep
+Stay —
+End of this walk.
+</description>
+        <Point><coordinates>135.2441,34.4347,0</coordinates></Point>
+      </Placemark>
+<Placemark>
+        <name>Route · Namba → KIX morning</name>
+        <styleUrl>#style-d13-kix</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>135.5107,34.661533,0 135.2441,34.4347,0</coordinates>
+        </LineString>
+      </Placemark>
+</Folder>
+</Document>
+</kml>

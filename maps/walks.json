@@ -1,0 +1,726 @@
+{
+  "trip": "Japan 2026",
+  "dates": "2026-10-14 / 2026-10-26",
+  "note": "Food is never a route pin. Core = sights. Shop tracks are optional layers.",
+  "mymaps_existing": "https://www.google.com/maps/d/edit?mid=1ddiUaduPUQycU2IgWCbR5874kPnOlkE",
+  "hotels": {
+    "tokyo": {
+      "id": "hotel-tokyo",
+      "name": "Hotel LiVEMAX Nihonbashi-Koamicho",
+      "address": "10-7 Nihonbashi-Koamicho, Chuo-ku, Tokyo 103-0016",
+      "lat": 35.68258,
+      "lng": 139.780836,
+      "checkin": "2026-10-14 15:00",
+      "checkout": "2026-10-19 10:00",
+      "maps": "https://maps.google.com/?q=Hotel+LiVEMAX+Nihonbashi+Koamicho"
+    },
+    "hakone": {
+      "id": "hotel-hakone",
+      "name": "Senkei",
+      "address": "Yumoto 592, Hakone 250-0311",
+      "lat": 35.229167,
+      "lng": 139.097633,
+      "checkin": "2026-10-19 15:00",
+      "checkout": "2026-10-20 11:00",
+      "maps": "https://maps.google.com/?q=Senkei+Hakone+Yumoto+592"
+    },
+    "kyoto": {
+      "id": "hotel-kyoto",
+      "name": "Guesthouse Sign",
+      "address": "568 Nakanomachi, Shimogyo, Kyoto 600-8032",
+      "lat": 35.00235,
+      "lng": 135.766767,
+      "checkin": "2026-10-20 16:00",
+      "checkout": "2026-10-24 11:00",
+      "maps": "https://maps.google.com/?q=Guesthouse+Sign+Kyoto+Nakanomachi"
+    },
+    "osaka": {
+      "id": "hotel-osaka",
+      "name": "NICO Hotel Osaka Namba",
+      "address": "1-2-6 Shimodera, Osaka 556-0001",
+      "lat": 34.661533,
+      "lng": 135.5107,
+      "checkin": "2026-10-24 15:00",
+      "checkout": "2026-10-26 morning",
+      "maps": "https://maps.google.com/?q=NICO+Hotel+Osaka+Namba+Shimodera"
+    }
+  },
+  "walks": [
+    {
+      "id": "d1-arrival",
+      "day": "d1",
+      "date": "2026-10-14",
+      "title": "Nihonbashi arrive",
+      "mode": "walk",
+      "color": "0e7c3a",
+      "core": [
+        {
+          "name": "Hotel LiVEMAX",
+          "lat": 35.68258,
+          "lng": 139.780836,
+          "stay_min": 90,
+          "kind": "hotel",
+          "hours": "check-in 15:00"
+        }
+      ]
+    },
+    {
+      "id": "d2-asakusa",
+      "day": "d2",
+      "date": "2026-10-15",
+      "title": "Asakusa · Kappabashi · Ueno",
+      "mode": "walk",
+      "color": "c45c26",
+      "core": [
+        {
+          "name": "Kaminarimon",
+          "lat": 35.71107,
+          "lng": 139.79655,
+          "stay_min": 15,
+          "kind": "photo",
+          "note": "Giant red lantern gate. Photo, then walk through."
+        },
+        {
+          "name": "Nakamise",
+          "lat": 35.71215,
+          "lng": 139.79665,
+          "stay_min": 20,
+          "kind": "place",
+          "walk_from_prev_min": 2,
+          "note": "Souvenir lane to the temple. Ningyo-yaki, senbei, cheap fans."
+        },
+        {
+          "name": "Sensō-ji",
+          "lat": 35.71477,
+          "lng": 139.79666,
+          "stay_min": 35,
+          "kind": "place",
+          "walk_from_prev_min": 4,
+          "hours": "hall 06:00–17:00",
+          "note": "Tokyo’s oldest temple. Incense, main hall, pagoda."
+        },
+        {
+          "name": "Shin-Nakamise",
+          "lat": 35.7128,
+          "lng": 139.7954,
+          "stay_min": 15,
+          "kind": "place",
+          "walk_from_prev_min": 4,
+          "hours": "~10:00–20:00",
+          "note": "Covered shopping arcade beside Nakamise — not a second temple."
+        },
+        {
+          "name": "Asakusa Menchi",
+          "lat": 35.71085,
+          "lng": 139.7964,
+          "stay_min": 25,
+          "kind": "food",
+          "walk_from_prev_min": 8,
+          "hours": "~10:00–18:00",
+          "note": "Menchi-katsu at Kaminarimon. The Asakusa lunch. Opens around 10:00."
+        },
+        {
+          "name": "Kappabashi",
+          "lat": 35.7139,
+          "lng": 139.7886,
+          "stay_min": 40,
+          "kind": "shop",
+          "walk_from_prev_min": 10,
+          "hours": "10:00–17:00",
+          "note": "Chef-supply street: knives, plastic food, ceramics."
+        },
+        {
+          "name": "Ameyoko",
+          "lat": 35.7095,
+          "lng": 139.7745,
+          "stay_min": 40,
+          "kind": "place",
+          "walk_from_prev_min": 18,
+          "hours": "~10:00–19:00",
+          "note": "Open-air market under the JR tracks. Lunch window here."
+        },
+        {
+          "name": "Ueno Park",
+          "lat": 35.7148,
+          "lng": 139.7717,
+          "stay_min": 40,
+          "kind": "place",
+          "walk_from_prev_min": 8,
+          "note": "Park + pond next to Ameyoko. Sit, don’t museum-sprint."
+        }
+      ]
+    },
+    {
+      "id": "d2-shinjuku",
+      "day": "d2",
+      "date": "2026-10-15",
+      "title": "Shinjuku sunset",
+      "mode": "walk",
+      "color": "c45c26",
+      "core": [
+        {
+          "name": "Shinjuku Gyoen (optional)",
+          "lat": 35.6852,
+          "lng": 139.71,
+          "stay_min": 40,
+          "kind": "place",
+          "hours": "09:00–16:30 last 16:00",
+          "note": "Drop if Ueno ran long. Deck matters more."
+        },
+        {
+          "name": "Tokyo Metropolitan Government Building South 45F",
+          "lat": 35.68962,
+          "lng": 139.69172,
+          "stay_min": 80,
+          "kind": "place",
+          "walk_from_prev_min": 15,
+          "hours": "09:30–22:00",
+          "note": "Arrive 16:20. Sunset 17:06. Free."
+        }
+      ]
+    },
+    {
+      "id": "d1-shoes",
+      "day": "d1",
+      "date": "2026-10-14",
+      "title": "Ochanomizu shoes (optional)",
+      "mode": "walk",
+      "color": "9a3412",
+      "core": [
+        {
+          "name": "Super Sports Xebio Ochanomizu",
+          "lat": 35.6994,
+          "lng": 139.7652,
+          "stay_min": 35,
+          "kind": "shop",
+          "hours": "~10:00–20:00"
+        },
+        {
+          "name": "Step Sports Tokyo",
+          "lat": 35.6989,
+          "lng": 139.7668,
+          "stay_min": 35,
+          "kind": "shop",
+          "walk_from_prev_min": 5
+        }
+      ]
+    },
+    {
+      "id": "d3-shibuya-morning",
+      "day": "d3",
+      "date": "2026-10-16",
+      "title": "Shibuya Sky morning + shops",
+      "mode": "walk",
+      "color": "9d174d",
+      "core": [
+        {
+          "name": "Shibuya Sky",
+          "lat": 35.65803,
+          "lng": 139.70255,
+          "stay_min": 70,
+          "kind": "place",
+          "hours": "book morning slot · 10:00–22:30",
+          "note": "Evening sold out. Book before 12:00 if you can. 14F entrance."
+        },
+        {
+          "name": "Scramble + MAGNET 7F",
+          "lat": 35.65905,
+          "lng": 139.70055,
+          "stay_min": 20,
+          "kind": "photo",
+          "walk_from_prev_min": 6,
+          "note": "Free balcony after Sky, not instead."
+        },
+        {
+          "name": "PARCO Shibuya (Pokémon / Nintendo)",
+          "lat": 35.6618,
+          "lng": 139.6984,
+          "stay_min": 35,
+          "kind": "shop",
+          "walk_from_prev_min": 6,
+          "hours": "11:00–21:00"
+        },
+        {
+          "name": "Tokyu Hands Udagawacho",
+          "lat": 35.6608,
+          "lng": 139.6989,
+          "stay_min": 25,
+          "kind": "shop",
+          "walk_from_prev_min": 4,
+          "hours": "10:00–21:00"
+        },
+        {
+          "name": "mont-bell Shibuya",
+          "lat": 35.6606,
+          "lng": 139.6985,
+          "stay_min": 30,
+          "kind": "shop",
+          "walk_from_prev_min": 1,
+          "hours": "10:30–21:00"
+        },
+        {
+          "name": "MEGA Don Quijote Shibuya",
+          "lat": 35.6605,
+          "lng": 139.6982,
+          "stay_min": 40,
+          "kind": "shop",
+          "walk_from_prev_min": 4,
+          "hours": "24h"
+        }
+      ]
+    },
+    {
+      "id": "d3-ginza-tower",
+      "day": "d3",
+      "date": "2026-10-16",
+      "title": "Ginza shops · Tokyo Tower dusk",
+      "mode": "walk",
+      "color": "d4487a",
+      "core": [
+        {
+          "name": "UNIQLO Ginza",
+          "lat": 35.6714,
+          "lng": 139.7646,
+          "stay_min": 45,
+          "kind": "shop",
+          "hours": "~11:00–21:00",
+          "note": "Heattech once."
+        },
+        {
+          "name": "MUJI Ginza",
+          "lat": 35.6728,
+          "lng": 139.7655,
+          "stay_min": 20,
+          "kind": "shop",
+          "walk_from_prev_min": 4
+        },
+        {
+          "name": "Itoya Ginza",
+          "lat": 35.6722,
+          "lng": 139.7658,
+          "stay_min": 20,
+          "kind": "shop",
+          "walk_from_prev_min": 3,
+          "note": "Goshuin-cho + pen."
+        },
+        {
+          "name": "Bic Camera Yurakucho",
+          "lat": 35.6752,
+          "lng": 139.7633,
+          "stay_min": 20,
+          "kind": "shop",
+          "walk_from_prev_min": 6,
+          "note": "Cheap Seiko. Short if late for Tower."
+        },
+        {
+          "name": "Tokyo Tower",
+          "lat": 35.65858,
+          "lng": 139.74543,
+          "stay_min": 70,
+          "kind": "place",
+          "walk_from_prev_min": 15,
+          "hours": "~09:00–22:30",
+          "note": "Dusk. Arrive 16:20."
+        }
+      ]
+    },
+    {
+      "id": "d4-takao",
+      "day": "d4",
+      "date": "2026-10-17",
+      "title": "Mt. Takao",
+      "mode": "hike",
+      "color": "2f6b3a",
+      "core": [
+        {
+          "name": "Keio Shinjuku",
+          "lat": 35.6906,
+          "lng": 139.6994,
+          "stay_min": 0,
+          "kind": "transit"
+        },
+        {
+          "name": "Yakuo-in + summit",
+          "lat": 35.6254,
+          "lng": 139.2437,
+          "stay_min": 240,
+          "kind": "hike",
+          "walk_from_prev_min": 55,
+          "leg_mode": "train"
+        },
+        {
+          "name": "Takaosan Onsen Gokurakuyu",
+          "lat": 35.642,
+          "lng": 139.2705,
+          "stay_min": 70,
+          "kind": "onsen",
+          "walk_from_prev_min": 20,
+          "hours": "~10:00–23:00"
+        }
+      ]
+    },
+    {
+      "id": "d5-akiba",
+      "day": "d5",
+      "date": "2026-10-18",
+      "title": "Akihabara evening",
+      "mode": "walk",
+      "color": "1a5c2e",
+      "core": [
+        {
+          "name": "Yodobashi Akiba",
+          "lat": 35.69868,
+          "lng": 139.77305,
+          "stay_min": 25,
+          "kind": "shop",
+          "hours": "09:30–22:00"
+        },
+        {
+          "name": "Radio Kaikan",
+          "lat": 35.69848,
+          "lng": 139.77172,
+          "stay_min": 25,
+          "kind": "shop",
+          "walk_from_prev_min": 3
+        },
+        {
+          "name": "Animate",
+          "lat": 35.69985,
+          "lng": 139.77128,
+          "stay_min": 20,
+          "kind": "shop",
+          "walk_from_prev_min": 3
+        },
+        {
+          "name": "Mandarake Complex",
+          "lat": 35.70018,
+          "lng": 139.77105,
+          "stay_min": 25,
+          "kind": "shop",
+          "walk_from_prev_min": 2
+        },
+        {
+          "name": "Trader",
+          "lat": 35.7004,
+          "lng": 139.7712,
+          "stay_min": 20,
+          "kind": "shop",
+          "walk_from_prev_min": 2
+        },
+        {
+          "name": "Taito Station / GiGO",
+          "lat": 35.69975,
+          "lng": 139.77148,
+          "stay_min": 30,
+          "kind": "experience",
+          "walk_from_prev_min": 2
+        }
+      ]
+    },
+    {
+      "id": "d6-hakone",
+      "day": "d6",
+      "date": "2026-10-19",
+      "title": "Hakone loop",
+      "mode": "transit",
+      "color": "b45309",
+      "core": [
+        {
+          "name": "Tokyo Station",
+          "lat": 35.6812,
+          "lng": 139.7671,
+          "stay_min": 0,
+          "kind": "transit"
+        },
+        {
+          "name": "Hakone Open-Air Museum",
+          "lat": 35.245,
+          "lng": 139.053,
+          "stay_min": 90,
+          "kind": "place",
+          "walk_from_prev_min": 50,
+          "leg_mode": "train",
+          "hours": "09:00–17:00"
+        },
+        {
+          "name": "Owakudani",
+          "lat": 35.2445,
+          "lng": 139.0195,
+          "stay_min": 50,
+          "kind": "place",
+          "walk_from_prev_min": 40,
+          "leg_mode": "ropeway"
+        },
+        {
+          "name": "Lake Ashi",
+          "lat": 35.202,
+          "lng": 139.0246,
+          "stay_min": 40,
+          "kind": "place",
+          "walk_from_prev_min": 25,
+          "leg_mode": "ropeway"
+        },
+        {
+          "name": "Hakone Shrine torii",
+          "lat": 35.2048,
+          "lng": 139.0256,
+          "stay_min": 30,
+          "kind": "photo",
+          "walk_from_prev_min": 10
+        },
+        {
+          "name": "Senkei",
+          "lat": 35.229167,
+          "lng": 139.097633,
+          "stay_min": 0,
+          "kind": "hotel",
+          "walk_from_prev_min": 35,
+          "leg_mode": "bus",
+          "hours": "in by 19:00"
+        }
+      ]
+    },
+    {
+      "id": "d7-kyoto-eve",
+      "day": "d7",
+      "date": "2026-10-20",
+      "title": "Kyoto arrival walk",
+      "mode": "walk",
+      "color": "7c3aed",
+      "core": [
+        {
+          "name": "Guesthouse Sign",
+          "lat": 35.00235,
+          "lng": 135.766767,
+          "stay_min": 20,
+          "kind": "hotel",
+          "hours": "check-in 16:00"
+        },
+        {
+          "name": "Nishiki Market",
+          "lat": 35.005,
+          "lng": 135.7649,
+          "stay_min": 40,
+          "kind": "place",
+          "walk_from_prev_min": 3,
+          "hours": "stalls ~10:00–18:00"
+        },
+        {
+          "name": "Yasaka Shrine + Gion",
+          "lat": 35.00365,
+          "lng": 135.77855,
+          "stay_min": 40,
+          "kind": "place",
+          "walk_from_prev_min": 12
+        }
+      ]
+    },
+    {
+      "id": "d8-arashiyama",
+      "day": "d8",
+      "date": "2026-10-21",
+      "title": "Arashiyama core",
+      "mode": "walk",
+      "color": "0f766e",
+      "core": [
+        {
+          "name": "Arashiyama Bamboo Grove",
+          "lat": 35.017,
+          "lng": 135.6716,
+          "stay_min": 25,
+          "kind": "photo",
+          "hours": "go 08:00"
+        },
+        {
+          "name": "Tenryu-ji",
+          "lat": 35.0158,
+          "lng": 135.6739,
+          "stay_min": 40,
+          "kind": "place",
+          "walk_from_prev_min": 5,
+          "hours": "08:30–17:00"
+        }
+      ]
+    },
+    {
+      "id": "d9-higashiyama",
+      "day": "d9",
+      "date": "2026-10-22",
+      "title": "Higashiyama core",
+      "mode": "walk",
+      "color": "9f1239",
+      "core": [
+        {
+          "name": "Kiyomizu-dera",
+          "lat": 34.99486,
+          "lng": 135.785,
+          "stay_min": 55,
+          "kind": "place",
+          "hours": "06:00–18:00"
+        },
+        {
+          "name": "Ninenzaka",
+          "lat": 34.99655,
+          "lng": 135.7825,
+          "stay_min": 15,
+          "kind": "place",
+          "walk_from_prev_min": 6
+        },
+        {
+          "name": "Sannenzaka",
+          "lat": 34.99745,
+          "lng": 135.78145,
+          "stay_min": 15,
+          "kind": "place",
+          "walk_from_prev_min": 4
+        },
+        {
+          "name": "Kodai-ji",
+          "lat": 35.0006,
+          "lng": 135.7811,
+          "stay_min": 50,
+          "kind": "place",
+          "walk_from_prev_min": 8,
+          "hours": "09:00–17:30"
+        }
+      ]
+    },
+    {
+      "id": "d10-fushimi-nara",
+      "day": "d10",
+      "date": "2026-10-23",
+      "title": "Fushimi · Nara deer park",
+      "mode": "transit",
+      "color": "b91c1c",
+      "core": [
+        {
+          "name": "Fushimi Inari Taisha",
+          "lat": 34.96714,
+          "lng": 135.77267,
+          "stay_min": 130,
+          "kind": "hike",
+          "note": "Red torii climb at 07:00."
+        },
+        {
+          "name": "Nara Park deer",
+          "lat": 34.6851,
+          "lng": 135.843,
+          "stay_min": 50,
+          "kind": "place",
+          "walk_from_prev_min": 55,
+          "leg_mode": "train",
+          "note": "Deer bow for senbei. They bite bags."
+        },
+        {
+          "name": "Tōdai-ji Great Buddha",
+          "lat": 34.6889,
+          "lng": 135.8398,
+          "stay_min": 70,
+          "kind": "place",
+          "walk_from_prev_min": 8,
+          "hours": "08:00–16:30",
+          "note": "15 m bronze Buddha in a huge wooden hall."
+        },
+        {
+          "name": "Kasuga Taisha",
+          "lat": 34.6814,
+          "lng": 135.8398,
+          "stay_min": 40,
+          "kind": "place",
+          "walk_from_prev_min": 10,
+          "hours": "06:30–17:00",
+          "note": "Lantern shrine. Optional."
+        }
+      ]
+    },
+    {
+      "id": "d11-osaka",
+      "day": "d11",
+      "date": "2026-10-24",
+      "title": "Osaka south core",
+      "mode": "walk",
+      "color": "1d4ed8",
+      "core": [
+        {
+          "name": "NICO Hotel",
+          "lat": 34.661533,
+          "lng": 135.5107,
+          "stay_min": 15,
+          "kind": "hotel",
+          "hours": "check-in 15:00"
+        },
+        {
+          "name": "Kuromon Ichiba",
+          "lat": 34.66555,
+          "lng": 135.5065,
+          "stay_min": 60,
+          "kind": "place",
+          "walk_from_prev_min": 12,
+          "hours": "most 09:00–17:00"
+        },
+        {
+          "name": "Dotonbori + Glico",
+          "lat": 34.6687,
+          "lng": 135.5013,
+          "stay_min": 70,
+          "kind": "place",
+          "walk_from_prev_min": 12
+        }
+      ]
+    },
+    {
+      "id": "d12-osaka",
+      "day": "d12",
+      "date": "2026-10-25",
+      "title": "Shinsekai · full Osaka day",
+      "mode": "walk",
+      "color": "1d4ed8",
+      "core": [
+        {
+          "name": "NICO Hotel",
+          "lat": 34.661533,
+          "lng": 135.5107,
+          "stay_min": 0,
+          "kind": "hotel"
+        },
+        {
+          "name": "Shinsekai + Tsutenkaku",
+          "lat": 34.65245,
+          "lng": 135.5063,
+          "stay_min": 120,
+          "kind": "place",
+          "walk_from_prev_min": 12,
+          "note": "Retro neon and kushikatsu alleys. 10 min south of NICO."
+        }
+      ]
+    },
+    {
+      "id": "d13-kix",
+      "day": "d13",
+      "date": "2026-10-26",
+      "title": "Namba → KIX morning",
+      "mode": "transit",
+      "color": "334155",
+      "core": [
+        {
+          "name": "NICO Hotel",
+          "lat": 34.661533,
+          "lng": 135.5107,
+          "stay_min": 0,
+          "kind": "hotel",
+          "hours": "checkout morning"
+        },
+        {
+          "name": "KIX",
+          "lat": 34.4347,
+          "lng": 135.2441,
+          "stay_min": 0,
+          "kind": "transit",
+          "walk_from_prev_min": 50,
+          "leg_mode": "train",
+          "hours": "leave Namba ~3.5h before dep"
+        }
+      ]
+    }
+  ]
+}
